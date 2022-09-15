@@ -16,10 +16,67 @@ use Illuminate\Support\Facades\Log;
 class ItemController extends Controller
 {
 
+    //  --  Show Home  --  \\
+    public function home() {
+        // Takes only 500 to not tank performance
+        $items = Item::query()
+            ->with(['authors:id,fullname', 'collections:id,title'])
+            ->where('status', Item::STATUS_ACTIVE)->latest()->limit(500)->get();
+        $latestItems = array();
+        $latestManuscripts = array();
+        $latestPeriodics = array();
+        if($items != null) {
+            $i = 0;
+            foreach($items as $item) {
+                if ($i == 12) {
+                    break;
+                }
+                $latestItems[] = $item;
+                $i++;
+            }
+            $i = 0;
+            foreach($items as $key => $item) {
+                if ($i == 12) {
+                    break;
+                }
+                if ($item->type == Item::type_Periodic) {
+                    $latestPeriodics[] = $item;
+                    unset($items[$key]);
+                    $i++;
+                }
+            }
+            $i = 0;
+            foreach($items as $key => $item) {
+                if ($i == 12) {
+                    break;
+                }
+                if ($item->type == Item::type_Manuscript) {
+                    $latestManuscripts[] = $item;
+                    unset($items[$key]);
+                    $i++;
+                }
+            }
+
+
+        }
+        return view('home', [
+            'latestItems' => $latestItems,
+            'latestPeriodics' => $latestPeriodics,
+            'latestManuscripts' => $latestManuscripts,
+        ]);
+    }
+
     //  --  Show all items  --  \\
     public function index() {
+            $pages = request('orderBy', 25);
+            $sort = request('sortBy', SORT_NATURAL);
         return view('items.index' , [
-            'items' => Item::with(['authors:id,fullname', 'subjects:title,id'])->where('status', Item::STATUS_ACTIVE)->latest()->filter(request(['subject', 'search']))->paginate(12),
+            'items' => Item::with(['authors:id,fullname', 'subjects:title,id'])->where('status', Item::STATUS_ACTIVE)
+                ->filter(request(['search']))
+                ->paginate($pages)->withQueryString(),
+            'authors' => Author::get(['id', 'fullname'])->sortBy('fullname', SORT_NATURAL),
+            'collections' => Collection::get(['id', 'title'])->sortBy('title', SORT_NATURAL),
+            'subjects' => Subject::get(['id', 'title'])->sortBy('title', SORT_NATURAL),
         ]);
     }
 

@@ -45,7 +45,7 @@ class DatabaseSeeder extends Seeder
 
         ]);
 
-        Item::factory(1)->hasCollections(1, ['created_by' => '1'])->hasAuthors(1, ['created_by' => '1'])->hasSubjects(3)->create([
+        Item::factory(500)->hasCollections(3, ['created_by' => '1'])->hasAuthors(3, ['created_by' => '1'])->hasSubjects(3)->create([
             'created_by'=>$user->id,
             'pdf_path'=>'item/2022/Aug/Quis nemo aut in rem/HFakIg6GRAhmTDUfaiK9EwTrmX2FLdVcTiC0bVqv.pdf'
         ]);

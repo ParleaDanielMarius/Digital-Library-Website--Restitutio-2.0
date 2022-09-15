@@ -8,10 +8,8 @@ use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Traits\UUID;
 
-class Item extends Model
-{
+class Item extends Model {
     use HasFactory;
 
     protected $fillable = [
@@ -48,6 +46,7 @@ class Item extends Model
 
     // Basic Filters
     public function scopeFilter($query, array $filters) {
+        $request = request();
 
         // Subject Tag Filter
         if($filters['subject'] ?? false) {
@@ -58,20 +57,23 @@ class Item extends Model
 
 
         // Advanced Search Filter
-        if($filters['type'] ?? false) {
-            $request = request();
-            $query->when($request->title, function ($query) use ($request) {
-                $query->where('title', 'LIKE', '%' . $request->title . '%');
-            })
-                ->when($request->author, function ($query) use ($request) {
-                    $query->whereHas('authors', function ($query) use ($request) {
-                        $query->where('fullname', 'LIKE', '%' . $request->author . '%');
-                    });
+        if(array_key_exists('search', $filters)) {
+            $query->when($request->search, function($query) use($request) {
+                $query->where('title', 'like', '%' . $request->search . '%');
+                    })
+                ->when($request->authors, function ($query) use ($request) {
+                    foreach($request->authors as $author) {
+                        $query->whereHas('authors', function ($query) use ($author) {
+                            $query->where('fullname', $author);
+                        });
+                    }
                 })
-                ->when($request->subject, function ($query) use ($request) {
-                    $query->whereHas('subjects', function ($query) use ($request) {
-                        $query->where('title', 'LIKE', '%' . $request->subject . '%');
-                    });
+                ->when($request->subjects, function ($query) use ($request) {
+                    foreach($request->subjects as $subject) {
+                        $query->whereHas('subjects', function ($query) use ($subject) {
+                            $query->where('title', $subject);
+                        });
+                    }
                 })
                 ->when($request->publisher_when, function ($query) use ($request) {
                     $query->where('publisher_when', 'LIKE', '%' . $request->publisher_when . '%');
@@ -89,7 +91,7 @@ class Item extends Model
 
 
         // Simple Search for Main Search Bar
-        if($filters['search'] ?? false) {
+        if($filters['NOthing here Yet'] ?? false) {
             $query->where('title', 'like', '%' . request('search') . '%')
                 ->orwhere('description', 'like', '%' . request('search') . '%')
                 ->orwhereHas('subjects', function($query) {
@@ -101,7 +103,6 @@ class Item extends Model
                 });
 
         }
-
     }
 
 
@@ -125,6 +126,11 @@ class Item extends Model
 // Relationship To Collection
     public function collections() {
         return $this->belongsToMany(Collection::class, 'collection_item');
+    }
+
+// Relationship To OneCollection
+    public function OneCollection() {
+        return $this->belongsToMany(Collection::class, 'collection_item')->limit(1);
     }
 
 // Relationship To Subjects
