@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Author;
+use App\Models\Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -12,14 +13,16 @@ class AuthorController extends Controller
 {
     public function index() {
         return view('authors.index', [
-            'authors' => Author::withCount('items')->filter(request(['search']))->paginate(12)
+            'authors' => Author::withCount('items')->filter(request(['search']))->orderBy('fullname', 'asc')->paginate(10)
         ]);
     }
 
     public function show(Author $author) {
+        $author->loadCount('items');
+        $items = $author->items()->with(['authors:id,fullname', 'collections:id,title'])->orderBy('title', 'asc')->paginate(10);
         return view('authors.show', [
-            'author' => $author->loadCount('items'),
-            'items' => Author::find($author->id)->items()->latest()->filter(request(['subject', 'search']))->paginate(12),
+            'author' => $author,
+            'items' => $items,
         ]);
     }
 
@@ -93,6 +96,9 @@ class AuthorController extends Controller
     }
 
     public function destroy(Author $author) {
+        if(!$author->items->isEmpty()) {
+            return redirect(route('authors.show', $author))->with('warning', "Author has items. Cannot delete!");
+        }
         try {
             DB::beginTransaction();
             $author->delete();
@@ -106,6 +112,7 @@ class AuthorController extends Controller
                 'message' => $e,
             ]);
             DB::rollBack();
+            return redirect(route('authors.show', $author))->with('warning', "Author couldn't be deleted!");
         }
 
         Log::notice('Destroy (Author)', [

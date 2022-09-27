@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Author;
 use App\Models\Collection;
 use App\Models\Item;
+use App\Models\Subject;
 use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -18,7 +20,7 @@ class ItemCollectionController extends Controller
         return view('collections.index', [
             'collections' => Collection::withCount(['items' => function ($query) {
                 $query->where('status', Item::STATUS_ACTIVE);
-            } ])->where('status', Collection::STATUS_ACTIVE)->filter(request(['search']))->latest()->paginate(12),
+            } ])->where('status', Collection::STATUS_ACTIVE)->orderBy('title', 'asc')->paginate(10),
         ]);
     }
 
@@ -28,11 +30,30 @@ class ItemCollectionController extends Controller
         if($collection->status == Collection::STATUS_INACTIVE && !auth()->user()) {
             abort(404);
         }
+        $validationSort = ['asc', 'desc', 'latest'];
+        $validationPage = ['10', '15', '20', '25', '30'];
+        $pages = request('orderBy', 25);
+        $sort = request('sortBy', 'asc');
+        $sortField = 'title';
+        if(!in_array($pages, $validationPage, true)) {
+            $pages = 25;
+        }
+        if(!in_array($sort, $validationSort, true)) {
+            $sort = 'asc';
+        }
+        if($sort === 'latest') {
+            $sort = 'desc';
+            $sortField = 'created_at';
+        }
+        $items = $collection->loadCount('items')->items()->with(['authors:id,fullname', 'subjects:title,id', 'collections:id,title'])->where('status', Item::STATUS_ACTIVE)
+            ->filter(request(['search']))
+            ->orderBy($sortField, $sort)->get();
         return view('collections.show', [
-            'collection' => $collection->loadCount(['items' => function ($query) {
-                $query->where('status', Item::STATUS_ACTIVE);
-            }]),
-            'items' => $collection->items()->where('status', Item::STATUS_ACTIVE)->filter(request(['subject', 'search']))->latest()->paginate(12),
+            'collection' => $collection,
+            'items' => $items->paginate($pages)->withQueryString(),
+            'authors' => $items->pluck('authors')->flatten()->sortBy('fullname', SORT_NATURAL),
+            'collections' => $items->pluck('collections')->flatten()->sortBy('title', SORT_NATURAL),
+            'subjects' => $items->pluck('subjects')->flatten()->sortBy('title', SORT_NATURAL),
         ]);
     }
 
@@ -54,7 +75,7 @@ class ItemCollectionController extends Controller
     //  --  Manage Collection  --  \\
     public function manage() {
         return view('collections.manage', [
-            'collections' => Collection::where('status', Collection::STATUS_INACTIVE)->withCount('items')->filter(request(['search']))->paginate(12)
+            'collections' => Collection::where('status', Collection::STATUS_INACTIVE)->withCount('items')->paginate(10)
         ]);
     }
 
@@ -203,7 +224,7 @@ class ItemCollectionController extends Controller
 
         try {
             DB::beginTransaction();
-            $collection = Collection::create($formFields)->id;
+            $collection = Collection::create($formFields);
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();

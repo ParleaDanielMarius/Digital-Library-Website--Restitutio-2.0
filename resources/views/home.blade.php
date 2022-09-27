@@ -1,30 +1,122 @@
-@extends('layouts.layout')
+@extends('layouts.layout-index')
 @section('title', 'Home')
 
 @section('content')
     <!-- ===== MAIN CONTENT ==== -->
-    <section class="space-bottom-2 space-bottom-xl-3">
-        <div class="container">
-            <div class="row">
-                <div class="offset-xl-3 offset-wd-2 col-lg-8 col-xl-9 col-wd-10">
-                    <div class="bg-img-hero img-fluid bg-gradient-dark-1 mb-6 mb-xl-0 ml-xl-2d75 ml-wd-11" style="background-image: url({{asset('assets/img/900x506/img1.jpg')}});">
-                        <div class="space-top-2 space-top-xl-4 px-4 px-md-5 px-lg-7 pb-3">
-                            <ul class="u-slick pl-0 mb-0">
-                                    <div class="d-block d-md-flex media">
-                                        <div class="media-body align-self-center mb-4 mb-xl-0">
-                                            <h2 class="font-size-15 d-flex mb-4">
-                                                <span class="font-weight-normal d-block text-white">Restitutio</span>
 
-                                            </h2>
-                                            <p class="text-white">I have no clue what to put here</p>
-                                        </div>
-                                        <img src="https://placehold.it/250x293" class="img-fluid" alt="This place is for a future image. What Image? I have no clue">
-                                    </div>
-                            </ul>
+    <!-- ===== HEADER ==== -->
+    <section class="space-bottom-3">
+        <div class="bg-gray-200 space-2 space-lg-0 bg-img-hero" style="background-image: url(../../assets/img/1920x588/img1.jpg);">
+            <div class="container">
+                <div class="js-slick-carousel u-slick"
+                     data-pagi-classes="text-center u-slick__pagination position-absolute right-0 left-0 mb-n8 mb-lg-4 bottom-0">
+                    <div class="js-slide">
+                        <div class="hero row min-height-588 align-items-center">
+                            <div class="col-lg-7 col-wd-6 mb-4 mb-lg-0">
+                                <div class="media-body mr-wd-4 align-self-center mb-4 mb-md-0">
+                                    <p class="hero__pretitle text-uppercase font-weight-bold text-gray-400 mb-2"
+                                       data-scs-animation-in="fadeInUp"
+                                       data-scs-animation-delay="200">BCU Carol I</p>
+                                    <h2 class="hero__title font-size-14 mb-4"
+                                        data-scs-animation-in="fadeInUp"
+                                        data-scs-animation-delay="300">
+                                        <span class="hero__title-line-1 font-weight-regular d-block">Welcome To</span>
+                                        <span class="hero__title-line-2 font-weight-bold d-block">Restitutio</span>
+                                    </h2>
+                                    <a href="{{route('items.index')}}" class="btn btn-dark btn-wide rounded-0 hero__btn"
+                                       data-scs-animation-in="fadeInLeft"
+                                       data-scs-animation-delay="400">Browse Items</a>
+                                </div>
+                            </div>
+                            <div class="col-lg-5 col-wd-6"
+                                 data-scs-animation-in="fadeInRight"
+                                 data-scs-animation-delay="500">
+                                <p>
+                                    RESTITUTIO is the digital platform of the ‘Carol I’ Central University Library which gathers digitized collections of manuscripts, old and rare books, press, journals and other serial publications, current Romanian and foreign books, iconographic resources, cartographic resources and audio-video resources. RESTITUTIO gives library users an innovative tool for the discovery of information, which can be found in the bibliographic description. Searching can be done simply by inserting into the search box the term of interest and the given results are ordered by relevance. Also, you can use the advanced search by using multiple search criteria (title, author, subject, publication date) or you can search using the list of authors, subjects and publication dates.
+                                    Digitized resources are grouped into categories, depending on the types of documents. RESTITUTIO is an Open Access repository.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="js-slide">
+                        <div class="hero row min-height-588 align-items-center">
+                            <div class="col-lg-7 col-wd-6 mb-4 mb-lg-0">
+                                <div class="media-body mr-wd-4 align-self-center mb-4 mb-md-0">
+                                    <p class="hero__pretitle text-uppercase font-weight-bold text-gray-400 mb-2"
+                                       data-scs-animation-in="fadeInUp"
+                                       data-scs-animation-delay="200">The Bookworm Editors'</p>
+                                    <h2 class="hero__title font-size-14 mb-4"
+                                        data-scs-animation-in="fadeInUp"
+                                        data-scs-animation-delay="300">
+                                        <span class="hero__title-line-1 font-weight-regular d-block">Featured Books of the</span>
+                                        <span class="hero__title-line-2 font-weight-bold d-block">February</span>
+                                    </h2>
+                                    <a href="{{route('items.index')}}" class="btn btn-dark btn-wide rounded-0 hero__btn"
+                                       data-scs-animation-in="fadeInLeft"
+                                       data-scs-animation-delay="400">Browse Items</a>
+                                </div>
+                            </div>
+                            <div class="col-lg-5 col-wd-6"
+                                 data-scs-animation-in="fadeInRight"
+                                 data-scs-animation-delay="500">
+                                <img class="img-fluid" src="https://placehold.it/800x420" alt="image-description">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="js-slide">
+                        <div class="hero row min-height-588 align-items-center">
+                            <div class="col-lg-7 col-wd-6 mb-4 mb-lg-0">
+                                <div class="media-body mr-wd-4 align-self-center mb-4 mb-md-0">
+                                    <p class="hero__pretitle text-uppercase font-weight-bold text-gray-400 mb-2"
+                                       data-scs-animation-in="fadeInUp"
+                                       data-scs-animation-delay="200">The Bookworm Editors'</p>
+                                    <h2 class="hero__title font-size-14 mb-4"
+                                        data-scs-animation-in="fadeInUp"
+                                        data-scs-animation-delay="300">
+                                        <span class="hero__title-line-1 font-weight-regular d-block">Featured Books of the</span>
+                                        <span class="hero__title-line-2 font-weight-bold d-block">February</span>
+                                    </h2>
+                                    <a href="../shop/v1.html" class="btn btn-dark btn-wide rounded-0 hero__btn"
+                                       data-scs-animation-in="fadeInLeft"
+                                       data-scs-animation-delay="400">See More</a>
+                                </div>
+                            </div>
+                            <div class="col-lg-5 col-wd-6"
+                                 data-scs-animation-in="fadeInRight"
+                                 data-scs-animation-delay="500">
+                                <img class="img-fluid" src="https://placehold.it/800x420" alt="image-description">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="js-slide">
+                        <div class="hero row min-height-588 align-items-center">
+                            <div class="col-lg-7 col-wd-6 mb-4 mb-lg-0">
+                                <div class="media-body mr-wd-4 align-self-center mb-4 mb-md-0">
+                                    <p class="hero__pretitle text-uppercase font-weight-bold text-gray-400 mb-2"
+                                       data-scs-animation-in="fadeInUp"
+                                       data-scs-animation-delay="200">The Bookworm Editors'</p>
+                                    <h2 class="hero__title font-size-14 mb-4"
+                                        data-scs-animation-in="fadeInUp"
+                                        data-scs-animation-delay="300">
+                                        <span class="hero__title-line-1 font-weight-regular d-block">Featured Books of the</span>
+                                        <span class="hero__title-line-2 font-weight-bold d-block">February</span>
+                                    </h2>
+                                    <a href="../shop/v1.html" class="btn btn-dark btn-wide rounded-0 hero__btn"
+                                       data-scs-animation-in="fadeInLeft"
+                                       data-scs-animation-delay="400">See More</a>
+                                </div>
+                            </div>
+                            <div class="col-lg-5 col-wd-6"
+                                 data-scs-animation-in="fadeInRight"
+                                 data-scs-animation-delay="500">
+                                <img class="img-fluid" src="https://placehold.it/800x420" alt="image-description">
+                            </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
@@ -32,7 +124,7 @@
     <section class="space-bottom-2 space-bottom-xl-3 product-4-1-4">
         <div class="container">
             <header class="d-md-flex justify-content-between align-items-center mb-4 pb-xl-1">
-                <h2 class="font-size-7 font-weight-medium mb-4 mb-lg-0">Latest Books</h2>
+                <h2 class="font-size-7 font-weight-medium mb-4 mb-lg-0">Latest Items</h2>
                 <ul class="nav justify-content-md-center nav-gray-700 flex-nowrap flex-md-wrap overflow-auto overflow-md-visible" id="featuredBooks" role="tablist">
                     <li class="nav-item mx-5 mb-1 flex-shrink-0 flex-md-shrink-1">
                         <a class="nav-link px-0 active" id="featured-tab" data-toggle="tab" href="#featured" role="tab" aria-controls="featured" aria-selected="true">Latest</a>
@@ -89,139 +181,32 @@
 
     <section class="space-bottom-2 space-bottom-xl-3">
         <div class="bg-gray-200">
-            <div class="space-2 space-xl-3">
-                <div class="container">
-                    <header class="d-md-flex justify-content-between align-items-center mb-5">
-                        <h2 class="font-size-7 mb-4 mb-lg-0">Featured Categories</h2>
-                        <a href="../shop/v4.html" class="d-flex">All Categories<span class="flaticon-next font-size-3 ml-2"></span></a>
-                    </header>
-                    <ul class="nav justify-content-between flex-nowrap pb-2 py-md-3 js-slick-carousel u-slick"
-                        data-pagi-classes="d-xl-none text-center u-slick__pagination mb-n7 position-absolute right-0 left-0 bottom-0"
-                        data-arrows-classes="d-none d-xl-block u-slick__arrow u-slick__arrow-centered--y bg-transparent border-0 text-dark"
-                        data-arrow-left-classes="fas flaticon-back u-slick__arrow-inner u-slick__arrow-inner--left ml-lg-n5" data-arrow-right-classes="fas flaticon-next u-slick__arrow-inner u-slick__arrow-inner--right mr-lg-n5"
-                        data-slides-show="7"
-                        data-responsive='[{
-                        "breakpoint": 1500,
-                           "settings": {
-                             "slidesToShow": 6
-                           }
-                        }, {
-                           "breakpoint": 992,
-                           "settings": {
-                             "slidesToShow": 4
-                           }
-                        }, {
-                           "breakpoint": 768,
-                           "settings": {
-                             "slidesToShow": 3
-                           }
-                        }, {
-                           "breakpoint": 554,
-                           "settings": {
-                             "slidesToShow": 1
-                           }
-                        }]'>
-                        <li class="nav-item">
-                            <a class="nav-link font-weight-medium px-0" href="../shop/v4.html">
-                                <div class="text-center">
-                                    <figure class="d-md-block mb-0 text-primary-indigo">
-                                        <i class="glyph-icon flaticon-gallery font-size-12"></i>
-                                    </figure>
-                                    <span class="tabtext font-size-3 font-weight-medium text-dark">Arts & Photography</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link font-weight-medium px-0" href="../shop/v4.html">
-                                <div class="text-center">
-                                    <figure class="d-md-block mb-0 text-tangerine">
-                                        <i class="glyph-icon flaticon-cook font-size-12"></i>
-                                    </figure>
-                                    <span class="tabtext font-size-3 font-weight-medium text-dark">Food & Drink</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link font-weight-medium px-0" href="../shop/v4.html">
-                                <div class="text-center">
-                                    <figure class="d-md-block mb-0 text-chili">
-                                        <i class="glyph-icon flaticon-like font-size-12"></i>
-                                    </figure>
-                                    <span class="tabtext font-size-3 font-weight-medium text-dark">Romance</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link font-weight-medium px-0" href="../shop/v4.html">
-                                <div class="text-center">
-                                    <figure class="d-md-block mb-0 text-carolina">
-                                        <i class="glyph-icon flaticon-doctor font-size-12"></i>
-                                    </figure>
-                                    <span class="tabtext font-size-3 font-weight-medium text-dark">Health</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link font-weight-medium px-0" href="../shop/v4.html">
-                                <div class="text-center">
-                                    <figure class="d-md-block mb-0 text-punch">
-                                        <i class="glyph-icon flaticon-resume font-size-12"></i>
-                                    </figure>
-                                    <span class="tabtext font-size-3 font-weight-medium text-dark">Biography</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link font-weight-medium px-0" href="../shop/v4.html">
-                                <div class="text-center">
-                                    <figure class="d-md-block mb-0 text-tangerine">
-                                        <i class="icon glyph-icon flaticon-jogging font-size-12"></i>
-                                    </figure>
-                                    <span class="tabtext font-size-3 font-weight-medium text-dark">Sports</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link font-weight-medium px-0" href="../shop/v4.html">
-                                <div class="text-center">
-                                    <figure class="d-md-block mb-0 text-chili">
-                                        <i class="icon glyph-icon flaticon-baby-boy font-size-12"></i>
-                                    </figure>
-                                    <span class="tabtext font-size-3 font-weight-medium text-dark">Children</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link font-weight-medium px-0" href="../shop/v4.html">
-                                <div class="text-center">
-                                    <figure class="d-md-block mb-0 text-chili">
-                                        <i class="glyph-icon flaticon-like font-size-12"></i>
-                                    </figure>
-                                    <span class="tabtext font-size-3 font-weight-medium text-dark">Romance</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link font-weight-medium px-0" href="../shop/v4.html">
-                                <div class="text-center">
-                                    <figure class="d-md-block mb-0 text-chili">
-                                        <i class="icon glyph-icon flaticon-baby-boy font-size-12"></i>
-                                    </figure>
-                                    <span class="tabtext font-size-3 font-weight-medium text-dark">Children</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link font-weight-medium px-0" href="../shop/v4.html">
-                                <div class="text-center">
-                                    <figure class="d-md-block mb-0 text-tangerine">
-                                        <i class="icon glyph-icon flaticon-jogging font-size-12"></i>
-                                    </figure>
-                                    <span class="tabtext font-size-3 font-weight-medium text-dark">Sports</span>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
+            <div class="container">
+                <div class="js-slick-carousel u-slick"
+                     data-pagi-classes="text-center u-slick__pagination position-absolute right-0 left-0 mb-n8 mb-lg-4 bottom-0">
+                    <div class="js-slide">
+                        <div class="hero row min-height-588 align-items-center">
+                            <div class="col-lg-7 col-wd-6 mb-4 mb-lg-0">
+                                <img class="img-fluid rounded" style="height: 550px" src="{{asset('/assets/img/statuie-Carol1-800x800.jpg')}}" alt="image-description">
+                            </div>
+
+                            <div class="col-lg-5 col-wd-6"
+                                 data-scs-animation-in="fadeInRight"
+                                 data-scs-animation-delay="500">
+                                <h2 class="hero__title font-size-14 mb-4"
+                                    data-scs-animation-in="fadeInUp"
+                                    data-scs-animation-delay="300">
+                                    <span class="hero__title-line-1 font-weight-bold d-block"><i>“An institution for the well-being of the university youth“</i></span>
+                                </h2>
+                                <p>
+                                    In a letter addressed to the President of the Council of Ministers, a document that can be considered a true founding act, King Carol I declared his desire to “set up an institution for the well-being of the university youth from all the universities of the Country, endowed with a permanently open library.”
+                                </p>
+                                <p>
+                                    The future place of culture was to be certified by law as a state institution, under the administration of the Ministry of Cults and Public Instruction.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 

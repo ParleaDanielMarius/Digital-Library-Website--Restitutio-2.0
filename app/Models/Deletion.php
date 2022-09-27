@@ -11,6 +11,7 @@ class Deletion extends Model
     protected $fillable = [
         'original_id',
         'created_by',
+        'created_at',
         'updated_by',
         'title',
         'title_long',
@@ -47,7 +48,21 @@ class Deletion extends Model
     public const null_Unknown = 'Unknown'; // Used if a field is null (Example: When publishing year is not known)
 
 
+    public function scopeFilter($query, array $filters) {
+        $request = request();
 
+        // Advanced Search Filter
+        if(array_key_exists('search' ,$filters)) {
+            $query->when($request->search, function($query) use($request) {
+                $query->where('title', 'like', '%' . $request->search . '%')
+                    ->orWhere('title_long', 'like', '%' . $request->search . '%')
+                    ->orWhere('deleted_at', 'like', '%' . $request->search . '%');
+            });
+
+
+
+        }
+    }
 
 
     // Relationship To User

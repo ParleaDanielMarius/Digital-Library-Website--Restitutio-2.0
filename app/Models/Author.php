@@ -21,28 +21,9 @@ class Author extends Model
     // Basic Filters
     public function scopeFilter($query, array $filters) {
         // Subject Filter for Subject Tags
-        if($filters['subject'] ?? false) {
-            $query -> whereHas('items', function($query) {
-                $query -> whereHas('subjects', function($query) {
-                    $query->where('title' , '=', request('subject'));
-                });
-            });
-        }
-
-        // Simple Search for Main Search Bar
-        if($filters['search'] ?? false) {
-            $query ->whereHas('items', function($query) {
-                $query->where('title', 'like', '%' . request('search') . '%')
-                    ->orwhere('description', 'like', '%' . request('search') . '%')
-                    ->orwhereHas('subjects', function ($query) {
-                        $query->where('title', 'like', '%' . request('search') . '%');
-                    })
-                    ->orwhere('publisher', 'like', '%' . request('search') . '%')
-                    ->orwhereHas('authors', function ($query) {
-                        $query->where('fullname', 'like', '%' . request('search') . '%');
-                    });
-            });
-
+        $request = request();
+        if(array_key_exists('search' ,$filters)) {
+            $query->where('fullname', 'LIKE', '%'. $request->search . '%');
         }
     }
 //

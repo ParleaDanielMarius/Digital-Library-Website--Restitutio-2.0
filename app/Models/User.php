@@ -5,7 +5,6 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -65,29 +64,30 @@ class User extends Authenticatable
 
 
     // Advanced Search for User Manage View
-    public function scopeFilter($query, array $filter)
+    public function scopeFilter($query, array $filters)
     {
         $request = request();
-        $query->when($request->first_name, function ($query) use($request) {
-            $query->where('first_name', 'LIKE', '%'. $request->first_name . '%');
-        })
-            ->when($request->last_name, function ($query) use($request) {
-                $query->where('last_name', 'LIKE', '%'. $request->last_name . '%');
+        if(array_key_exists('username' ,$filters)) {
+            $query->when($request->first_name, function ($query) use ($request) {
+                $query->where('first_name', 'LIKE', '%' . $request->first_name . '%');
             })
-            ->when($request->email, function ($query) use($request) {
-                $query->where('email', 'LIKE', '%'. $request->email . '%');
-            })
-            ->when($request->username, function ($query) use($request) {
-                $query->where('username', 'LIKE', '%'. $request->username . '%');
-            })
-            ->when($request->location, function ($query) use($request) {
-                $query->where('location', 'LIKE', '%'. $request->location . '%');
-            })
-            ->when($request->status, function ($query) use ($request) {
-                $query->where('status', $request->status);
-            })
-            ->latest()->Paginate(20);
-
+                ->when($request->last_name, function ($query) use ($request) {
+                    $query->where('last_name', 'LIKE', '%' . $request->last_name . '%');
+                })
+                ->when($request->email, function ($query) use ($request) {
+                    $query->where('email', 'LIKE', '%' . $request->email . '%');
+                })
+                ->when($request->username, function ($query) use ($request) {
+                    $query->where('username', 'LIKE', '%' . $request->username . '%');
+                })
+                ->when($request->location, function ($query) use ($request) {
+                    $query->where('location', 'LIKE', '%' . $request->location . '%');
+                })
+                ->when($request->status, function ($query) use ($request) {
+                    $query->where('status', $request->status);
+                })
+                ->latest();
+        }
     }
 
     // Relationship to Authors

@@ -19,46 +19,34 @@ class ItemController extends Controller
     //  --  Show Home  --  \\
     public function home() {
         // Takes only 500 to not tank performance
+        /*
         $items = Item::query()
             ->with(['authors:id,fullname', 'collections:id,title'])
-            ->where('status', Item::STATUS_ACTIVE)->latest()->limit(500)->get();
-        $latestItems = array();
-        $latestManuscripts = array();
-        $latestPeriodics = array();
-        if($items != null) {
-            $i = 0;
-            foreach($items as $item) {
-                if ($i == 12) {
-                    break;
-                }
-                $latestItems[] = $item;
-                $i++;
-            }
-            $i = 0;
-            foreach($items as $key => $item) {
-                if ($i == 12) {
-                    break;
-                }
-                if ($item->type == Item::type_Periodic) {
-                    $latestPeriodics[] = $item;
-                    unset($items[$key]);
-                    $i++;
-                }
-            }
-            $i = 0;
-            foreach($items as $key => $item) {
-                if ($i == 12) {
-                    break;
-                }
-                if ($item->type == Item::type_Manuscript) {
-                    $latestManuscripts[] = $item;
-                    unset($items[$key]);
-                    $i++;
-                }
-            }
+            ->where('status', Item::STATUS_ACTIVE)->latest()->limit(500)
+            ->get();
+        $latestItems = $items->take(12);
+        $latestManuscripts = $items->where('type', Item::type_Manuscript)->take(12);
+        $latestPeriodics = $items->where('type', Item::type_Periodic)->take(12);
+        */
 
+        $latestItems = Item::query()
+            ->with(['authors:id,fullname', 'collections:id,title'])
+            ->where('status', Item::STATUS_ACTIVE)->latest()->limit(12)
+            ->get();
 
-        }
+        $latestManuscripts = Item::query()
+            ->with(['authors:id,fullname', 'collections:id,title'])
+            ->where('status', Item::STATUS_ACTIVE)
+            ->where('type', Item::type_Manuscript)
+            ->latest()->limit(12)
+            ->get();
+        $latestPeriodics = Item::query()
+            ->with(['authors:id,fullname', 'collections:id,title'])
+            ->where('status', Item::STATUS_ACTIVE)
+            ->where('type', Item::type_Periodic)
+            ->latest()->limit(12)
+            ->get();
+
         return view('home', [
             'latestItems' => $latestItems,
             'latestPeriodics' => $latestPeriodics,
@@ -68,26 +56,56 @@ class ItemController extends Controller
 
     //  --  Show all items  --  \\
     public function index() {
-            $pages = request('orderBy', 25);
-            $sort = request('sortBy', SORT_NATURAL);
+        $validationSort = ['asc', 'desc', 'latest'];
+        $validationPage = ['10', '15', '20', '25', '30'];
+        $pages = request('orderBy', 25);
+        $sort = request('sortBy', 'asc');
+        $sortField = 'title';
+        if(!in_array($pages, $validationPage, true)) {
+            $pages = 25;
+        }
+        if(!in_array($sort, $validationSort, true)) {
+            $sort = 'asc';
+        }
+        if($sort === 'latest') {
+            $sort = 'desc';
+            $sortField = 'created_at';
+        }
+        $items = Item::with(['authors:id,fullname', 'subjects:id,title', 'collections:id,title'])->where('status', Item::STATUS_ACTIVE)
+            ->filter(request(['search']))
+            ->orderBy($sortField, $sort)->paginate($pages)->withQueryString()
+            ;
         return view('items.index' , [
-            'items' => Item::with(['authors:id,fullname', 'subjects:title,id'])->where('status', Item::STATUS_ACTIVE)
-                ->filter(request(['search']))
-                ->paginate($pages)->withQueryString(),
-            'authors' => Author::get(['id', 'fullname'])->sortBy('fullname', SORT_NATURAL),
-            'collections' => Collection::get(['id', 'title'])->sortBy('title', SORT_NATURAL),
-            'subjects' => Subject::get(['id', 'title'])->sortBy('title', SORT_NATURAL),
+            'items' => $items,
+
+            /*  Was used for multiselect
+            'authors' => $items->pluck('authors')->flatten()->sortBy('fullname', SORT_NATURAL),
+            'collections' => $items->pluck('collections')->flatten()->sortBy('title', SORT_NATURAL),
+            'subjects' => $items->pluck('subjects')->flatten()->sortBy('title', SORT_NATURAL),
+            */
         ]);
     }
 
 
     // --  Show single item  --  \\
     public function show(Item $item) {
-        if($item->status == Item::STATUS_INACTIVE && !auth()->user()) {
+        if($item->status == Item::STATUS_INACTIVE && ! auth()->user()) {
             abort(404);
         }
+
+        $subjectsID = array();
+        foreach($item->subjects as $subject) {
+            $subjectsID[] = $subject->id;
+        }
+
         return view('items.show' , [
-            'item' => $item->load(['authors:id,fullname', 'subjects:title', 'collections:id,title']),
+            'item' => $item,
+            'similarItems' => Item::query()->with(['authors:id,fullname', 'collections:id,title'])
+            ->where('status', Item::STATUS_ACTIVE)
+            ->whereNot('id', $item->id)
+            ->whereHas('subjects', function($query) use($subjectsID) {
+                    $query->whereIn('subject_id', $subjectsID);
+            })->limit(5)->get(),
         ]);
     }
 
@@ -115,8 +133,30 @@ class ItemController extends Controller
 
     //  --  Manage Item  --  \\
     public function manage() {
-        return view('items.manage', [
-            'items' => Item::with(['authors:id,fullname', 'subjects:title'])->where('status', Item::STATUS_INACTIVE)->filter(request(['subject', 'search']))->latest()->paginate(12)
+        $validationSort = ['asc', 'desc', 'latest'];
+        $validationPage = ['10', '15', '20', '25', '30'];
+        $pages = request('orderBy', 25);
+        $sort = request('sortBy', 'asc');
+        $sortField = 'title';
+        if(!in_array($pages, $validationPage, true)) {
+            $pages = 25;
+        }
+        if(!in_array($sort, $validationSort, true)) {
+            $sort = 'asc';
+        }
+        if($sort === 'latest') {
+            $sort = 'desc';
+            $sortField = 'created_at';
+        }
+        $items = Item::with(['authors:id,fullname', 'subjects:id,title', 'collections:id,title'])->where('status', Item::STATUS_INACTIVE)
+            ->filter(request(['search']))
+            ->orderBy($sortField, $sort)->get()
+        ;
+        return view('items.manage' , [
+            'items' => $items->paginate($pages)->withQueryString(),
+            'authors' => $items->pluck('authors')->flatten()->sortBy('fullname', SORT_NATURAL),
+            'collections' => $items->pluck('collections')->flatten()->sortBy('title', SORT_NATURAL),
+            'subjects' => $items->pluck('subjects')->flatten()->sortBy('title', SORT_NATURAL),
         ]);
     }
 
@@ -201,7 +241,7 @@ class ItemController extends Controller
                     'user' => auth()->id(),
                     'message' => $e,
                 ]);
-                return redirect(route('items.show', $item))->with('warning', "Item couldn't be deleted");
+                return redirect(route('items.show', $item))->with('warning', "Item couldn't be deleted!");
             }
             Log::notice('Destroy (Item):', [
                 'id' => $item->id,
@@ -210,12 +250,15 @@ class ItemController extends Controller
             ]);
             return redirect('/')->with('message', 'Item Deleted Successfully');
         } else
-            return redirect(route('items.show', $item))->with('warning', "Item couldn't be deleted. Mandatory Backup Failed");
+            return redirect(route('items.show', $item))->with('warning', "Item couldn't be deleted. Mandatory Backup Failed!");
     }
 
 
     //  --  Change Item's Status  --  \\
     public function changeStatus(Item $item) {
+        if($item->collections->isEmpty() || $item->authors->isEmpty()) {
+            return redirect(route('items.show', $item))->with('warning', "Status couldn't be changed. No author or collection present for item!");
+        }
         try {
             if($item->status == Item::STATUS_ACTIVE) {
                 $item->status = Item::STATUS_INACTIVE;
@@ -497,7 +540,7 @@ class ItemController extends Controller
             ]);
             return redirect(route('items.show', $item))->with('warning', "Item couldn't be updated!");
         }
-        Log::notice('Update (Item)', [
+        Log::notice('Update (Item):', [
             'id' => $item->id,
             'title' => $item->title,
             'user' => auth()->id(),

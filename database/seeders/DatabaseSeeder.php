@@ -7,7 +7,6 @@ use App\Models\Author;
 use App\Models\Collection;
 use App\Models\Item;
 use App\Models\Subject;
-use Database\Factories\AuthorItemFactory;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 class DatabaseSeeder extends Seeder
@@ -45,11 +44,19 @@ class DatabaseSeeder extends Seeder
 
         ]);
 
-        Item::factory(500)->hasCollections(3, ['created_by' => '1'])->hasAuthors(3, ['created_by' => '1'])->hasSubjects(3)->create([
-            'created_by'=>$user->id,
-            'pdf_path'=>'item/2022/Aug/Quis nemo aut in rem/HFakIg6GRAhmTDUfaiK9EwTrmX2FLdVcTiC0bVqv.pdf'
-        ]);
+        //Item::factory(2000)->hasCollections(3, ['created_by' => '1'])->hasAuthors(3, ['created_by' => '1'])->hasSubjects(3)->create([
+       //     'created_by'=>$user->id,
+        //    'pdf_path'=>'item/2022/Aug/Quis nemo aut in rem/HFakIg6GRAhmTDUfaiK9EwTrmX2FLdVcTiC0bVqv.pdf'
+       // ]);
 
+        Collection::factory(10)->create(['created_by' => $user->id])->each(function($collection) use($user) {
+            $collection->items()
+                ->saveMany(Item::factory(100) -> make(['created_by' => $user->id]))
+                ->each(function($item) use($user) {
+                    $item->authors()->saveMany(Author::factory(random_int(1,3))->make(['created_by' => $user->id]));
+                    $item->subjects()->saveMany(Subject::factory(random_int(1,3))->make());
+                });
+        });
 
 
         // \App\Models\User::factory()->create([

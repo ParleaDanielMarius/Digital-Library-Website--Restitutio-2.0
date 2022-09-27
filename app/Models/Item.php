@@ -47,24 +47,56 @@ class Item extends Model {
     // Basic Filters
     public function scopeFilter($query, array $filters) {
         $request = request();
+        $authors = array();
+        $subjects = array();
+        if($request->authors != null) {
+            $authors = explode(', ', $request->authors);
+        }
 
-        // Subject Tag Filter
-        if($filters['subject'] ?? false) {
-            $query->whereHas('subjects', function($query) {
-                $query->where('title', request('subject'));
-            });
+        if($request->subjects != null) {
+            $subjects = explode(', ', $request->subjects);
         }
 
 
         // Advanced Search Filter
-        if(array_key_exists('search', $filters)) {
+        if(array_key_exists('search' ,$filters)) {
             $query->when($request->search, function($query) use($request) {
                 $query->where('title', 'like', '%' . $request->search . '%');
                     })
-                ->when($request->authors, function ($query) use ($request) {
-                    foreach($request->authors as $author) {
+                ->when($authors, function ($query) use ($authors) {
+                    foreach($authors as $author) {
                         $query->whereHas('authors', function ($query) use ($author) {
-                            $query->where('fullname', $author);
+                            $query->where('fullname', 'LIKE', '%' . $author . '%');
+                        });
+                    }
+                })
+                ->when($subjects, function ($query) use ($subjects) {
+                    foreach($subjects as $subject) {
+                        $query->whereHas('subjects', function ($query) use ($subject) {
+                            $query->where('title', 'LIKE', '%' . $subject . '%');
+                        });
+                    }
+                })
+                ->when($request->language, function ($query) use ($request) {
+                    $query->where('language', 'LIKE', '%' . $request->language . '%');
+                })
+                ->when($request->type, function ($query) use ($request) {
+                    $query->where('type', $request->type);
+                });
+
+
+
+        }
+/*
+     if(array_key_exists('search' ,$filters)) {
+            $query->when($request->search, function($query) use($request) {
+                $query->where('title', 'like', '%' . $request->search . '%')
+                ->orWhere('title_long', 'like', '%' . $request->search . '%');
+                    })
+                ->when($authors, function ($query) use ($authors) {
+                    foreach($authors as $author) {
+                        $query->whereHas('authors', function ($query) use ($author) {
+                            $query->where('fullname', 'like', '%' . $author . '%');
                         });
                     }
                 })
@@ -78,17 +110,16 @@ class Item extends Model {
                 ->when($request->publisher_when, function ($query) use ($request) {
                     $query->where('publisher_when', 'LIKE', '%' . $request->publisher_when . '%');
                 })
-                ->when($request->collection, function ($query) use ($request) {
-                    $query->whereHas('collections', function ($query) use ($request) {
-                        $query->where('title', 'LIKE', '%' . $request->collection . '%');
-                    });
+                ->when($request->language, function ($query) use ($request) {
+                    $query->where('language', 'LIKE', '%' . $request->language . '%');
                 })
                 ->when($request->type, function ($query) use ($request) {
                     $query->where('type', $request->type);
                 });
 
-        }
 
+        }
+ */
 
         // Simple Search for Main Search Bar
         if($filters['NOthing here Yet'] ?? false) {
@@ -127,6 +158,7 @@ class Item extends Model {
     public function collections() {
         return $this->belongsToMany(Collection::class, 'collection_item');
     }
+
 
 // Relationship To OneCollection
     public function OneCollection() {

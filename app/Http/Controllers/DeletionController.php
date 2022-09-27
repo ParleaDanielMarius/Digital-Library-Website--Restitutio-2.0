@@ -18,14 +18,51 @@ class DeletionController extends Controller
 {
     //  --  Manage Item  --  \\
     public function manage() {
+        $validationSort = ['asc', 'desc', 'latest'];
+        $validationPage = ['10', '15', '20', '25', '30'];
+        $pages = request('orderBy', 25);
+        $sort = request('sortBy', 'asc');
+        $sortField = 'title';
+        if(!in_array($pages, $validationPage, true)) {
+            $pages = 25;
+        }
+        if(!in_array($sort, $validationSort, true)) {
+            $sort = 'asc';
+        }
+        if($sort === 'latest') {
+            $sort = 'desc';
+            $sortField = 'created_at';
+        }
+        $deletions = Deletion::query()
+            ->filter(request(['search']))
+            ->orderBy($sortField, $sort)->get()
+        ;
         return view('deletions.manage', [
-            'items' => Deletion::latest()->paginate(12)
+            'deletions' => $deletions->paginate($pages)->withQueryString()
         ]);
     }
 
     public function show(Deletion $deletion) {
+        $subjects = array();
+        $authors = array();
+        $collections = array();
+        if($deletion->had_subjects) {
+            $subjects = explode(', ', $deletion->had_subjects);
+        }
+
+        if($deletion->had_authors) {
+            $authors = explode(', ', $deletion->had_authors);
+        }
+
+        if($deletion->was_partOf) {
+            $collections = explode(', ', $deletion->was_partOf);
+        }
+
         return view('deletions.show', [
-            'item' => $deletion,
+            'deletion' => $deletion,
+            'subjects'=> $subjects,
+            'authors' => $authors,
+            'collections' => $collections,
         ]);
     }
 

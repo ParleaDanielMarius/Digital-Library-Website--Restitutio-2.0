@@ -6,12 +6,12 @@
             <a href="../shop/single-product-v4.html" class="d-block"><img src="@if($item->cover_path && file_exists('storage' . '/' . $item->cover_path)){{asset('storage/' . $item->cover_path)}} @else{{asset('/images/no-item-image.png')}}@endif" class="img-fluid d-block mx-auto attachment-shop_catalog size-shop_catalog wp-post-image img-fluid" alt="image-description"></a>
         </div>
         <div class="col-md woocommerce-loop-product__body product__body pt-3 bg-white mb-3 mb-md-0">
-            <div class="text-uppercase font-size-1 mb-1 text-truncate"><a href="../shop/single-product-v4.html">COLLECTION</a></div>
-            <h2 class="woocommerce-loop-product__title product__title h6 text-lh-md mb-1 crop-text-2 h-dark"><a href="../shop/single-product-v4.html" tabindex="0">{{$item->title}}</a></h2>
+            <div class="text-uppercase font-size-1 mb-1 text-truncate"><a href="{{route('collections.show', ($item->collections->first()) ?? '')}}">{{($item->collections->first())->title ?? ''}}</a></div>
+            <h2 class="woocommerce-loop-product__title product__title h6 text-lh-md mb-1 crop-text-2 h-dark"><a href="{{route('items.show', $item)}}" tabindex="0">{{$item->title}}</a></h2>
             @forelse($item->authors as $author)
-                <div class="font-size-2  mb-2 text-truncate"><a href="../others/authors-single.html" class="text-gray-700">{{$author->fullname}}</a></div>
+                <div class="font-size-2  mb-2 text-truncate"><a href="{{route('authors.show', $author)}}" class="text-gray-700">{{$author->fullname}}</a></div>
             @empty
-                <div class="font-size-2  mb-2 text-truncate"><a class="text-gray-700">Unknown Author</a></div>
+                <div class="font-size-2  mb-2 text-truncate"><a class="text-gray-700">Unknown</a></div>
             @endforelse
             <p class="font-size-2 mb-2 crop-text-2">{{$item->description}}</p>
         </div>

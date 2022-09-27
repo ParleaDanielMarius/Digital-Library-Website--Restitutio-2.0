@@ -21,16 +21,6 @@ class Collection extends Model
     public const STATUS_ACTIVE = 'active';
     public const STATUS_INACTIVE = 'inactive';
 
-    public function scopeFilter($query, array $filters) {
-        if($filters['search'] ?? false) {
-            $query->where('title', 'like', '%' . request('search') . '%')
-                ->orwhere('description', 'like', '%' . request('search') . '%');
-
-
-        }
-
-    }
-
 
     // Relationship To User
     public function user() {

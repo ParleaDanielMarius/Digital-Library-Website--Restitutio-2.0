@@ -12,15 +12,13 @@ use Exception;
 
 class UserController extends Controller
 {
-    use ThrottlesLogins;
-    use AuthenticatesUsers;
     protected $maxAttempts = 5; // Default is 5
     protected $decayMinutes = 1; // Default is 1
 
 
     // Show Register/Create Form
     public function create() {
-        return view('users.register');
+        return view('users.create');
     }
 
     // Create User
@@ -69,7 +67,7 @@ class UserController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/')->with('message', 'Logged out successfully');
+        return redirect(route('home'))->with('message', 'Logged out successfully');
     }
 
     // Show Login Form
@@ -79,11 +77,6 @@ class UserController extends Controller
 
     // Authenticate User
     public function authenticate(Request $request) {
-        if ($this->hasTooManyLoginAttempts($request)) {
-            $this->fireLockoutEvent($request);
-            return $this->sendLockoutResponse($request);
-        }
-
         $formFields = $request->validate([
             'username'=>'required',
             'password'=>'required',
@@ -95,10 +88,8 @@ class UserController extends Controller
             'status' => USER::STATUS_ACTIVE,
         ])) {
             $request->session()->regenerate();
-            $this->clearLoginAttempts($request);
             return redirect('/')->with('message', 'Logged In!');
         }
-        $this->incrementLoginAttempts($request);
         return back()->withErrors(['username' => 'Invalid Credentials'])->onlyInput('username');
     }
 
@@ -151,8 +142,27 @@ class UserController extends Controller
 
     // Manage User
     public function manage() {
-        return view('users.manage',[
-            'users' => User::withCount('items')->filter(['username'])->simplePaginate(20)
+        $validationSort = ['asc', 'desc', 'latest'];
+        $validationPage = ['10', '15', '20', '25', '30'];
+        $pages = request('orderBy', 25);
+        $sort = request('sortBy', 'asc');
+        $sortField = 'username';
+        if(!in_array($pages, $validationPage, true)) {
+            $pages = 25;
+        }
+        if(!in_array($sort, $validationSort, true)) {
+            $sort = 'asc';
+        }
+        if($sort === 'latest') {
+            $sort = 'desc';
+            $sortField = 'created_at';
+        }
+        $users = User::query()
+            ->filter(request(['username']))
+            ->orderBy($sortField, $sort)->get()
+        ;
+        return view('users.manage' , [
+            'users' => $users->paginate($pages)->withQueryString(),
         ]);
     }
 
