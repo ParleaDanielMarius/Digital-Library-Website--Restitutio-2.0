@@ -2,12 +2,13 @@
     use App\Models\Item;
 @endphp
 @extends('layouts.layout-index')
+
 @section('content')
 <!-- ====== MAIN CONTENT ====== -->
 <div class="page-header border-bottom mb-8">
     <div class="container">
         <div class="d-md-flex justify-content-between align-items-center py-4">
-            <h1 class="page-title font-size-3 font-weight-medium m-0 text-lh-lg">Shop</h1>
+            <h1 class="page-title font-size-3 font-weight-medium m-0 text-lh-lg">{{__('browse')['browse items']}}</h1>
             <nav class="woocommerce-breadcrumb font-size-2">
                 <a href="../home/index.html" class="h-primary">Home</a>
                 <span class="breadcrumb-separator mx-1"><i class="fas fa-angle-right"></i></span>
@@ -27,13 +28,13 @@
                 <div class="shop-control-bar d-lg-flex justify-content-between align-items-center mb-5 text-center text-md-left">
                     <div class="shop-control-bar__left mb-4 m-lg-0">
                         <p class="woocommerce-result-count m-0">
-                            {!! __('Showing') !!}
+                            {!! __('pagination')['showing'] !!}
                             <span>{{ $items->firstItem() }}</span>
-                            {!! __('to') !!}
+                            {!! __('pagination')['to'] !!}
                             <span>{{ $items->lastItem() }}</span>
-                            {!! __('of') !!}
+                            {!! __('pagination')['of'] !!}
                             <span>{{ $items->total() }}</span>
-                            {!! __('results') !!}
+                            {!! __('pagination')['results'] !!}
                         </p>
                     </div>
 
@@ -42,23 +43,22 @@
                             <!-- Select -->
                             <select onchange="this.form.submit()" class="js-select selectpicker dropdown-select orderby" name="sortBy"
                                     data-style="border-bottom shadow-none outline-none py-2">
-                                <option value="latest" @if(request('sortBy') === 'latest') selected @endif>Sort by Latest</option>
-                                <option value="asc" @if(request('sortBy') == null || request('sortBy') == 'asc') selected @endif>Asc</option>
-                                <option value="desc"@if(request('sortBy') == 'desc') selected @endif>Desc</option>
+                                <option value="latest" @if(request('sortBy') === 'latest') selected @endif>{{__('sort')['latest']}}</option>
+                                <option value="asc" @if(request('sortBy') == null || request('sortBy') == 'asc') selected @endif>{{__('sort')['asc']}}</option>
+                                <option value="desc"@if(request('sortBy') == 'desc') selected @endif>{{__('sort')['desc']}}</option>
                             </select>
                             <!-- End Select -->
-
 
 
                             <!-- Select -->
                             <select name="orderBy" onchange="this.form.submit()" class="js-select selectpicker dropdown-select orderby"
                                     data-style="border-bottom shadow-none outline-none py-2"
                                     data-width="fit">
-                                <option value="10" @if($items->perPage() == 10) selected @endif>Show 10</option>
-                                <option value="15" @if($items->perPage() == 15) selected @endif>Show 15</option>
-                                <option value="20" @if($items->perPage() == 20) selected @endif>Show 20</option>
-                                <option value="25" @if($items->perPage() == 25) selected @endif>Show 25</option>
-                                <option value="30" @if($items->perPage() == 30) selected @endif>Show 30</option>
+                                <option value="10" @if($items->perPage() == 10) selected @endif>{{__('show')}} 10</option>
+                                <option value="15" @if($items->perPage() == 15) selected @endif>{{__('show')}} 15</option>
+                                <option value="20" @if($items->perPage() == 20) selected @endif>{{__('show')}} 20</option>
+                                <option value="25" @if($items->perPage() == 25) selected @endif>{{__('show')}} 25</option>
+                                <option value="30" @if($items->perPage() == 30) selected @endif>{{__('show')}} 30</option>
                             </select>
                             <!-- End Select -->
 
@@ -104,6 +104,7 @@
                                 <x-items.item-card :item="$item"></x-items.item-card>
                             </li>
                             @empty
+                                {{__('no results')}}
                             @endforelse
                         </ul>
                         <!-- End Mockup Block -->
@@ -116,7 +117,7 @@
                                     <x-items.item-list-card :item="$item"></x-items.item-list-card>
                                 </li>
                             @empty
-                                No Product Found
+                            {{__('no results')}}
                             @endforelse
                             </li>
 
@@ -140,7 +141,7 @@
                                aria-expanded="true"
                                aria-controls="widgetCollapseOne">
 
-                                <h3 class="widget-title mb-0 font-weight-medium font-size-3">Title</h3>
+                                <h3 class="widget-title mb-0 font-weight-medium font-size-3">{{__('items')['title']}}</h3>
 
                                 <svg class="mins" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="2px">
                                     <path fill-rule="evenodd" fill="rgb(22, 22, 25)" d="M0.000,-0.000 L15.000,-0.000 L15.000,2.000 L0.000,2.000 L0.000,-0.000 Z" />
@@ -159,9 +160,9 @@
                                     <div class="input-group-prepend">
                                         <i class="glph-icon flaticon-loupe py-2d75 bg-white-100 border-white-100 text-dark pl-3 pr-0 rounded-0"></i>
                                     </div>
-                                    <input name="search" class="form-control bg-white-100 py-2d75 height-4 border-white-100 rounded-0" type="search" value="{{request('search') ?? ''}}" placeholder="Title" aria-label="Search">
+                                    <input name="search" class="form-control bg-white-100 py-2d75 height-4 border-white-100 rounded-0" type="search" value="{{request('search') ?? ''}}" placeholder="Ex: Floare Albastra" aria-label="Search">
                                 </div>
-                                <button class="btn btn-outline-primary btn-sm" type="submit">Search</button>
+                                <button class="btn btn-outline-primary btn-sm" type="submit">{{__('search')}}</button>
 
                         </div>
                     </div>
@@ -174,7 +175,7 @@
                                aria-expanded="true"
                                aria-controls="widgetCollapse20">
 
-                                <h3 class="widget-title mb-0 font-weight-medium font-size-3">Subjects</h3>
+                                <h3 class="widget-title mb-0 font-weight-medium font-size-3">{{__('subjects')['subjects']}}</h3>
 
                                 <svg class="mins" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="2px">
                                     <path fill-rule="evenodd" fill="rgb(22, 22, 25)" d="M0.000,-0.000 L15.000,-0.000 L15.000,2.000 L0.000,2.000 L0.000,-0.000 Z" />
@@ -189,20 +190,14 @@
                         <div id="widgetCollapse20" class="mt-4 widget-content collapse show"
                              aria-labelledby="widgetHeading20"
                         >
-                            <select  name="subjects[]" id="subjects[]" class="border border-gray-200 rounded p-2 w-full" multiple multiselect-search="true">
-                                @foreach($subjects as $subject)
-                                    <option value="{{$subject->title}}"
-                                        @if(request('subjects'))
-                                            @foreach(request('subjects') as $subjectSelected)
-                                                @if($subject->title == $subjectSelected) selected @endif
-                                            @endforeach
-                                        @endif
-                                    >{{$subject->title}}</option>
-                                @endforeach
-                            </select>
+                            <div class="input-group flex-nowrap w-100">
+                                <div class="input-group-prepend">
+                                    <i class="glph-icon flaticon-loupe py-2d75 bg-white-100 border-white-100 text-dark pl-3 pr-0 rounded-0"></i>
+                                </div>
+                            <input name="subjects" class="form-control bg-white-100 py-2d75 height-4 border-white-100 rounded-0" type="search" value="{{request('subjects') ?? ''}}" placeholder="Ex: History, Politics" aria-label="Search">
                         </div>
                     </div>
-
+                    </div>
 
                     <div id="Authors" class="widget widget_search widget_author p-4d875 border">
                         <div id="widgetHeading21" class="widget-head">
@@ -212,7 +207,7 @@
                                aria-expanded="true"
                                aria-controls="widgetCollapse21">
 
-                                <h3 class="widget-title mb-0 font-weight-medium font-size-3">Author</h3>
+                                <h3 class="widget-title mb-0 font-weight-medium font-size-3">{{__('authors')['authors']}}</h3>
 
                                 <svg class="mins" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="2px">
                                     <path fill-rule="evenodd" fill="rgb(22, 22, 25)" d="M0.000,-0.000 L15.000,-0.000 L15.000,2.000 L0.000,2.000 L0.000,-0.000 Z" />
@@ -227,54 +222,14 @@
                         <div id="widgetCollapse21" class="mt-4 widget-content collapse show"
                              aria-labelledby="widgetHeading21"
                              >
-                            <select  name="authors[]" id="authors[]" class="border border-gray-200 rounded p-2 w-full" multiple multiselect-search="true">
-                                @foreach($authors as $author)
-                                    <option value="{{$author->fullname}}"
-                                            @if(request('authors'))
-                                                @foreach(request('authors') as $authorSelected)
-                                                    @if($author->fullname == $authorSelected) selected @endif
-                                                @endforeach
-                                            @endif
-                                    >{{$author->fullname}}</option>
-                                @endforeach
-                            </select>
+                            <div class="input-group flex-nowrap w-100">
+                                <div class="input-group-prepend">
+                                    <i class="glph-icon flaticon-loupe py-2d75 bg-white-100 border-white-100 text-dark pl-3 pr-0 rounded-0"></i>
+                                </div>
+                            <input name="authors" class="form-control bg-white-100 py-2d75 height-4 border-white-100 rounded-0" type="search" value="{{request('authors') ?? ''}}" placeholder="Ex: Eminescu, Eliade" aria-label="Search">
                         </div>
                     </div>
-
-                    <div id="Format" class="widget p-4d875 border">
-                        <div id="widgetHeading22" class="widget-head">
-                            <a class="d-flex align-items-center justify-content-between text-dark" href="#"
-                               data-toggle="collapse"
-                               data-target="#widgetCollapse22"
-                               aria-expanded="true"
-                               aria-controls="widgetCollapse22">
-
-                                <h3 class="widget-title mb-0 font-weight-medium font-size-3">Format</h3>
-
-                                <svg class="mins" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="2px">
-                                    <path fill-rule="evenodd" fill="rgb(22, 22, 25)" d="M0.000,-0.000 L15.000,-0.000 L15.000,2.000 L0.000,2.000 L0.000,-0.000 Z" />
-                                </svg>
-
-                                <svg class="plus" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="15px">
-                                    <path fill-rule="evenodd" fill="rgb(22, 22, 25)" d="M15.000,8.000 L9.000,8.000 L9.000,15.000 L7.000,15.000 L7.000,8.000 L0.000,8.000 L0.000,6.000 L7.000,6.000 L7.000,-0.000 L9.000,-0.000 L9.000,6.000 L15.000,6.000 L15.000,8.000 Z" />
-                                </svg>
-                            </a>
-                        </div>
-
-                        <div id="widgetCollapse22" class="mt-3 widget-content collapse show"
-                             aria-labelledby="widgetHeading22"
-                             >
-                            <select  name="type[]" id="type[]" class="border border-gray-200 rounded p-2 w-full" multiple multiselect-search="false">
-                                <option value="{{Item::type_Book}}" @if(request('type') === Item::type_Book) selected @endif>{{Item::type_Book}}</option>
-                                <option value="{{Item::type_OldBook}}" @if(request('type') === Item::type_OldBook) selected @endif>{{Item::type_OldBook}}</option>
-                                <option value="{{Item::type_Map}}" @if(request('type') === Item::type_Map) selected @endif>{{Item::type_Map}}</option>
-                                <option value="{{Item::type_Manuscript}}" @if(request('type') === Item::type_Manuscript) selected @endif>{{Item::type_Manuscript}}</option>
-                                <option value="{{Item::type_Periodic}}" @if(request('type') === Item::type_Periodic) selected @endif>{{Item::type_Periodic}}</option>
-                            </select>
-
-                        </div>
                     </div>
-
 
                     <div id="Language" class="widget p-4d875 border">
                         <div id="widgetHeading23" class="widget-head">
@@ -284,7 +239,7 @@
                                aria-expanded="true"
                                aria-controls="widgetCollapse23">
 
-                                <h3 class="widget-title mb-0 font-weight-medium font-size-3">Language</h3>
+                                <h3 class="widget-title mb-0 font-weight-medium font-size-3">{{__('items')['language']}}</h3>
 
                                 <svg class="mins" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="2px">
                                     <path fill-rule="evenodd" fill="rgb(22, 22, 25)" d="M0.000,-0.000 L15.000,-0.000 L15.000,2.000 L0.000,2.000 L0.000,-0.000 Z" />
@@ -305,6 +260,41 @@
                                 </div>
                                 <input name="language" class="form-control bg-white-100 py-2d75 height-4 border-white-100 rounded-0" type="search" value="{{request('language') ?? ''}}" placeholder="Ex: Romanian" aria-label="Search">
                             </div>
+                        </div>
+                    </div>
+
+                    <div id="Format" class="widget p-4d875 border">
+                        <div id="widgetHeading22" class="widget-head">
+                            <a class="d-flex align-items-center justify-content-between text-dark" href="#"
+                               data-toggle="collapse"
+                               data-target="#widgetCollapse22"
+                               aria-expanded="true"
+                               aria-controls="widgetCollapse22">
+
+                                <h3 class="widget-title mb-0 font-weight-medium font-size-3">{{__('items')['type']}}</h3>
+
+                                <svg class="mins" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="2px">
+                                    <path fill-rule="evenodd" fill="rgb(22, 22, 25)" d="M0.000,-0.000 L15.000,-0.000 L15.000,2.000 L0.000,2.000 L0.000,-0.000 Z" />
+                                </svg>
+
+                                <svg class="plus" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="15px">
+                                    <path fill-rule="evenodd" fill="rgb(22, 22, 25)" d="M15.000,8.000 L9.000,8.000 L9.000,15.000 L7.000,15.000 L7.000,8.000 L0.000,8.000 L0.000,6.000 L7.000,6.000 L7.000,-0.000 L9.000,-0.000 L9.000,6.000 L15.000,6.000 L15.000,8.000 Z" />
+                                </svg>
+                            </a>
+                        </div>
+
+                        <div id="widgetCollapse22" class="mt-3 widget-content collapse show"
+                             aria-labelledby="widgetHeading22"
+                        >
+                            <select  name="type" id="type" class="border border-gray-200 rounded p-2 w-full">
+                                <option value="" @if(request('type') === null) selected @endif>{{__('none')}}</option>
+                                <option value="{{Item::type_Book}}" @if(request('type') === Item::type_Book) selected @endif>{{__('items')['book']}}</option>
+                                <option value="{{Item::type_OldBook}}" @if(request('type') === Item::type_OldBook) selected @endif>{{__('items')['old book']}}</option>
+                                <option value="{{Item::type_Map}}" @if(request('type') === Item::type_Map) selected @endif>{{__('items')['map']}}</option>
+                                <option value="{{Item::type_Manuscript}}" @if(request('type') === Item::type_Manuscript) selected @endif>{{__('items')['manuscript']}}</option>
+                                <option value="{{Item::type_Periodic}}" @if(request('type') === Item::type_Periodic) selected @endif>{{__('items')['periodic']}}</option>
+                            </select>
+
                         </div>
                     </div>
                 </div>

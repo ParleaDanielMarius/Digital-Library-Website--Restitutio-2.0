@@ -23,7 +23,7 @@ class UserController extends Controller
 
     // Create User
     public function store(Request $request) {
-
+        // Validate fields
         $formFields = $request->validate([
             'username'=>['required', 'min:5', Rule::unique('users', 'username')],
             'first_name'=>'required',
@@ -38,7 +38,7 @@ class UserController extends Controller
         // Hash Password
         $formFields['password'] = bcrypt($formFields['password']);
 
-        // Transactions
+        // DB Transaction
         try {
             DB::beginTransaction();
 
@@ -46,13 +46,15 @@ class UserController extends Controller
 
             DB::commit();
         } catch(Exception $e) {
+            // Rollback and log errors
+            DB::rollBack();
             Log::error('store (User) - Failed:', [
                 'user' => auth()->id(),
                 'message' => $e,
             ]);
-            DB::rollBack();
             return redirect('/')->with('warning', "User couldn't be created!");
         }
+        // Log success
         Log::notice('store (User):', [
             'id' => $user->id,
             'user' => auth()->id(),
@@ -63,7 +65,7 @@ class UserController extends Controller
     // Logout User
     public function logout(Request $request) {
         auth()->logout();
-
+        // Invalidate session and regenerate token
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
@@ -77,11 +79,12 @@ class UserController extends Controller
 
     // Authenticate User
     public function authenticate(Request $request) {
+        // Validate Fields
         $formFields = $request->validate([
             'username'=>'required',
             'password'=>'required',
         ]);
-
+        // Check if user account is active
         if(auth()->attempt([
             'username' => $formFields['username'],
             'password' => $formFields['password'],
@@ -100,7 +103,7 @@ class UserController extends Controller
 
     // Update User
     public function update(Request $request, User $user) {
-
+        // Validate Fields
         $formFields = $request->validate([
             'username'=>['required', 'min:5', Rule::unique('users', 'username')->ignore($user)],
             'first_name'=>'required',
@@ -116,7 +119,7 @@ class UserController extends Controller
         $formFields['password'] = bcrypt($formFields['password']);
         $formFields['updated_by'] = auth()->id();
 
-        // Transactions
+        // DB Transaction
         try {
             DB::beginTransaction();
 
@@ -124,6 +127,7 @@ class UserController extends Controller
 
             DB::commit();
         } catch(Exception $e) {
+            // Rollback and log errors
             DB::rollBack();
             Log::error('update (User) - Failed:', [
                 'id' => $user->id,
@@ -132,6 +136,7 @@ class UserController extends Controller
             ]);
             return redirect(route('users.show', $user))->with('warning', "User couldn't be updated!");
         }
+        // Log success
         Log::notice('store (User):', [
             'id' => $user->id,
             'user' => auth()->id(),
@@ -142,21 +147,28 @@ class UserController extends Controller
 
     // Manage User
     public function manage() {
+        // Some arrays for validation of sorting, ordering and pagination
         $validationSort = ['asc', 'desc', 'latest'];
         $validationPage = ['10', '15', '20', '25', '30'];
+        // Gets the pagination, sorting and ordering from the request
         $pages = request('orderBy', 25);
         $sort = request('sortBy', 'asc');
         $sortField = 'username';
+        // Pagination Validation, $pages gets a default value if validation fails
         if(!in_array($pages, $validationPage, true)) {
             $pages = 25;
         }
+        // Sorting Validation, $sort gets a default value if validation fails
         if(!in_array($sort, $validationSort, true)) {
             $sort = 'asc';
         }
+        // Sorts by 'created_at' field if sorting is done by latest
         if($sort === 'latest') {
             $sort = 'desc';
             $sortField = 'created_at';
         }
+        // Query Users, order, sort, paginate
+        // and filter using 'username' (found in User Model)
         $users = User::query()
             ->filter(request(['username']))
             ->orderBy($sortField, $sort)->get()
@@ -175,7 +187,9 @@ class UserController extends Controller
 
     //  --  Change User's Status  --  \\
     public function changeStatus(User $user) {
+        // DB Transaction
         try {
+            // Check user status and change to opposite
             if ($user->status == User::STATUS_ACTIVE) {
                 $user->status = User::STATUS_INACTIVE;
                 DB::beginTransaction();
@@ -191,6 +205,7 @@ class UserController extends Controller
                 $redirect = 2;
             }
         }catch(Exception $e) {
+            // Rollback and log errors
             DB::rollBack();
             Log::error('update (User):', [
                 'id' => $user->id,
@@ -199,6 +214,7 @@ class UserController extends Controller
             ]);
             return redirect(route('users.show', $user))->with('warning', 'An error has occurred! ' . $e);
         }
+        // Log success
         Log::notice('update (User):', [
             'id' => $user->id,
             'user' => auth()->id(),

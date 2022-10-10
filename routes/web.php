@@ -4,6 +4,8 @@ use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\DeletionController;
 use App\Http\Controllers\ItemCollectionController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\LangController;
+use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,8 +19,18 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/test', [AuthorController::class, 'test'])->name('test');
+Route::get('/authors-ajax-list', [AuthorController::class, 'ajaxGetList']);
+Route::get('/items-index-get', [ItemController::class, 'ajaxIndexGet']);
 
-Route::get('/', [ItemController::class, 'home'])->name('home');
+
+Route::get('/authors-select/{search}', [AuthorController::class, 'authorsSelect'])->name('authorsSelect');
+Route::get('/collections-select/{search}', [ItemCollectionController::class, 'collectionsSelect'])->name('collectionsSelect');
+Route::get('/subjects-select/{search}', [SubjectController::class, 'subjectsSelect'])->name('subjectsSelect');
+
+
+Route::get('/', [LangController::class, 'home'])->name('home');
+Route::get('lang/change', [LangController::class, 'change'])->name('changeLang');
 
 
 Route::get('/items', [ItemController::class, 'index'])->name('items.index');

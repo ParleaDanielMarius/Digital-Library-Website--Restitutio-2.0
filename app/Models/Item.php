@@ -20,7 +20,9 @@ class Item extends Model {
         'cover_path',
         'pdf_path',
         'publisher',
-        'publisher_when',
+        'publisher_day',
+        'publisher_month',
+        'publisher_year',
         'publisher_where',
         'type',
         'language',
@@ -28,13 +30,12 @@ class Item extends Model {
         'provider',
         'rights',
         'ISBN',
+        'ISSN',
         'status',
     ];
 
-    // protected $casts = [
-    //     'publisher_when' => 'date:d-m-Y',
-    // ];
 
+    // A ton of constants for items used pretty much everywhere (To make life easier? Did they?)
     public const STATUS_INACTIVE = 'Inactive';
     public const STATUS_ACTIVE = 'Active';
     public const type_Book = 'Book';
@@ -43,27 +44,41 @@ class Item extends Model {
     public const type_Map = 'Map';
     public const type_Periodic = 'Periodic';
     public const null_Unknown = 'Unknown'; // Used if a field is null (Example: When publishing year is not known)
+                                            // Not really used anymore as front-end should take care of this (SHOULD)
 
-    // Basic Filters
+    // Filters
     public function scopeFilter($query, array $filters) {
+        // Get Request
         $request = request();
+
+        // Initialize arrays
         $authors = array();
         $subjects = array();
+
+        // Used to allow search for multiple authors in the same field
         if($request->authors != null) {
             $authors = explode(', ', $request->authors);
         }
-
+        // Same as above
         if($request->subjects != null) {
             $subjects = explode(', ', $request->subjects);
         }
+        // Checks if one-digit month was entered and add 0 in front of it
+        if(strlen($request->month_from) == 1) {
+            $request->month_from = 0 . $request->month_from;
+        }
+        // Same as above
+        if(strlen($request->month_to) == 1) {
+            $request->month_to = 0 . $request->month_to;
+        }
 
-
-        // Advanced Search Filter
+        // Check if search filter exists
         if(array_key_exists('search' ,$filters)) {
             $query->when($request->search, function($query) use($request) {
                 $query->where('title', 'like', '%' . $request->search . '%');
                     })
                 ->when($authors, function ($query) use ($authors) {
+                    // Queries each author
                     foreach($authors as $author) {
                         $query->whereHas('authors', function ($query) use ($author) {
                             $query->where('fullname', 'LIKE', '%' . $author . '%');
@@ -71,6 +86,7 @@ class Item extends Model {
                     }
                 })
                 ->when($subjects, function ($query) use ($subjects) {
+                    // Queries each subject
                     foreach($subjects as $subject) {
                         $query->whereHas('subjects', function ($query) use ($subject) {
                             $query->where('title', 'LIKE', '%' . $subject . '%');
@@ -80,6 +96,15 @@ class Item extends Model {
                 ->when($request->language, function ($query) use ($request) {
                     $query->where('language', 'LIKE', '%' . $request->language . '%');
                 })
+                ->when($request->year_from ?? $request->year_to, function ($query) use ($request) {
+
+                    $query->whereBetween('publisher_year', [($request->year_from ?? $request->year_to), ($request->year_to ?? $request->year_from)]);
+                })
+                ->when($request->month_from ?? $request->month_to, function ($query) use ($request) {
+
+                    $query->whereBetween('publisher_month', [($request->month_from ?? $request->month_to), ($request->month_to ?? $request->month_from)]);
+                })
+
                 ->when($request->type, function ($query) use ($request) {
                     $query->where('type', $request->type);
                 });
@@ -87,7 +112,7 @@ class Item extends Model {
 
 
         }
-/*
+/* NOT USED ANYMORE, MIGHT DELETE
      if(array_key_exists('search' ,$filters)) {
             $query->when($request->search, function($query) use($request) {
                 $query->where('title', 'like', '%' . $request->search . '%')
@@ -120,20 +145,6 @@ class Item extends Model {
 
         }
  */
-
-        // Simple Search for Main Search Bar
-        if($filters['NOthing here Yet'] ?? false) {
-            $query->where('title', 'like', '%' . request('search') . '%')
-                ->orwhere('description', 'like', '%' . request('search') . '%')
-                ->orwhereHas('subjects', function($query) {
-                    $query->where('title', 'like', '%' .request('search') . '%');
-                })
-                ->orwhere('publisher', 'like', '%' . request('search') . '%')
-                ->orwhereHas('authors', function($query) {
-                    $query->where('fullname', 'like', '%' .request('search') . '%');
-                });
-
-        }
     }
 
 

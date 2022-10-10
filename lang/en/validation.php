@@ -168,6 +168,25 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'first_name' => 'First Name',
+        'last_name' => 'Last Name',
+        'title' => 'Title',
+        'title_long' => 'Long Title',
+        'cover_path' => 'Cover Path',
+        'pdf_path' => 'PDF Path',
+        'publisher' => 'Publisher',
+        'publisher_when' => 'Date of Publishing',
+        'publisher_day' => 'Day of Publishing',
+        'publisher_month' => 'Month of Publishing',
+        'publisher_year' => 'Year of Publishing',
+        'publisher_where' => 'Place of Publishing',
+        'description' => 'Description',
+        'type' => 'Type',
+        'provider' => 'Provider',
+        'rights' => 'Rights',
+        'language' => 'Language',
+        'status' => 'Status',
+    ],
 
 ];

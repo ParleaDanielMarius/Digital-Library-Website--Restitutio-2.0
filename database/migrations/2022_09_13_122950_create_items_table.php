@@ -26,7 +26,10 @@ return new class extends Migration
             $table->string('cover_path')->nullable();
             $table->string('pdf_path')->nullable();
             $table->string('publisher')->nullable();
-            $table->string('publisher_when')->nullable();
+            $table->string('publisher_day')->nullable();
+            $table->string('publisher_month')->nullable();
+            $table->string('publisher_year')->nullable();
+            //$table->string('publisher_when')->nullable(); - DEPRECATED
             $table->string('publisher_where')->nullable();
             $table->longText('description')->nullable();
             $table->string('type')->nullable();
@@ -35,6 +38,7 @@ return new class extends Migration
             $table->string('provider')->nullable();
             $table->string('rights')->nullable();
             $table->string('ISBN')->nullable();
+            $table->string('ISSN')->nullable();
             $table->timestamps();
 
 

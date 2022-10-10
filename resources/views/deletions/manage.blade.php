@@ -2,19 +2,17 @@
     use App\Models\Item;
 @endphp
 @extends('layouts.layout-index')
+@section('title', __('admin')['manage deleted items'])
+
 @section('content')
     <!-- ====== MAIN CONTENT ====== -->
     <div class="page-header border-bottom mb-8">
         <div class="container">
             <div class="d-md-flex justify-content-between align-items-center py-4">
-                <h1 class="page-title font-size-3 font-weight-medium m-0 text-lh-lg text-info">Manage Deleted Items</h1>
+                <h1 class="page-title font-size-3 font-weight-medium m-0 text-lh-lg text-info">{{__('admin')['manage deleted items']}}</h1>
                 <nav class="woocommerce-breadcrumb font-size-2">
-                    <a href="../home/index.html" class="h-primary">Home</a>
-                    <span class="breadcrumb-separator mx-1"><i class="fas fa-angle-right"></i></span>
-                    <a href="../shop/v6.html" class="h-primary">Electronics</a>
-                    <span class="breadcrumb-separator mx-1"><i class="fas fa-angle-right"></i></span>
-                    <a href="../shop/v6.html" class="h-primary">Cameras</a>
-                    <span class="breadcrumb-separator mx-1"><i class="fas fa-angle-right"></i></span>Build Your DSLR
+                    <a href="{{route('home')}}" class="h-primary">{{__('home')}}</a>
+                    <span class="breadcrumb-separator mx-1"><i class="fas fa-angle-right"></i></span>{{__('admin')['manage deleted items']}}
                 </nav>
             </div>
         </div>
@@ -27,13 +25,13 @@
                         <div class="shop-control-bar d-lg-flex justify-content-between align-items-center mb-5 text-center text-md-left">
                             <div class="shop-control-bar__left mb-4 m-lg-0">
                                 <p class="woocommerce-result-count m-0">
-                                    {!! __('Showing') !!}
+                                    {!! __('pagination')['showing'] !!}
                                     <span>{{ $deletions->firstItem() }}</span>
-                                    {!! __('to') !!}
+                                    {!! __('pagination')['to'] !!}
                                     <span>{{ $deletions->lastItem() }}</span>
-                                    {!! __('of') !!}
+                                    {!! __('pagination')['of'] !!}
                                     <span>{{ $deletions->total() }}</span>
-                                    {!! __('results') !!}
+                                    {!! __('pagination')['results'] !!}
                                 </p>
                             </div>
 
@@ -42,9 +40,9 @@
                                 <!-- Select -->
                                 <select onchange="this.form.submit()" class="js-select selectpicker dropdown-select orderby" name="sortBy"
                                         data-style="border-bottom shadow-none outline-none py-2">
-                                    <option value="latest" @if(request('sortBy') === 'latest') selected @endif>Sort by Latest</option>
-                                    <option value="asc" @if(request('sortBy') == null || request('sortBy') == 'asc') selected @endif>Asc</option>
-                                    <option value="desc"@if(request('sortBy') == 'desc') selected @endif>Desc</option>
+                                    <option value="latest" @if(request('sortBy') === 'latest') selected @endif>{{__('sort')['latest']}}</option>
+                                    <option value="asc" @if(request('sortBy') == null || request('sortBy') == 'asc') selected @endif>{{__('sort')['asc']}}</option>
+                                    <option value="desc"@if(request('sortBy') == 'desc') selected @endif>{{__('sort')['desc']}}</option>
                                 </select>
                                 <!-- End Select -->
 
@@ -54,11 +52,11 @@
                                 <select name="orderBy" onchange="this.form.submit()" class="js-select selectpicker dropdown-select orderby"
                                         data-style="border-bottom shadow-none outline-none py-2"
                                         data-width="fit">
-                                    <option value="10" @if($deletions->perPage() == 10) selected @endif>Show 10</option>
-                                    <option value="15" @if($deletions->perPage() == 15) selected @endif>Show 15</option>
-                                    <option value="20" @if($deletions->perPage() == 20) selected @endif>Show 20</option>
-                                    <option value="25" @if($deletions->perPage() == 25) selected @endif>Show 25</option>
-                                    <option value="30" @if($deletions->perPage() == 30) selected @endif>Show 30</option>
+                                    <option value="10" @if($deletions->perPage() == 10) selected @endif>{{__('show')}} 10</option>
+                                    <option value="15" @if($deletions->perPage() == 15) selected @endif>{{__('show')}} 15</option>
+                                    <option value="20" @if($deletions->perPage() == 20) selected @endif>{{__('show')}} 20</option>
+                                    <option value="25" @if($deletions->perPage() == 25) selected @endif>{{__('show')}} 25</option>
+                                    <option value="30" @if($deletions->perPage() == 30) selected @endif>{{__('show')}} 30</option>
                                 </select>
                                 <!-- End Select -->
 
@@ -117,7 +115,7 @@
                                             <x-deletions.deletion-list-card :deletion="$deletion"></x-deletions.deletion-list-card>
                                         </li>
                                     @empty
-                                        No Product Found
+                                    {{__('no results')}}
                                         @endforelse
                                         </li>
 

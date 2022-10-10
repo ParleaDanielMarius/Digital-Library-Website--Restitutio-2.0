@@ -56,6 +56,7 @@
  */
 :root {
   --blue: #3259ea;
+  --blue-bcu: #124b8d;
   --indigo: #a200fc;
   --purple: #6f42c1;
   --pink: #e83e8c;
@@ -21714,7 +21715,7 @@ a.text-red-1:hover, a.text-red-1:focus {
   .table, .widget_calendar table {
     border-collapse: collapse !important;
   }
-  
+
   .table td,
   .widget_calendar table td, .table th, .widget_calendar table th {
     background-color: #fff !important;
@@ -24960,6 +24961,10 @@ Slick Pagination
 
 .text-gray-400 {
   color: #beb4b4;
+}
+
+.text-blue-bcu {
+    color: #124b8d !important;
 }
 
 .text-white-60 {

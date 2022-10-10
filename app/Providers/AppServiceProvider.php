@@ -6,6 +6,7 @@ namespace App\Providers;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -40,5 +41,7 @@ class AppServiceProvider extends ServiceProvider
                 ]
             );
         });
+
+        Paginator::useBootstrap();
     }
 }

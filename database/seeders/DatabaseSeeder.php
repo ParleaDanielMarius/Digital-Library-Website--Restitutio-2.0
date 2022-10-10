@@ -51,7 +51,7 @@ class DatabaseSeeder extends Seeder
 
         Collection::factory(10)->create(['created_by' => $user->id])->each(function($collection) use($user) {
             $collection->items()
-                ->saveMany(Item::factory(100) -> make(['created_by' => $user->id]))
+                ->saveMany(Item::factory(1000) -> make(['created_by' => $user->id]))
                 ->each(function($item) use($user) {
                     $item->authors()->saveMany(Author::factory(random_int(1,3))->make(['created_by' => $user->id]));
                     $item->subjects()->saveMany(Subject::factory(random_int(1,3))->make());

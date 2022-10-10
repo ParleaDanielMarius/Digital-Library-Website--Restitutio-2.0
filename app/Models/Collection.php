@@ -18,8 +18,28 @@ class Collection extends Model
         'description'
     ];
 
+    // Status constants for collections (To make life easier? Did they?)
     public const STATUS_ACTIVE = 'active';
     public const STATUS_INACTIVE = 'inactive';
+
+    // Filters
+    public function scopeFilter($query, array $filters) {
+        // Get request
+        $request = request();
+        // Check if search filter exists
+        if(array_key_exists('search' ,$filters)) {
+            // Query collection
+            $query->where('title', 'LIKE', '%'. $request->search . '%')
+                ->when($request->subjects, function($query) use($request) {
+                    $query->whereHas('items', function($query) use($request) {
+                        $query->whereHas('subjects', function($query) use($request) {
+                            $query->where('title', 'LIKE', '%' . $request->subjects. '%');
+                        });
+                    });
+                })
+            ;
+        }
+    }
 
 
     // Relationship To User

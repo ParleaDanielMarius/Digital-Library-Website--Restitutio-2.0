@@ -18,7 +18,9 @@ class Deletion extends Model
         'cover_path',
         'pdf_path',
         'publisher',
-        'publisher_when',
+        'publisher_day',
+        'publisher_month',
+        'publisher_year',
         'publisher_where',
         'type',
         'language',
@@ -38,6 +40,7 @@ class Deletion extends Model
     //     'publisher_when' => 'date:d-m-Y',
     // ];
 
+    // A ton of constants for deletions used pretty much everywhere (To make life easier? Did they?)
     public const STATUS_INACTIVE = 'Inactive';
     public const STATUS_ACTIVE = 'Active';
     public const type_Book = 'Book';
@@ -46,13 +49,16 @@ class Deletion extends Model
     public const type_Map = 'Map';
     public const type_Periodic = 'Periodic';
     public const null_Unknown = 'Unknown'; // Used if a field is null (Example: When publishing year is not known)
+                                            // Not really used anymore as front-end should take care of this (SHOULD)
 
-
+    // Filters
     public function scopeFilter($query, array $filters) {
+        // Get Request
         $request = request();
 
-        // Advanced Search Filter
+        // Check if search filter exists
         if(array_key_exists('search' ,$filters)) {
+            // Query deletions
             $query->when($request->search, function($query) use($request) {
                 $query->where('title', 'like', '%' . $request->search . '%')
                     ->orWhere('title_long', 'like', '%' . $request->search . '%')
@@ -70,7 +76,7 @@ class Deletion extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
-// Relationship To User Update
+    // Relationship To User Update
     public function userUpdate() {
         return $this->belongsTo(User::class, 'updated_by');
     }

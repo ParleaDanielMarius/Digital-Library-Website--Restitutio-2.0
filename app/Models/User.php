@@ -28,6 +28,7 @@ class User extends Authenticatable
         'status',
     ];
 
+    // Constants used pretty much everywhere (to make life easier? Did they?)
     public const role_Admin = 'Admin';
     public const role_Librarian = 'Librarian';
     public const STATUS_ACTIVE = 'Active';
@@ -53,7 +54,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-
+    // Used by middlewere to check account type
     public function isAdmin() {
         if ($this->role == self::role_Admin) {
             return $this;
@@ -66,7 +67,10 @@ class User extends Authenticatable
     // Advanced Search for User Manage View
     public function scopeFilter($query, array $filters)
     {
+        // Get Request
         $request = request();
+
+        // Check if username filter exists
         if(array_key_exists('username' ,$filters)) {
             $query->when($request->first_name, function ($query) use ($request) {
                 $query->where('first_name', 'LIKE', '%' . $request->first_name . '%');

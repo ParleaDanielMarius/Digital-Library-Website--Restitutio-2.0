@@ -3,12 +3,12 @@
     <ul class="col-lg-4 col-xl-3 pt-9 border-top d-lg-block tabs wc-tabs nav justify-content-lg-center flex-nowrap flex-lg-wrap overflow-auto overflow-lg-visble" id="pills-tab" role="tablist">
         <li class="flex-shrink-0 flex-lg-shrink-1 nav-item mb-3">
             <a class="py-1 d-inline-block nav-link font-weight-medium active" id="pills-one-example1-tab" data-toggle="pill" href="#pills-one-example1" role="tab" aria-controls="pills-one-example1" aria-selected="true">
-                Description
+                {{__('items')['description']}}
             </a>
         </li>
         <li class="flex-shrink-0 flex-lg-shrink-1 nav-item mb-3">
             <a class="py-1 d-inline-block nav-link font-weight-medium" id="pills-two-example1-tab" data-toggle="pill" href="#pills-two-example1" role="tab" aria-controls="pills-two-example1" aria-selected="false">
-                Item Details
+                {{__('items')['details']}}
             </a>
         </li>
         <li class="flex-shrink-0 flex-lg-shrink-1 nav-item mb-3">
@@ -37,27 +37,27 @@
                 <table class="table table-hover table-borderless">
                     <tbody>
                     <tr>
-                        <th class="px-4 px-xl-5">Publication date: </th>
+                        <th class="px-4 px-xl-5">{{__('items')['publisher_when']}}: </th>
                         <td>{{$item->publisher_when ?? 'Unknown'}}</td>
                     </tr>
                     <tr>
-                        <th class="px-4 px-xl-5">Publisher:</th>
+                        <th class="px-4 px-xl-5">{{__('items')['publisher']}}:</th>
                         <td>{{$item->publisher ?? 'Unknown'}}</td>
                     </tr>
                     <tr>
-                        <th class="px-4 px-xl-5">Publication City/Country:</th>
+                        <th class="px-4 px-xl-5">{{__('items')['publisher_where']}}:</th>
                         <td>{{$item->publisher_where ?? 'Unknown'}}</td>
                     </tr>
                     <tr>
-                        <th class="px-4 px-xl-5">Language:</th>
+                        <th class="px-4 px-xl-5">{{__('items')['language']}}:</th>
                         <td>{{$item->language ?? 'Unknown'}}</td>
                     </tr>
                     <tr>
-                        <th class="px-4 px-xl-5">Provider: </th>
+                        <th class="px-4 px-xl-5">{{__('items')['provider']}}: </th>
                         <td>{{$item->provider ?? 'Unknown'}}</td>
                     </tr>
                     <tr>
-                        <th class="px-4 px-xl-5">Rights:</th>
+                        <th class="px-4 px-xl-5">{{__('items')['rights']}}:</th>
                         <td><a href="{{$item->rights ?? ''}}">{{$item->rights ?? 'Unknown'}}</a></td>
                     </tr>
 
@@ -71,12 +71,12 @@
             <!-- Mockup Block -->
             @if($item->pdf_path && file_exists('storage' . '/' . $item->pdf_path))
 
-                <iframe id="pdf-js-viewer" src="/assets/PDF.js/web/viewer.html?file=/storage/{{$item->pdf_path}}" title="PDF Viewer"  width="700" height="800"></iframe>
+                <iframe id="pdf-js-viewer" src="/assets/PDF.js/web/viewer.html?file=/storage/{{$item->pdf_path}}" title="PDF Viewer"  width="100%" height="600"></iframe>
 
-                <div class="text-xl font-bold mb-4"><a href="/storage/{{$item->pdf_path}}" target="_blank" class="hover:text-red">Click here to open PDF in a separate tab</a></div>
+                <div class="text-xl font-bold mb-4"><a href="/storage/{{$item->pdf_path}}" target="_blank" class="hover:text-red">{{__('click here to open pdf')}}</a></div>
 
                 <div class="border border-gray-200 w-full mb-6"></div>
-            @else <h3 class="text-xl font-bold">No PDF Attached</h3>
+            @else <h3 class="text-xl font-bold">{{__('no pdf attached')}}</h3>
         @endif
         <!-- End Mockup Block -->
         </div>
@@ -91,54 +91,54 @@
                             <td>{{$item->vubis_id ?? 'Unknown'}}</td>
                         </tr>
                         <tr>
-                            <th class="px-4 px-xl-5">Item Status: </th>
+                            <th class="px-4 px-xl-5">{{__('items')['status']}}: </th>
                             <td>{{$item->status ?? 'No Value'}}</td>
                         </tr>
                         @if(auth()->user()->isAdmin())
                             <tr>
-                                <th class="px-4 px-xl-5">Created by: </th>
+                                <th class="px-4 px-xl-5">{{__('items')['created_by']}}: </th>
                                 <td>{{$item->user->username ?? 'No Value'}}</td>
                             </tr>
                             <tr>
-                                <th class="px-4 px-xl-5">Created at: </th>
+                                <th class="px-4 px-xl-5">{{__('items')['created_at']}}: </th>
                                 <td>{{$item->created_at ?? 'No Value'}}</td>
                             </tr>
                             <tr>
-                                <th class="px-4 px-xl-5">Updated by: </th>
+                                <th class="px-4 px-xl-5">{{__('items')['updated_by']}}: </th>
                                 <td>{{$item->user->username ?? 'No Value'}}</td>
                             </tr>
                             <tr>
-                                <th class="px-4 px-xl-5">Updated at: </th>
+                                <th class="px-4 px-xl-5">{{__('items')['updated_at']}}: </th>
                                 <td>{{$item->updated_at ?? 'No Value'}}</td>
                             </tr>
                             <tr>
-                                <th class="px-4 px-xl-5">Deleted by: </th>
+                                <th class="px-4 px-xl-5">{{__('items')['deleted_by']}}: </th>
                                 <td>{{$item->userDelete->username ?? 'No Value'}}</td>
                             </tr>
                             <tr>
-                                <th class="px-4 px-xl-5">Deleted at: </th>
+                                <th class="px-4 px-xl-5">{{__('items')['deleted_at']}}: </th>
                                 <td>{{$item->deleted_at ?? 'No Value'}}</td>
                             </tr>
                             <tr>
-                                <th class="px-4 px-xl-5">Last restored at: </th>
+                                <th class="px-4 px-xl-5">{{__('items')['restored_at']}}: </th>
                                 <td>{{$item->restored_at ?? 'No Value'}}</td>
                             </tr>
                         @endif
                         <tr>
-                            <th class="px-4 px-xl-5">Actions: </th>
+                            <th class="px-4 px-xl-5">{{__('actions')}}: </th>
                             <td>
                                 <a href="{{route('items.edit', $item)}}" type="button"><i class="fa-solid fa-pencil"></i>
-                                    Edit Item
+                                    {{__('librarian')['edit item']}}
                                 </a>
                             </td>
                             <td>
                                 <a href="#" type="button" data-toggle="modal" data-target="#deleteModal"><i class="fa-solid fa-trash"></i>
-                                    Delete Item
+                                    {{__('librarian')['delete item']}}
                                 </a>
                             </td>
                             <td>
                                 <a href="#" type="button" data-toggle="modal" data-target="#statusModal"><i class="fa-solid fa-power-off"></i>
-                                    Change Status
+                                    {{__('librarian')['change status']}}
                                 </a>
                             </td>
                         </tr>

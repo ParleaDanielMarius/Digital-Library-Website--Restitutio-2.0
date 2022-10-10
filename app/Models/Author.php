@@ -17,13 +17,23 @@ class Author extends Model
         'updated_by',
     ];
 
-// TODO: Find something better than whatever these abominations are
-    // Basic Filters
+    // Filter
     public function scopeFilter($query, array $filters) {
-        // Subject Filter for Subject Tags
+        // Get Request
         $request = request();
+
+        // Check if search filter exists
         if(array_key_exists('search' ,$filters)) {
-            $query->where('fullname', 'LIKE', '%'. $request->search . '%');
+            // Query authors
+            $query->where('fullname', 'LIKE', '%'. $request->search . '%')
+            ->when($request->subjects, function($query) use($request) {
+                $query->whereHas('items', function($query) use($request) {
+                    $query->whereHas('subjects', function($query) use($request) {
+                        $query->where('title', 'LIKE', '%' . $request->subjects. '%');
+                    });
+                });
+            })
+            ;
         }
     }
 //
