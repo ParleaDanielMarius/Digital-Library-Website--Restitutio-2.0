@@ -13,7 +13,7 @@
                 <p>You are about to change this collection's status to <b class="text-primary"> @if($collection->status == app\models\Collection::STATUS_ACTIVE)Inactive. @else Active. @endif </b>Proceed?</p>
             </div>
             <div class="modal-footer">
-                <form method="post" action="{{route('collections.status', $collection)}}">
+                <form method="post" action="{{route('collections.status', $collection->slug)}}">
                     @method('put')
                     @csrf
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

@@ -32,6 +32,7 @@ class Item extends Model {
         'ISBN',
         'ISSN',
         'status',
+        'slug',
     ];
 
 
@@ -75,7 +76,8 @@ class Item extends Model {
         // Check if search filter exists
         if(array_key_exists('search' ,$filters)) {
             $query->when($request->search, function($query) use($request) {
-                $query->where('title', 'like', '%' . $request->search . '%');
+                $query->where('title', 'like', '%' . $request->search . '%')
+                ->orWhere('title_long', 'like', '%' . $request->search . '%');
                     })
                 ->when($authors, function ($query) use ($authors) {
                     // Queries each author
@@ -148,7 +150,7 @@ class Item extends Model {
     }
 
 
-    //  -- Relationships --
+    //  -- Relationships --  \\
 
 // Relationship To User
     public function user() {

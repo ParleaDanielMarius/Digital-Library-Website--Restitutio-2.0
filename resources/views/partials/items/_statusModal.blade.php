@@ -13,7 +13,7 @@
                 <p>You are about to change this item's status to <b class="text-primary"> @if($item->status == app\models\Item::STATUS_ACTIVE)Inactive. @else Active. @endif </b>Proceed?</p>
             </div>
             <div class="modal-footer">
-                <form method="post" action="{{route('items.status', $item)}}">
+                <form method="post" action="{{route('items.status', $item->slug)}}">
                     @method('put')
                     @csrf
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

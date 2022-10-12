@@ -19,7 +19,7 @@
                     <span class="breadcrumb-separator mx-1"><i class="fas fa-angle-right"></i></span>
                     <a href="{{route('collections.index')}}" class="h-primary">{{__('browse')['browse collections']}}</a>
                     <span class="breadcrumb-separator mx-1"><i class="fas fa-angle-right"></i></span>
-                    <a href="{{route('collections.show', $collection)}}" class="h-primary">{{$collection->title}}</a>
+                    <a href="{{route('collections.show', $collection->slug)}}" class="h-primary">{{$collection->title}}</a>
                     <span class="breadcrumb-separator mx-1"><i class="fas fa-angle-right"></i></span>
                     <span>{{__('librarian')['edit collection']}}</span>
                 </nav>

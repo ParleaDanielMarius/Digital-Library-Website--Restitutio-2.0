@@ -34,7 +34,9 @@ class Deletion extends Model
         'restored_at',
         'had_subjects',
         'had_authors',
-        'was_partOf',];
+        'was_partOf',
+        'slug',
+        ];
 
     // protected $casts = [
     //     'publisher_when' => 'date:d-m-Y',

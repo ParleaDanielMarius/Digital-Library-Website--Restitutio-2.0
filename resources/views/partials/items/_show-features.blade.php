@@ -71,7 +71,7 @@
             <!-- Mockup Block -->
             @if($item->pdf_path && file_exists('storage' . '/' . $item->pdf_path))
 
-                <iframe id="pdf-js-viewer" src="/assets/PDF.js/web/viewer.html?file=/storage/{{$item->pdf_path}}" title="PDF Viewer"  width="100%" height="600"></iframe>
+                <iframe id="pdf-js-viewer" src="{{asset('/assets/PDF.js/web/viewer.html?file=/storage/' . $item->pdf_path)}}" title="PDF Viewer"  width="100%" height="600"></iframe>
 
                 <div class="text-xl font-bold mb-4"><a href="/storage/{{$item->pdf_path}}" target="_blank" class="hover:text-red">{{__('click here to open pdf')}}</a></div>
 
@@ -86,10 +86,6 @@
                 <div class="table-responsive mb-4">
                     <table class="table table-hover table-borderless">
                         <tbody>
-                        <tr>
-                            <th class="px-4 px-xl-5">Vubis ID: </th>
-                            <td>{{$item->vubis_id ?? 'Unknown'}}</td>
-                        </tr>
                         <tr>
                             <th class="px-4 px-xl-5">{{__('items')['status']}}: </th>
                             <td>{{$item->status ?? 'No Value'}}</td>
@@ -127,7 +123,7 @@
                         <tr>
                             <th class="px-4 px-xl-5">{{__('actions')}}: </th>
                             <td>
-                                <a href="{{route('items.edit', $item)}}" type="button"><i class="fa-solid fa-pencil"></i>
+                                <a href="{{route('items.edit', $item->slug)}}" type="button"><i class="fa-solid fa-pencil"></i>
                                     {{__('librarian')['edit item']}}
                                 </a>
                             </td>

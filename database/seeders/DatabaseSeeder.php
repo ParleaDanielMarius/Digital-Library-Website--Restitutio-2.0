@@ -9,6 +9,9 @@ use App\Models\Item;
 use App\Models\Subject;
 use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Support\Str;
+use function Sodium\randombytes_buf;
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -50,18 +53,25 @@ class DatabaseSeeder extends Seeder
        // ]);
 
         Collection::factory(10)->create(['created_by' => $user->id])->each(function($collection) use($user) {
+            $collection->update(['slug' => Str::slug($collection->title)]);
             $collection->items()
                 ->saveMany(Item::factory(1000) -> make(['created_by' => $user->id]))
                 ->each(function($item) use($user) {
-                    $item->authors()->saveMany(Author::factory(random_int(1,3))->make(['created_by' => $user->id]));
-                    $item->subjects()->saveMany(Subject::factory(random_int(1,3))->make());
+                    $item->update(['slug' => Str::slug($item->title)]);
+                    $item->authors()->saveMany(Author::factory(random_int(1,6))->make([
+                        'created_by' => $user->id,
+                    ]));
+                    $item->subjects()->saveMany(Subject::factory(random_int(1,6))->make());
                 });
         });
-
-
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+    }
+
+    // Used to generate slugs for authors
+    function generateRandomString($itemTitle, $length = 10) {
+        return str_shuffle($itemTitle) . substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length) ;
     }
 }

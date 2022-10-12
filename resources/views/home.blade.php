@@ -55,7 +55,7 @@
                                         <span class="hero__title-line-1 font-weight-regular d-block">{{__('featured collection')}}</span>
                                         <span class="hero__title-line-2 font-weight-bold d-block">{{$featuredCollection->title}}</span>
                                     </h2>
-                                    <a href="{{route('collections.show', $featuredCollection)}}" class="btn btn-dark btn-wide rounded-0 hero__btn"
+                                    <a href="{{route('collections.show', $featuredCollection->slug)}}" class="btn btn-dark btn-wide rounded-0 hero__btn"
                                        data-scs-animation-in="fadeInLeft"
                                        data-scs-animation-delay="400">{{__('discover')}}</a>
                                 </div>

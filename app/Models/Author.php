@@ -15,6 +15,7 @@ class Author extends Model
         'fullname',
         'created_by',
         'updated_by',
+        'slug',
     ];
 
     // Filter

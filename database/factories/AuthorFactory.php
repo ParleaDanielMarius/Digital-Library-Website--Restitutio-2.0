@@ -5,7 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Author>
  */
 class AuthorFactory extends Factory
 {
@@ -19,7 +19,8 @@ class AuthorFactory extends Factory
         return [
             'first_name' => $this->faker->firstName(),
             'last_name' => $this->faker->lastName(),
-            'fullname' => $this->faker->name()
+            'fullname' => $this->faker->name() . ' ' . $this->faker->firstName() . ' ' .$this->faker->firstName(),
+            'slug' =>  $this->faker->firstName() . $this->faker->creditCardNumber(),
         ];
     }
 }

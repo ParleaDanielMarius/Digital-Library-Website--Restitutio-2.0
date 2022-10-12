@@ -15,8 +15,9 @@ return new class extends Migration
     {
         Schema::create('collections', function (Blueprint $table) {
             $table->id();
-            $table->integer('created_by');
-            $table->integer('updated_by')->nullable();
+            $table->string('slug')->unique()->nullable();
+            $table->foreignId('created_by')->default('0')->constrained('users');
+            $table->foreignId('updated_by')->nullable()->constrained('users');
             $table->string('status');
             $table->string('title');
             $table->string('cover_path')->nullable();

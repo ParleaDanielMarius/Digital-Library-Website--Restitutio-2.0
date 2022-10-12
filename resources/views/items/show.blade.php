@@ -92,7 +92,7 @@
                                 <tbody>
                                 @forelse($item->authors as $author)
                                     <tr>
-                                        <td><a href="{{route('authors.show', $author)}}" class="link-black-100">{{$author->fullname}}</a></td>
+                                        <td><a href="{{route('authors.show', $author->slug)}}" class="link-black-100">{{$author->fullname}}</a></td>
                                     </tr>
                                 @empty
                                     <tr>
@@ -135,7 +135,7 @@
                             @forelse($item->collections as $collection)
                                 <tr>
                                     <th class="px-4 px-xl-5">Part of: </th>
-                                    <td><a href="{{route('collections.show', $collection)}}" class="link-black-100">{{$collection->title}}</a></td>
+                                    <td><a href="{{route('collections.show', $collection->slug)}}" class="link-black-100">{{$collection->title}}</a></td>
                                 </tr>
                             @empty
                                 <tr>

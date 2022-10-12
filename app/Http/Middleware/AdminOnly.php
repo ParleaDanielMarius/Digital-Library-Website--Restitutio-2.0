@@ -17,6 +17,7 @@ class AdminOnly
      */
     public function handle(Request $request, Closure $next)
     {
+        // Used to restrict account access to admins
         if(auth()->check() && auth()->user()->role == User::role_Admin) {
             return $next($request);
         }

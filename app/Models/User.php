@@ -50,9 +50,9 @@ class User extends Authenticatable
      *
      * @var array<string, string>
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+//    protected $casts = [
+//        'email_verified_at' => 'datetime',
+//    ];
 
     // Used by middlewere to check account type
     public function isAdmin() {
@@ -99,7 +99,7 @@ class User extends Authenticatable
         return $this->hasMany(Author::class, 'created_by');
     }
 
-    // Relationship to Authors
+    // Relationship to Deletions
     public function deletions() {
         return $this->hasMany(Deletion::class, 'deleted_by');
     }

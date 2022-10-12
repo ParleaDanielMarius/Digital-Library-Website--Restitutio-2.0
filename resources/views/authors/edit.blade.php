@@ -13,7 +13,7 @@
                     <span class="breadcrumb-separator mx-1"><i class="fas fa-angle-right"></i></span>
                     <a href="{{route('authors.index')}}" class="h-primary">{{__('browse')['browse authors']}}</a>
                     <span class="breadcrumb-separator mx-1"><i class="fas fa-angle-right"></i></span>
-                    <a href="{{route('authors.show', $author)}}" class="h-primary">{{$author->fullname}}</a>
+                    <a href="{{route('authors.show', $author->slug)}}" class="h-primary">{{$author->fullname}}</a>
                     <span class="breadcrumb-separator mx-1"><i class="fas fa-angle-right"></i></span>
                     <span>{{__('librarian')['edit author']}}</span>
 

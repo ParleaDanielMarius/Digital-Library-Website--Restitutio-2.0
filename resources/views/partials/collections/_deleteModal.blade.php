@@ -13,7 +13,7 @@
                 <p>You are about to <b class ="text-danger">DELETE</b> this collection. This action is <b class ="text-danger">cannot be undone</b>.</p>
             </div>
             <div class="modal-footer">
-                <form method="post" action="{{route('collections.destroy', $collection)}}">
+                <form method="post" action="{{route('collections.destroy', $collection->slug)}}">
                     @method('DELETE')
                     @csrf
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

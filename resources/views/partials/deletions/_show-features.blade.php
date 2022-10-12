@@ -86,10 +86,6 @@
                     <table class="table table-hover table-borderless">
                         <tbody>
                         <tr>
-                            <th class="px-4 px-xl-5">Vubis ID: </th>
-                            <td>{{$deletion->vubis_id ?? 'Unknown'}}</td>
-                        </tr>
-                        <tr>
                             <th class="px-4 px-xl-5">{{__('items')['status']}}: </th>
                             <td>{{$deletion->status ?? 'No Value'}}</td>
                         </tr>

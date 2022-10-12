@@ -6,7 +6,7 @@
         </div>
         <div class="woocommerce-loop-product__body product__body pt-3 bg-white">
             <div class="text-uppercase font-size-1 mb-1 text-truncate">{{$user->status}}</div>
-            <h2 class="woocommerce-loop-product__title product__title h6 text-lh-md mb-1 text-height-2 crop-text-2 h-dark"><a href="{{route('items.show', $user)}}">{{$user->username}}</a></h2>
+            <h2 class="woocommerce-loop-product__title product__title h6 text-lh-md mb-1 text-height-2 crop-text-2 h-dark"><a href="{{route('users.show', $user)}}">{{$user->username}}</a></h2>
                 <div class="font-size-2  mb-1 text-truncate"><a href="{{route('users.show', $user)}}" class="text-gray-700">{{$user->first_name}}</a></div>
                 <div class="font-size-2  mb-1 text-truncate"><a href="{{route('users.show', $user)}}" class="text-gray-700">{{$user->last_name}}</a></div>
                 <div class="font-size-2  mb-1 text-truncate"><a href="{{route('users.show', $user)}}" class="text-gray-700">{{$user->email}}</a></div>

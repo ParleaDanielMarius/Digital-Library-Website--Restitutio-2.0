@@ -1,7 +1,7 @@
 @props(['author'])
 
 <div class="cbp-item {{substr($author->fullname, 0, 1)}}">
-    <a class="cbp-caption" href="{{route('authors.show', $author)}}">
+    <a class="cbp-caption" href="{{route('authors.show', $author->slug)}}">
 
         <div class="py-3 text-center">
             <h4 class="h6 text-dark">{{$author->fullname}}</h4>

@@ -146,7 +146,7 @@
                                     </div>
                                     <input name="username" class="form-control bg-white-100 py-2d75 height-4 border-white-100 rounded-0" type="search" value="{{request('username') ?? ''}}" placeholder="Username" aria-label="Search">
                                 </div>
-                                <button class="btn btn-outline-primary btn-sm" type="submit">Search</button>
+                                <button class="btn btn-outline-primary mt-2 btn-sm" type="submit">Search</button>
                             </div>
                         </div>
 {{--                        First Name--}}

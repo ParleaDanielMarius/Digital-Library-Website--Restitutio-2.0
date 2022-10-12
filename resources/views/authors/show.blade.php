@@ -2,6 +2,7 @@
     use App\Models\Item;
 @endphp
 
+
 @extends('layouts.layout-index')
 
 @section('title', $author->fullname)
@@ -98,12 +99,11 @@
                     <div class="site-content space-bottom-3" id="content">
                         <div class="container">
                             <div class="row">
-{{--                            Form for Pagination, Sort, Order and Search--}}
-                                <form action="" class="woocommerce-ordering mb-4 m-md-0" method="GET">
                                 <div id="primary" class="content-area order-2">
+                                    <form action="" class="woocommerce-ordering mb-4 m-md-0" method="GET">
                                         <div class="shop-control-bar d-lg-flex justify-content-between align-items-center mb-5 text-center text-md-left">
                                             <div class="shop-control-bar__left mb-4 m-lg-0">
-{{--                                                Pagination Details--}}
+                                                {{--                        Pagination details--}}
                                                 <p class="woocommerce-result-count m-0">
                                                     {!! __('pagination')['showing'] !!}
                                                     <span>{{ $items->firstItem() }}</span>
@@ -115,7 +115,7 @@
                                                 </p>
                                             </div>
                                             <div class="shop-control-bar__right d-md-flex align-items-center">
-{{--                                                Sort Select--}}
+                                                {{--                            Sort Select--}}
                                                 <label for="sortBy" hidden>{{__('sort')['sort']}}</label>
                                                 <select id="sortBy" name="sortBy" onchange="this.form.submit()" class="js-select selectpicker dropdown-select sortby"
                                                         data-style="border-bottom shadow-none outline-none py-2">
@@ -123,7 +123,7 @@
                                                     <option value="asc" @if(request('sortBy') == null || request('sortBy') == 'asc') selected @endif>{{__('sort')['asc']}}</option>
                                                     <option value="desc" @if(request('sortBy') == 'desc') selected @endif>{{__('sort')['desc']}}</option>
                                                 </select>
-{{--                                                Order Select--}}
+                                                {{--                            Order Select--}}
                                                 <label for="orderBy" hidden>{{__('order')['order']}}</label>
                                                 <select id="orderBy" name="orderBy" onchange="this.form.submit()" class="js-select selectpicker dropdown-select orderby"
                                                         data-style="border-bottom shadow-none outline-none py-2"
@@ -136,7 +136,7 @@
                                                 </select>
                                                 <ul class="nav nav-tab ml-lg-4 justify-content-center justify-content-md-start ml-md-auto" id="pills-tab" role="tablist">
                                                     <li class="nav-item border">
-                                                        <a class="nav-link p-0 height-38 width-38 justify-content-center d-flex align-items-center active" id="pills-one-example1-tab" data-toggle="pill" href="#pills-one-example1" role="tab" aria-controls="pills-one-example1" aria-selected="true">
+                                                        <a class="nav-link p-0 height-38 width-38 justify-content-center d-flex align-items-center active" id="pills-one-tab" data-toggle="pill" href="#pills-one" role="tab" aria-controls="pills-one" aria-selected="true">
                                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="17px" height="17px">
                                                                 <path fill-rule="evenodd" fill="rgb(25, 17, 11)" d="M-0.000,0.000 L3.000,0.000 L3.000,3.000 L-0.000,3.000 L-0.000,0.000 Z" />
                                                                 <path fill-rule="evenodd" fill="rgb(25, 17, 11)" d="M7.000,0.000 L10.000,0.000 L10.000,3.000 L7.000,3.000 L7.000,0.000 Z" />
@@ -151,7 +151,7 @@
                                                         </a>
                                                     </li>
                                                     <li class="nav-item border">
-                                                        <a class="nav-link p-0 height-38 width-38 justify-content-center d-flex align-items-center" id="pills-two-example1-tab" data-toggle="pill" href="#pills-two-example1" role="tab" aria-controls="pills-two-example1" aria-selected="false">
+                                                        <a class="nav-link p-0 height-38 width-38 justify-content-center d-flex align-items-center" id="pills-two-tab" data-toggle="pill" href="#pills-two" role="tab" aria-controls="pills-two" aria-selected="false">
                                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="23px" height="17px">
                                                                 <path fill-rule="evenodd" fill="rgb(25, 17, 11)" d="M-0.000,0.000 L3.000,0.000 L3.000,3.000 L-0.000,3.000 L-0.000,0.000 Z" />
                                                                 <path fill-rule="evenodd" fill="rgb(25, 17, 11)" d="M7.000,0.000 L23.000,0.000 L23.000,3.000 L7.000,3.000 L7.000,0.000 Z" />
@@ -165,10 +165,9 @@
                                                 </ul>
                                             </div>
                                         </div>
-{{--                                        Item Index--}}
                                         <div class="tab-content" id="pills-tabContent">
                                             <div class="tab-pane fade show active" id="pills-one" role="tabpanel" aria-labelledby="pills-one-tab">
-{{--                                                Individual Item Card (GRID) -> component: 'items.item-card'--}}
+                                                {{--                        Individual Item Card (GRID) component: 'item-card'--}}
                                                 <ul class="products list-unstyled row no-gutters row-cols-2 row-cols-lg-3 row-cols-wd-5 border-top border-left mb-6">
                                                     @forelse($items as $item)
                                                         <li class="product col">
@@ -178,27 +177,27 @@
                                                         {{__('no results')}}
                                                     @endforelse
                                                 </ul>
-                                                <!-- End Mockup Block -->
                                             </div>
                                             <div class="tab-pane fade" id="pills-two" role="tabpanel" aria-labelledby="pills-two-tab">
-                                                <!-- Mockup Block -->
+                                                {{--                        Individual Item Card (LIST) component: 'item-list-card'--}}
                                                 <ul class="products list-unstyled mb-6">
                                                     @forelse($items as $item)
                                                         <li class="product product__list">
                                                             <x-items.item-list-card :item="$item"></x-items.item-list-card>
                                                         </li>
-                                                        @empty
-                                                        <h2 class="woocommerce-loop-product__title product__title h6 text-lh-md mb-1 crop-text-2">{{__('no results')}}</h2
-                                                        @endforelse
+                                                    @empty
+                                                        {{__('no results')}}
+                                                    @endforelse
                                                 </ul>
                                             </div>
                                         </div>
                                     {{ $items->links('vendor.pagination.bootstrap-5') }}
                                 </div>
-{{--                                    Search Accordion--}}
+                                {{--            Search Accordion--}}
                                 <div id="secondary" class="sidebar widget-area order-1" role="complementary">
                                     <div id="widgetAccordion">
-                                        <div id="woocommerce_product_categories-2" class="widget p-4d875 border woocommerce widget_product_categories">
+                                        {{--                    Title Search--}}
+                                        <div id="titleTab" class="widget p-4d875 border woocommerce widget_product_categories">
                                             <div id="widgetHeadingOne" class="widget-head">
                                                 <a class="d-flex align-items-center justify-content-between text-dark" href="#"
                                                    data-toggle="collapse"
@@ -214,7 +213,6 @@
                                                     </svg>
                                                 </a>
                                             </div>
-{{--                                            General Search Tab--}}
                                             <div id="widgetCollapseOne" class="mt-3 widget-content collapse show"
                                                  aria-labelledby="widgetHeadingOne"
                                             >
@@ -222,13 +220,13 @@
                                                     <div class="input-group-prepend">
                                                         <i class="glph-icon flaticon-loupe py-2d75 bg-white-100 border-white-100 text-dark pl-3 pr-0 rounded-0"></i>
                                                     </div>
-                                                    <input name="search" class="form-control bg-white-100 py-2d75 height-4 border-white-100 rounded-0" type="search" value="{{request('search') ?? ''}}" placeholder="Ex: Floare Albastra" aria-label="Search">
+                                                    <input name="search" class="form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" type="search" value="{{request('search') ?? ''}}" placeholder="Ex: Floare Albastra" aria-label="Search">
                                                 </div>
-                                                <button class="btn btn-outline-primary btn-sm" type="submit">{{__('search')}}</button>
+                                                <button class="btn btn-outline-primary mt-2 btn-sm" type="submit">{{__('search')}}</button>
                                             </div>
                                         </div>
-{{--                                            Subjects Search Tab--}}
-                                        <div id="Subjects" class="widget widget_search widget_author p-4d875 border">
+                                        {{--                    Subjects Search--}}
+                                        <div id="subjectsTab" class="widget widget_search widget_author p-4d875 border">
                                             <div id="widgetHeading20" class="widget-head">
                                                 <a class="d-flex align-items-center justify-content-between text-dark" href="#"
                                                    data-toggle="collapse"
@@ -251,12 +249,12 @@
                                                     <div class="input-group-prepend">
                                                         <i class="glph-icon flaticon-loupe py-2d75 bg-white-100 border-white-100 text-dark pl-3 pr-0 rounded-0"></i>
                                                     </div>
-                                                    <input name="subjects" class="form-control bg-white-100 py-2d75 height-4 border-white-100 rounded-0" type="search" value="{{request('subjects') ?? ''}}" placeholder="Ex: History, Politics" aria-label="Search">
+                                                    <input name="subjects" class="form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" type="search" value="{{request('subjects') ?? ''}}" placeholder="Ex: History, Politics" aria-label="Search">
                                                 </div>
                                             </div>
                                         </div>
-{{--                                            Authors Search Tab--}}
-                                        <div id="Authors" class="widget widget_search widget_author p-4d875 border">
+                                        {{--                    Authors Search--}}
+                                        <div id="authorsTab" class="widget widget_search widget_author p-4d875 border">
                                             <div id="widgetHeading21" class="widget-head">
                                                 <a class="d-flex align-items-center justify-content-between text-dark" href="#"
                                                    data-toggle="collapse"
@@ -279,12 +277,12 @@
                                                     <div class="input-group-prepend">
                                                         <i class="glph-icon flaticon-loupe py-2d75 bg-white-100 border-white-100 text-dark pl-3 pr-0 rounded-0"></i>
                                                     </div>
-                                                    <input name="authors" class="form-control bg-white-100 py-2d75 height-4 border-white-100 rounded-0" type="search" value="{{request('authors') ?? ''}}" placeholder="Ex: Eminescu, Eliade" aria-label="Search">
+                                                    <input name="authors" class="form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" type="search" value="{{request('authors') ?? ''}}" placeholder="Ex: Eminescu, Eliade" aria-label="Search">
                                                 </div>
                                             </div>
                                         </div>
-{{--                                            Language Search Tab--}}
-                                        <div id="Language" class="widget p-4d875 border">
+                                        {{--                    Language Search--}}
+                                        <div id="languageTab" class="widget p-4d875 border">
                                             <div id="widgetHeading23" class="widget-head">
                                                 <a class="d-flex align-items-center justify-content-between text-dark" href="#"
                                                    data-toggle="collapse"
@@ -307,12 +305,70 @@
                                                     <div class="input-group-prepend">
                                                         <i class="glph-icon flaticon-loupe py-2d75 bg-white-100 border-white-100 text-dark pl-3 pr-0 rounded-0"></i>
                                                     </div>
-                                                    <input name="language" class="form-control bg-white-100 py-2d75 height-4 border-white-100 rounded-0" type="search" value="{{request('language') ?? ''}}" placeholder="Ex: Romanian" aria-label="Search">
+                                                    <input name="language" class="form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" type="search" value="{{request('language') ?? ''}}" placeholder="Ex: Romanian" aria-label="Search">
                                                 </div>
                                             </div>
                                         </div>
-{{--                                            Format Select Tab--}}
-                                        <div id="Format" class="widget p-4d875 border">
+                                        {{--                    Year Search--}}
+                                        <div id="yearTab" class="widget widget_search widget_author p-4d875 border">
+                                            <div id="widgetHeading24" class="widget-head">
+                                                <a class="d-flex align-items-center justify-content-between text-dark" href="#"
+                                                   data-toggle="collapse"
+                                                   data-target="#widgetCollapse24"
+                                                   aria-expanded="true"
+                                                   aria-controls="widgetCollapse24">
+                                                    <h3 class="widget-title mb-0 font-weight-medium font-size-3">{{__('items')['publisher_year']}}</h3>
+                                                    <svg class="mins" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="2px">
+                                                        <path fill-rule="evenodd" fill="rgb(22, 22, 25)" d="M0.000,-0.000 L15.000,-0.000 L15.000,2.000 L0.000,2.000 L0.000,-0.000 Z" />
+                                                    </svg>
+                                                    <svg class="plus" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="15px">
+                                                        <path fill-rule="evenodd" fill="rgb(22, 22, 25)" d="M15.000,8.000 L9.000,8.000 L9.000,15.000 L7.000,15.000 L7.000,8.000 L0.000,8.000 L0.000,6.000 L7.000,6.000 L7.000,-0.000 L9.000,-0.000 L9.000,6.000 L15.000,6.000 L15.000,8.000 Z" />
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                            <div id="widgetCollapse24" class="mt-4 widget-content collapse show"
+                                                 aria-labelledby="widgetHeading24"
+                                            >
+                                                <div class="input-group flex-nowrap">
+                                                    <input name="year_from" min="1800" max="2500" class="form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" type="number" value="{{request('year_from') ?? ''}}" placeholder="{{__('from')}}" aria-label="year_from">
+                                                    <div class="input-group-prepend">
+                                                        <i class="glph-icon flaticon-arrow py-2d75 bg-white-100 border-white-100 text-dark pr-0 rounded-0"></i>
+                                                    </div>
+                                                    <input name="year_to" min="1800" max="2500" class="form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" type="number" value="{{request('year_to') ?? ''}}" placeholder="{{__('to')}}" aria-label="year_to">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {{--                    Month Search--}}
+                                        <div id="monthTab" class="widget widget_search widget_author p-4d875 border">
+                                            <div id="widgetHeading25" class="widget-head">
+                                                <a class="d-flex align-items-center justify-content-between text-dark" href="#"
+                                                   data-toggle="collapse"
+                                                   data-target="#widgetCollapse25"
+                                                   aria-expanded="true"
+                                                   aria-controls="widgetCollapse25">
+                                                    <h3 class="widget-title mb-0 font-weight-medium font-size-3">{{__('items')['publisher_month']}}</h3>
+                                                    <svg class="mins" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="2px">
+                                                        <path fill-rule="evenodd" fill="rgb(22, 22, 25)" d="M0.000,-0.000 L15.000,-0.000 L15.000,2.000 L0.000,2.000 L0.000,-0.000 Z" />
+                                                    </svg>
+                                                    <svg class="plus" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="15px">
+                                                        <path fill-rule="evenodd" fill="rgb(22, 22, 25)" d="M15.000,8.000 L9.000,8.000 L9.000,15.000 L7.000,15.000 L7.000,8.000 L0.000,8.000 L0.000,6.000 L7.000,6.000 L7.000,-0.000 L9.000,-0.000 L9.000,6.000 L15.000,6.000 L15.000,8.000 Z" />
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                            <div id="widgetCollapse25" class="mt-4 widget-content collapse show"
+                                                 aria-labelledby="widgetHeading25"
+                                            >
+                                                <div class="input-group flex-nowrap">
+                                                    <input name="month_from" type="number" min="01" max="12" class="form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" value="{{request('month_from') ?? ''}}" placeholder="{{__('from')}}" aria-label="month_from">
+                                                    <div class="input-group-prepend">
+                                                        <i class="glph-icon flaticon-arrow py-2d75 bg-white-100 border-white-100 text-dark pr-0 rounded-0"></i>
+                                                    </div>
+                                                    <input name="month_to" type="number" min="01" max="12" class="form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" value="{{request('month_to') ?? ''}}" placeholder="{{__('to')}}" aria-label="month_to">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {{--                    Format Search--}}
+                                        <div id="formatTab" class="widget p-4d875 border">
                                             <div id="widgetHeading22" class="widget-head">
                                                 <a class="d-flex align-items-center justify-content-between text-dark" href="#"
                                                    data-toggle="collapse"
@@ -320,7 +376,6 @@
                                                    aria-expanded="true"
                                                    aria-controls="widgetCollapse22">
                                                     <h3 class="widget-title mb-0 font-weight-medium font-size-3">{{__('items')['type']}}</h3>
-
                                                     <svg class="mins" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="2px">
                                                         <path fill-rule="evenodd" fill="rgb(22, 22, 25)" d="M0.000,-0.000 L15.000,-0.000 L15.000,2.000 L0.000,2.000 L0.000,-0.000 Z" />
                                                     </svg>
@@ -332,6 +387,7 @@
                                             <div id="widgetCollapse22" class="mt-3 widget-content collapse show"
                                                  aria-labelledby="widgetHeading22"
                                             >
+                                                <label hidden for="type">{{__('items')['type']}}</label>
                                                 <select  name="type" id="type" class="border border-gray-200 rounded p-2 w-full">
                                                     <option value="" @if(request('type') === null) selected @endif>{{__('none')}}</option>
                                                     <option value="{{Item::type_Book}}" @if(request('type') === Item::type_Book) selected @endif>{{__('items')['book']}}</option>
@@ -343,8 +399,8 @@
                                             </div>
                                         </div>
                                     </div>
+                                    </form>
                                 </div>
-                            </form>
                             </div>
                         </div>
                     </div>

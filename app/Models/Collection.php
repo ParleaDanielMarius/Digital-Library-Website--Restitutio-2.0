@@ -15,7 +15,8 @@ class Collection extends Model
         'status',
         'title',
         'cover_path',
-        'description'
+        'description',
+        'slug',
     ];
 
     // Status constants for collections (To make life easier? Did they?)

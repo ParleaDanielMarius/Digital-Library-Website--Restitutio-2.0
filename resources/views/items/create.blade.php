@@ -106,7 +106,7 @@
 {{--                                                    Publishing Year--}}
                                                     <p class="col-12 mb-4d75 form-row form-row-wide address-field validate-required" id="publisher_year_field" data-priority="60" data-o_class="form-row form-row-wide address-field validate-required">
                                                         <label for="publisher_year" class="form-label">{{__('items')['publisher_year']}} <abbr class="required" title="required">*</abbr></label>
-                                                        <input type="number" class="input-text form-control" name="publisher_year" id="publisher_year" min="1000" placeholder="Ex: 2000" value="{{old('publisher_year') ?? ''}}" autocomplete="publisher_year">
+                                                        <input type="number" class="input-text form-control" name="publisher_year" id="publisher_year" min="1000" max="2500" placeholder="Ex: 2000" value="{{old('publisher_year') ?? ''}}" autocomplete="publisher_year">
                                                     </p>
                                                     @error('publisher_year')
                                                     <p class="text-danger mt-1 col-12 mb-4d75 form-row form-row-wide">{{$message}}</p>
@@ -181,14 +181,6 @@
                                                         <input type="text" class="input-text form-control" value="{{old('ISSN') ?? ''}}" placeholder="Ex: 2049-3630" name="ISSN" id="ISSN" autocomplete="ISSN">
                                                     </p>
                                                     @error('ISSN')
-                                                    <p class="text-danger mt-1 col-12 mb-4d75 form-row form-row-wide">{{$message}}</p>
-                                                    @enderror
-{{--                                                    Vubis ID--}}
-                                                    <p class="col-12 mb-4d75 form-row form-row-wide" id="vubis_id_field" data-priority="170" data-o_class="form-row form-row-wide">
-                                                        <label for="vubis_id" class="form-label">Vubis ID (optional)</label>
-                                                        <input type="text" class="input-text form-control" value="{{old('vubis_id') ?? ''}}" placeholder="Ex: 800100" name="vubis_id" id="vubis_id" autocomplete="vubis_id">
-                                                    </p>
-                                                    @error('vubis_id')
                                                     <p class="text-danger mt-1 col-12 mb-4d75 form-row form-row-wide">{{$message}}</p>
                                                     @enderror
 {{--                                                    Type--}}
@@ -342,6 +334,7 @@
             setValueAsArray: false,
             emptyValue: null,
             showValueAsTags: true,
+            allowNewOption: true,
             onServerSearch: pointToSubjects,
         });
         const searchSubject = debounce(function(searchValue, virtualSelect) {

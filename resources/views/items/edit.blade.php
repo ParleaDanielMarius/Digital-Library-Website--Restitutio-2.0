@@ -19,7 +19,7 @@
                     <span class="breadcrumb-separator mx-1"><i class="fas fa-angle-right"></i></span>
                     <a href="{{route('items.index')}}" class="h-primary">{{__('browse')['browse items']}}</a>
                     <span class="breadcrumb-separator mx-1"><i class="fas fa-angle-right"></i></span>
-                    <a href="{{route('items.show', $item)}}" class="h-primary">{{$item->title}}</a>
+                    <a href="{{route('items.show', $item->slug)}}" class="h-primary">{{$item->title}}</a>
                     <span class="breadcrumb-separator mx-1"><i class="fas fa-angle-right"></i></span>{{__('librarian')['edit item']}}
                 </nav>
             </div>
@@ -132,7 +132,7 @@
 {{--                                            Subjects--}}
                                             <p class="col-12 mb-4d75 form-row form-row-wide" id="subjects_field" data-priority="80" data-o_class="form-row form-row-wide">
                                                 <label for="multipleSelect" class="form-label">{{__('subjects')['subjects']}} <abbr class="required" title="required">*</abbr></label>
-                                                <select id="multipleSelect" multiple name="subjects" placeholder="Subjects" data-search="true" data-silent-initial-value-set="true">
+                                                <select id="multipleSelect" multiple name="subjects_id" placeholder="Subjects" data-search="true" data-silent-initial-value-set="true">
                                                     @foreach($subjects as $subject)
                                                         <option value="{{$subject->id}}"
                                                                 @foreach($item->subjects as $itemSubject)
@@ -142,7 +142,7 @@
                                                     @endforeach
                                                 </select>
                                             </p>
-                                            @error('subjects')
+                                            @error('subjects_id')
                                             <p class="text-danger mt-1 col-12 mb-4d75 form-row form-row-wide">{{$message}}</p>
                                             @enderror
 {{--                                            Cover Path--}}

@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('items', function (Blueprint $table) {
 
             $table->id();
+            $table->string('slug')->unique()->nullable();
             $table->foreignId('created_by')->default('0')->constrained('users');
             $table->foreignId('updated_by')->nullable()->constrained('users');
             $table->string('status')->default('Inactive');

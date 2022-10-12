@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class ItemCollectionController extends Controller
 {
@@ -81,7 +82,7 @@ class ItemCollectionController extends Controller
         }
         // Query all Active items that belong to Collection,
         // order, sort, paginate and filter with 'search' (found in Item Model)
-        $items = $collection->loadCount('items')->items()->with(['authors:id,fullname', 'subjects:title,id'])->where('status', Item::STATUS_ACTIVE)
+        $items = $collection->loadCount('items')->items()->with(['authors:slug,fullname', 'subjects:title,id'])->where('status', Item::STATUS_ACTIVE)
             ->filter(request(['search']))
             ->orderBy($sortField, $sort)
             ->paginate($pages)->withQueryString();
@@ -235,6 +236,10 @@ class ItemCollectionController extends Controller
             'status' => 'required',
             'cover_path' => 'image',
         ]);
+
+        // Creates a slug
+        $formFields['slug'] = Str::slug($formFields['title']);
+
         // Check if request has files and call fileStorage (found in helpers)
         if($request->hasFile('cover_path')) {
             $formFields['cover_path'] = fileStorage('collection' ,$formFields['title'], $request, 'cover_path');
@@ -284,6 +289,10 @@ class ItemCollectionController extends Controller
             'status' => 'required',
             'cover_path' => 'image',
         ]);
+
+        // Creates a slug
+        $formFields['slug'] = Str::slug($formFields['title']);
+
         // Check if request has files and call fileStorage (found in helpers)
         if ($request->hasFile('cover_path')) {
             $formFields['cover_path'] = fileStorage('collection', $formFields['title'], $request, 'cover_path');

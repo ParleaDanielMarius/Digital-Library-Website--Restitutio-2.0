@@ -13,7 +13,7 @@
                 <p>You are about to <b class ="text-danger">DELETE</b> this author. This action is <b class ="text-danger">cannot be undone</b>.</p>
             </div>
             <div class="modal-footer">
-                <form method="post" action="{{route('authors.destroy', $author)}}">
+                <form method="post" action="{{route('authors.destroy', $author->slug)}}">
                     @method('DELETE')
                     @csrf
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

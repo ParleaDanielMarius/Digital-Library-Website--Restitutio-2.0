@@ -13,6 +13,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class ItemController extends Controller
@@ -79,8 +80,8 @@ class ItemController extends Controller
         }
         // Query Active Items, sort, order, paginate and filter using 'search' (found in Item Model)
         // Might need to remove query for collections and subjects since they are not used at the moment and may never be
-        $items = Item::query()->with(['authors:id,fullname', 'subjects:id,title', 'collections:id,title'])
-            ->select('id','title','type','cover_path',)
+        $items = Item::query()
+            ->with(['authors:slug,fullname', 'subjects:id,title', 'collections:slug,title'])
             ->where('status', Item::STATUS_ACTIVE)
             ->filter(request(['search']))
             ->orderBy($sortField, $sort)->paginate($pages)->withQueryString();
@@ -114,17 +115,16 @@ class ItemController extends Controller
         }else {
             $item['publisher_when'] = $item->publisher_year;
         }
-
         return view('items.show' , [
             'item' => $item,
             // Query for similar and active items based on subjects
-            'similarItems' => Item::query()->select('id','title','type','cover_path')
-                ->with(['authors:id,fullname', 'collections:id,title'])
-            ->where('status', Item::STATUS_ACTIVE)
-            ->whereNot('id', $item->id)
-            ->whereHas('subjects', function($query) use($subjectsID) {
+            'similarItems' => Item::query()
+                ->with(['authors:slug,fullname', 'collections:slug,title'])
+                ->where('status', Item::STATUS_ACTIVE)
+                ->whereNot('id', $item->id)
+                ->whereHas('subjects', function($query) use($subjectsID) {
                     $query->whereIn('subject_id', $subjectsID);
-            })->limit(5)->get(),
+                })->limit(5)->get(),
         ]);
     }
 
@@ -170,7 +170,7 @@ class ItemController extends Controller
         }
         // Query Inactive Items, sort, order, paginate and filter using 'search' (found in Item Model)
         // Might need to remove query for collections and subjects since they are not used at the moment and may never be
-        $items = Item::with(['authors:id,fullname', 'subjects:id,title', 'collections:id,title'])
+        $items = Item::with(['authors:slug,fullname', 'subjects:id,title', 'collections:slug,title'])
             ->where('status', Item::STATUS_INACTIVE)
             ->filter(request(['search']))
             ->orderBy($sortField, $sort)->get()
@@ -351,12 +351,12 @@ class ItemController extends Controller
             'cover_path' => 'image',
             'pdf_path' => 'mimes:pdf',
             'publisher' => 'nullable',
-            'publisher_day'=> 'nullable | numeric',
-            'publisher_month'=> ['nullable', 'required_with:publisher_day', 'numeric'],
-            'publisher_year'=> ['nullable', 'required_with:publisher_month', 'numeric'],
+            'publisher_day'=> 'nullable|numeric|min:1|max:31 ',
+            'publisher_month'=> ['nullable', 'required_with:publisher_day', 'numeric', 'min:1', 'max:12'],
+            'publisher_year'=> ['nullable', 'required_with:publisher_month', 'numeric', 'min:1000', 'max:2500'],
             'publisher_where'=> 'nullable',
             'type' => 'required',
-            'subjects' => 'required',
+            'subjects_id' => 'required',
             'language' => 'required',
             'description' => 'required',
             'provider' => 'required',
@@ -366,9 +366,21 @@ class ItemController extends Controller
             'status' => 'required',
 
         ]);
+        // Creates a slug
+        $formFields['slug'] = Str::slug($formFields['title']);
+
+        // Checks if one-digit month was entered and add 0 in front of it
+        if(strlen($formFields['publisher_month']) == 1) {
+            $formFields['publisher_month'] = 0 . $formFields['publisher_month'];
+        }
+        // Same as above
+        if(strlen($formFields['publisher_day']) == 1) {
+            $formFields['publisher_day'] = 0 . $formFields['publisher_day'];
+        }
+
         // Front-end returns values as strings, so we turn them into arrays
         $formFields['authors_id'] = explode(',', $formFields['authors_id']);
-        $formFields['subjects'] = explode(',', $formFields['subjects']);
+        $formFields['subjects_id'] = explode(',', $formFields['subjects_id']);
         $formFields['collections_id'] = explode(',', $formFields['collections_id']);
 
 
@@ -414,11 +426,10 @@ class ItemController extends Controller
                 $formFields['authors_id'] = 1;
             }
 
-
             $item = Item::create($formFields);
 
             // Create subjects if they do not exist already and add them to array
-                foreach ($formFields['subjects'] as $subject) {
+                foreach ($formFields['subjects_id'] as $subject) {
                     $toAdd = Subject::firstOrCreate([
                         'id' => $subject,
                     ], ['title'=> $subject]);
@@ -460,7 +471,7 @@ class ItemController extends Controller
     {
         // Validate all fields
         $formFields = $request->validate([
-            'title' => 'required | max:76',
+            'title' => ['required', 'max:76', Rule::unique('items', 'title')->ignore($item)],
             'title_long' => 'nullable',
             'collections_id' => 'required',
             'authors_id' =>'nullable',
@@ -470,23 +481,26 @@ class ItemController extends Controller
             'publisher_day'=> 'nullable | numeric',
             'publisher_month'=> ['nullable', 'required_with:publisher_day', 'numeric'],
             'publisher_year'=> ['nullable', 'required_with:publisher_month', 'numeric'],
-            'publisher_where' => 'nullable',
+            'publisher_where'=> 'nullable',
             'type' => 'required',
-            'subjects' => 'nullable',
-            //'subjects_toAdd' => 'required_without:subjects', - Deprecated - To be removed
+            'subjects_id' => 'required',
             'language' => 'required',
             'description' => 'required',
             'provider' => 'required',
             'rights' => 'required',
             'ISBN' => 'nullable',
+            'ISSN' => 'nullable',
             'status' => 'required',
 
         ]);
 
+        // Creates a slug
+        $formFields['slug'] = Str::slug($formFields['title']);
+
         // Front-end returns values as strings, so we turn them into arrays
-        $formFields['authors_id'] = explode(',', $request->authors_id);
-        $formFields['subjects'] = explode(',', $request->subjects);
-        $formFields['collections_id'] = explode(',', $request->collections_id);
+        $formFields['authors_id'] = explode(',', $formFields['authors_id']);
+        $formFields['subjects_id'] = explode(',', $formFields['subjects_id']);
+        $formFields['collections_id'] = explode(',', $formFields['collections_id']);
 
         // If request has files call fileStorage for each
         if($request->hasFile('cover_path')) {
@@ -535,7 +549,7 @@ class ItemController extends Controller
             $item->update($formFields);
 
             // Create subjects if they do not exist already and add them to array
-            foreach ($formFields['subjects'] as $subject) {
+            foreach ($formFields['subjects_id'] as $subject) {
                 $toAdd = Subject::firstOrCreate([
                     'id' => $subject,
                 ], ['title'=> $subject]);

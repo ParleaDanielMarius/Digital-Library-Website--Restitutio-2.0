@@ -13,7 +13,7 @@
                 <p>You are about to <b class ="text-danger">DELETE</b> this item. The PDF and Cover will remain in storage.</p>
             </div>
             <div class="modal-footer">
-                <form method="post" action="{{route('items.destroy', $item)}}">
+                <form method="post" action="{{route('items.destroy', $item->slug)}}">
                     @method('DELETE')
                     @csrf
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

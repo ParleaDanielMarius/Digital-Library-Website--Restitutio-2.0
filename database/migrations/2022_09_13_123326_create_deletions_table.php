@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('deletions', function (Blueprint $table) {
             $table->id();
+            $table->string('slug')->unique()->nullable();
             $table->string('original_id');
             $table->foreignId('created_by')->default('0')->constrained('users');
             $table->foreignId('updated_by')->nullable()->constrained('users');

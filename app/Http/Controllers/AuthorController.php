@@ -7,6 +7,7 @@ use App\Models\Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Mockery\Exception;
 
 class AuthorController extends Controller {
@@ -59,7 +60,7 @@ class AuthorController extends Controller {
         // Gets the pagination, sorting and ordering from the request
         $pages = request('orderBy', 25);
         $sort = request('sortBy', 'asc');
-        $sortField = 'fullname';
+        $sortField = 'title';
         // Pagination Validation, $pages gets a default value if validation fails
         if(!in_array($pages, $validationPage, true)) {
             $pages = 25;
@@ -75,7 +76,7 @@ class AuthorController extends Controller {
         }
         // Queries for Author's items that are active
         // paginates, sorts and filters by 'search' (found in Item Model)
-        $items = $author->items()->with(['authors:id,fullname', 'subjects:id,title', 'collections:id,title'])
+        $items = $author->items()->with(['authors:slug,fullname', 'subjects:id,title', 'collections:slug,title'])
             ->where('status', Item::STATUS_ACTIVE)
             ->filter(request(['search']))
             ->orderBy($sortField, $sort)->paginate($pages)->withQueryString();
@@ -98,10 +99,14 @@ class AuthorController extends Controller {
             'first_name' => 'required',
             'last_name' => 'required',
         ]);
+
         // Appends first_name and last_name since Authors Table has a fullname column
         // Used in case first_name or last_name are needed separately
         $formFields['fullname'] = $formFields['first_name'] . ' ' . $formFields['last_name'];
         $formFields['created_by'] = auth()->id();
+
+        // Creates a slug
+        $formFields['slug'] = Str::slug($formFields['fullname']);
 
         // DB Transaction
         try {
@@ -144,7 +149,11 @@ class AuthorController extends Controller {
         // Appends first_name and last_name since Authors Table has a fullname column
         // Used in case first_name or last_name are needed separately
         $formFields['fullname'] = $formFields['first_name'] . ' ' . $formFields['last_name'];
+
         $formFields['updated_by'] = auth()->id();
+
+        // Creates a slug
+        $formFields['slug'] = Str::slug($formFields['fullname']);
 
         // DB Transaction
         try {
