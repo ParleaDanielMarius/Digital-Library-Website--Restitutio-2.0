@@ -36,6 +36,7 @@ return new class extends Migration
             $table->string('provider')->nullable();
             $table->string('rights')->nullable();
             $table->string('ISBN')->nullable();
+            $table->string('ISSN')->nullable();
             $table->dateTime('deleted_at')->nullable();
             $table->dateTime('restored_at')->nullable()->default(null);
             $table->string('was_partOf')->nullable();

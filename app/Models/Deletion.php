@@ -28,6 +28,7 @@ class Deletion extends Model
         'provider',
         'rights',
         'ISBN',
+        'ISSN',
         'status',
         'deleted_at',
         'deleted_by',

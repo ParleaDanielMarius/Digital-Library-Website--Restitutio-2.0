@@ -139,7 +139,7 @@ class AuthorController extends Controller {
         return view('authors.edit', ['author' => $author]);
     }
 
-    // Author Edit
+    // Author Update
     public function update(Request $request, Author $author) {
         // Validates required fields
         $formFields = $request->validate([

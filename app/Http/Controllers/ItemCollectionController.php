@@ -177,7 +177,12 @@ class ItemCollectionController extends Controller
             'title' => $collection->title,
             'user' => auth()->id(),
         ]);
-        return redirect(route('home'))->with('message', 'Collection Deleted Successfully');
+        // Destroy any cover Collection had in storage (Helpers/fileDestroy)
+        if (fileDestroy($collection->cover_path, true)) {
+            return redirect(route('home'))->with('message', 'Collection Deleted Successfully');
+        }else {
+            return redirect(route('home'))->with('warning', 'Cover could not be deleted, but the Collection was Deleted Successfully');
+        }
     }
 
     // Change Collection's Status

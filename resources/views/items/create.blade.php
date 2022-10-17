@@ -15,7 +15,7 @@
                 <h1 class="page-title font-size-3 font-weight-medium m-0 text-lh-lg">{{__('librarian')['add item']}}</h1>
 {{--                Breadcrumbs--}}
                 <nav class="woocommerce-breadcrumb font-size-2">
-                    <a href="#" class="h-primary">{{__('home')}}</a>
+                    <a href="{{route('home')}}" class="h-primary">{{__('home')}}</a>
                     <span class="breadcrumb-separator mx-1"><i class="fas fa-angle-right"></i></span>{{__('librarian')['add item']}}
                 </nav>
             </div>
