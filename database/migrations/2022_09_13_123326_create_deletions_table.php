@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('deletions', function (Blueprint $table) {
             $table->id();
-            $table->string('slug')->unique()->nullable();
+            $table->string('slug')->nullable();
             $table->string('original_id');
             $table->foreignId('created_by')->default('0')->constrained('users');
             $table->foreignId('updated_by')->nullable()->constrained('users');
@@ -41,6 +41,7 @@ return new class extends Migration
             $table->dateTime('restored_at')->nullable()->default(null);
             $table->string('was_partOf')->nullable();
             $table->string('had_authors')->nullable();
+            $table->string('contributions')->nullable();
             $table->string('had_subjects')->nullable();
             $table->timestamps();
         });

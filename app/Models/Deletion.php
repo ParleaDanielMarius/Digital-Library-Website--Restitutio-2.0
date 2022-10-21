@@ -35,6 +35,7 @@ class Deletion extends Model
         'restored_at',
         'had_subjects',
         'had_authors',
+        'contributions',
         'was_partOf',
         'slug',
         ];

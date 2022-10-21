@@ -37,6 +37,31 @@ if(!function_exists('fileStorage')) {
         return $path;
     }
 }
+
+if(!function_exists('fileUpdate')) {
+
+    function fileUpdate($path, $request, $key)
+    {
+        try {
+            // Store File
+            $path = $request->file($key)->store(dirname($path));
+        } catch (Exception $e) {
+            // Log failure and return false
+            Log::error('fileUpdate - Failed:', [
+                'user' => auth()->id(),
+                'message' => $e,
+            ]);
+            return false;
+        }
+        // Log success and return file's path
+        Log::notice('fileUpdate:', [
+            'path' => $path,
+            'user' => auth()->id(),
+        ]);
+        return $path;
+    }
+}
+
     if(!function_exists('fileDestroy')) {
 
         function fileDestroy($path, bool $deleteDirectory = false)
@@ -51,6 +76,7 @@ if(!function_exists('fileStorage')) {
                         Storage::disk('public')->deleteDirectory($pathDir);
                     } else {
                         // Delete File
+                        $fileName = pathinfo($path, PATHINFO_BASENAME);
                         Storage::disk('public')->delete($path);
                     }
                 } catch (Exception $e) {

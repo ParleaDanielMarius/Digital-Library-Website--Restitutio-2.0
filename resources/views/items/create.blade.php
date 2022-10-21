@@ -1,6 +1,7 @@
 @php
     use App\Models\Item;
 @endphp
+
 @extends('layouts.layout-index')
 @section('title', __('librarian')['add item'])
 @section('CSS')
@@ -39,7 +40,7 @@
 {{--                                                    Title--}}
                                                     <p class="col-12 mb-4d75 form-row form-row-wide validate-required woocommerce-invalid woocommerce-invalid-required-field" id="title_field" data-priority="10">
                                                         <label for="title" class="form-label">{{__('items')['title']}} <abbr class="required" title="required">*</abbr></label>
-                                                        <input type="text" class="input-text form-control" name="title" id="title" placeholder="Ex: Romeo and Juliet" value="{{old('title') ?? ''}}" autocomplete="title" autofocus="autofocus">
+                                                        <input required type="text" class="input-text form-control" name="title" id="title" placeholder="Ex: Romeo and Juliet" value="{{old('title') ?? ''}}" autocomplete="title" autofocus="autofocus">
                                                     </p>
                                                     @error('title')
                                                     <p class="text-danger mt-1 col-12 mb-4d75 form-row form-row-wide">{{$message}}</p>
@@ -55,16 +56,34 @@
 {{--                                                    Collections--}}
                                                     <div class="col-12 mb-4d75 form-row form-row-wide">
                                                         <label for="collectionsSelect" class="col-12 mb-4d75">{{__('collections')['collections']}} <abbr class="required" title="required">*</abbr></label>
-                                                        <div id="collectionsSelect" class="col-12 mb-4d75" multiple name="collections_id" placeholder="{{__('collections')['collections']}}" data-search="true" data-silent-initial-value-set="true">
-                                                        </div>
+                                                        <select multiple required
+                                                                id="collectionsSelect"
+                                                                name="collections_id" placeholder="{{__('collections')['collections']}}"
+                                                                data-search="true" data-silent-initial-value-set="true"
+                                                        >
+                                                            @foreach($collections as $collection)
+                                                                <option value="{{$collection->id}}" @if(old('collections_id' === $collection->title)) selected @endif>{{$collection->title}}</option>
+                                                            @endforeach
+                                                        </select>
                                                     </div>
                                                     @error('collections_id')
                                                     <p class="text-danger mt-1 col-12 mb-4d75 form-row form-row-wide">{{$message}}</p>
                                                     @enderror
 {{--                                                    Authors--}}
                                                     <div class="col-12 mb-4d75 form-row form-row-wide">
-                                                        <label for="authorsSelect" class="col-12 mb-4d75">{{__('authors')['authors']}} <abbr class="required" title="required">*</abbr></label>
-                                                        <div id="authorsSelect" class="col-12 mb-4d75" multiple name="authors_id" placeholder="{{__('authors')['authors']}}" data-search="true" data-silent-initial-value-set="true">
+                                                        <label for="authors_container" class="col-12 mb-4d75 form-label">{{__('authors')['authors']}} <abbr class="required" title="required">*</abbr></label>
+                                                        <div id="authors_container" class="authors_container">
+                                                            <button class="add_author_field rounded">{{__('librarian')['add author']}} &nbsp;
+                                                                <span style="font-size:16px; font-weight:bold;">+ </span>
+                                                            </button>
+                                                            <div class="author_wrapper"><input required class="authors" placeholder="Person" value="{{old('authors_id')[0] ?? ''}}" type="text" name="authors_id[]"><input value="{{old('contribution')[0] ?? ''}}" required placeholder="Contribution" type="text" name="contribution[]"/><a href="#" class="checkData mx-5">Check</a></div>
+                                                            @if(old('authors_id'))
+                                                                @foreach(old('authors_id') as $key => $value)
+                                                                    @if($key != 0)
+                                                                        <div class="author_wrapper"><input required class="authors" placeholder="Person" type="text" name="authors_id[]" value="{{$value}}"><input required value="{{old('contribution')[$key] ?? ''}}" placeholder="Contribution" type="text" name="contribution[]"/><a href="#" class="checkData mx-5">Check</a><a href="#" class="delete">Delete</a></div>
+                                                                    @endif
+                                                                @endforeach
+                                                            @endif
                                                         </div>
                                                     </div>
                                                     @error('authors_id')
@@ -72,8 +91,19 @@
                                                     @enderror
 {{--                                                    Subjects--}}
                                                     <div class="col-12 mb-4d75 form-row form-row-wide">
-                                                        <label for="subjectsSelect" class="col-12 mb-4d75">{{__('subjects')['subjects']}} <abbr class="required" title="required">*</abbr></label>
-                                                        <div id="subjectsSelect" class="col-12 mb-4d75" multiple name="subjects_id" placeholder="{{__('subjects')['subjects']}}" data-search="true" data-silent-initial-value-set="true">
+                                                        <label for="subjects_container" class="col-12 mb-4d75 form-label">{{__('subjects')['subjects']}}</label>
+                                                        <div id="subjects_container" class="subjects_container">
+                                                            <button class="add_subject_field rounded">{{__('librarian')['add subject']}} &nbsp;
+                                                                <span style="font-size:16px; font-weight:bold;">+ </span>
+                                                            </button>
+                                                            <div class="subject_wrapper"><input class="subjects" placeholder="{{__('subjects')['subject']}}" value="{{old('subjects_id')[0] ?? ''}}" type="text" name="subjects_id[]"><a href="#" class="checkData mx-5">Check</a></div>
+                                                            @if(old('subjects_id'))
+                                                                @foreach(old('subjects_id') as $key => $value)
+                                                                    @if($key != 0)
+                                                                        <div class="subject_wrapper"><input required class="subjects" placeholder="{{__('subjects')['subject']}}" type="text" name="subjects_id[]" value="{{$value}}"><a href="#" class="checkData mx-5">Check</a><a href="#" class="delete">Delete</a></div>
+                                                                    @endif
+                                                                @endforeach
+                                                            @endif
                                                         </div>
                                                     </div>
                                                     @error('subjects_id')
@@ -89,7 +119,7 @@
                                                     @enderror
 {{--                                                    Publishing Day--}}
                                                     <p class="col-12 mb-4d75 form-row form-row-wide address-field validate-required" id="publisher_day_field" data-priority="60" data-o_class="form-row form-row-wide address-field validate-required">
-                                                        <label for="publisher_day" class="form-label">{{__('items')['publisher_day']}} <abbr class="required" title="required">*</abbr></label>
+                                                        <label for="publisher_day" class="form-label">{{__('items')['publisher_day']}}<abbr class="required" title="Required if month was entered">*</abbr></label>
                                                         <input type="number" class="input-text form-control" name="publisher_day" id="publisher_day" min="1" max="31" placeholder="Ex: 26" value="{{old('publisher_day') ?? ''}}" autocomplete="publisher_day">
                                                     </p>
                                                     @error('publisher_day')
@@ -97,7 +127,7 @@
                                                     @enderror
 {{--                                                    Publishing Month--}}
                                                     <p class="col-12 mb-4d75 form-row form-row-wide address-field validate-required" id="publisher_month_field" data-priority="60" data-o_class="form-row form-row-wide address-field validate-required">
-                                                        <label for="publisher_month" class="form-label">{{__('items')['publisher_month']}} <abbr class="required" title="required">*</abbr></label>
+                                                        <label for="publisher_month" class="form-label">{{__('items')['publisher_month']}} <abbr class="required" title="Required if day was entered">*</abbr></label>
                                                         <input type="number" class="input-text form-control" name="publisher_month" id="publisher_month" min="1" max="12" placeholder="Ex: 06" value="{{old('publisher_month') ?? ''}}" autocomplete="publisher_month">
                                                     </p>
                                                     @error('publisher_month')
@@ -105,7 +135,7 @@
                                                     @enderror
 {{--                                                    Publishing Year--}}
                                                     <p class="col-12 mb-4d75 form-row form-row-wide address-field validate-required" id="publisher_year_field" data-priority="60" data-o_class="form-row form-row-wide address-field validate-required">
-                                                        <label for="publisher_year" class="form-label">{{__('items')['publisher_year']}} <abbr class="required" title="required">*</abbr></label>
+                                                        <label for="publisher_year" class="form-label">{{__('items')['publisher_year']}}</label>
                                                         <input type="number" class="input-text form-control" name="publisher_year" id="publisher_year" min="1000" max="2500" placeholder="Ex: 2000" value="{{old('publisher_year') ?? ''}}" autocomplete="publisher_year">
                                                     </p>
                                                     @error('publisher_year')
@@ -188,11 +218,16 @@
                                                         <label for="type" class="form-label">{{__('items')['type']}} <abbr class="required" title="required">*</abbr></label>
                                                         <select name="type" id="type" class="form-control select2-hidden-accessible"
                                                                 autocomplete="type" tabindex="-1" aria-hidden="true">
-                                                            <option value="{{Item::type_Book}}" @if(old('type') == Item::type_Book) selected @endif>{{Item::type_Book}}</option>
-                                                            <option value="{{Item::type_OldBook}}" @if(old('type') == Item::type_OldBook) selected @endif>{{Item::type_OldBook}}</option>
-                                                            <option value="{{Item::type_Map}}" @if(old('type') == Item::type_Map) selected @endif>{{Item::type_Map}}</option>
-                                                            <option value="{{Item::type_Manuscript}}" @if(old('type') == Item::type_Manuscript) selected @endif>{{Item::type_Manuscript}}</option>
-                                                            <option value="{{Item::type_Periodic}}" @if(old('type') == Item::type_Periodic) selected @endif>{{Item::type_Periodic}}</option>
+                                                            <option value="Book" @if(old('type') == 'Book') selected @endif>{{__('items')['book']}}</option>
+                                                            <option value="Old Book" @if(old('type') == 'Old Book') selected @endif>{{__('items')['old book']}}</option>
+                                                            <option value="Manuscript" @if(old('type') == 'Manuscript') selected @endif>{{__('items')['manuscript']}}</option>
+                                                            <option value="Map" @if(old('type') == 'Map') selected @endif>{{__('items')['map']}}</option>
+                                                            <option value="Serial" @if(old('type') == 'Serial') selected @endif>{{__('items')['serial']}}</option>
+                                                            <option value="Ex Libris" @if(old('type') == 'Ex Libris') selected @endif>{{__('items')['ex libris']}}</option>
+                                                            <option value="Photograph" @if(old('type') == 'Photograph') selected @endif>{{__('items')['photograph']}}</option>
+                                                            <option value="Document" @if(old('type') == 'Document') selected @endif>{{__('items')['document']}}</option>
+                                                            <option value="Postcard" @if(old('type') == 'Postcard') selected @endif>{{__('items')['postcard']}}</option>
+                                                            <option value="Other" @if(old('type') == 'Other') selected @endif>{{__('items')['other']}}</option>
                                                         </select>
                                                     </p>
                                                     @error('type')
@@ -220,6 +255,26 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="checkModal" tabindex="-1" role="dialog" aria-labelledby="checkModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="checkModalLabel">DataBase Check</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p><strong><span id="checkResult"></span></strong></p>
+                    <p><span id="checkData"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('JS')
@@ -227,150 +282,138 @@
 @endsection
 
 @section('separate scripts')
-{{--    Author Multi-select     --}}
-    <script type="text/javascript">
-        VirtualSelect.init({
-            ele: '#authorsSelect',
-            labelKey:'fullname',
-            valueKey:'id',
-            setValueAsArray: false,
-            emptyValue: null,
-            showValueAsTags: true,
-            onServerSearch: pointToAuthors,
-        });
-        const searchAuthor = debounce(function(searchValue, virtualSelect) {
-            authorsSearch(searchValue, virtualSelect)
-            }, 1000)
-
-        function pointToAuthors(searchValue, virtualSelect) {
-                searchAuthor(searchValue, virtualSelect)
-        }
-
-        function authorsSearch(searchValue, virtualSelect) {
-            getAuthorsFromServer(searchValue).then(function(newOptions) {
-                virtualSelect.setServerOptions(newOptions)
-
-            });
-        }
-
-        function getAuthorsFromServer(searchValue) {
-            if(searchValue === '') {
-                searchValue = 'a'
-            }
-            var authorsRoute = '/authors-select/'
-            authorsRoute = authorsRoute.concat(searchValue)
-            return $.ajax({
-                url: authorsRoute,
-                type: 'GET',
-                dataType: 'json',
-            })
-
-        }
-
-        function debounce(cb, delay = 250) {
-            let timeout
-
-            return (...args) => {
-                clearTimeout(timeout)
-                timeout = setTimeout(() => {
-                    cb(...args)
-                }, delay)
-            }
-        }
-    </script>
 {{--    Collection Multi-select --}}
     <script type="text/javascript">
         VirtualSelect.init({
             ele: '#collectionsSelect',
-            labelKey:'title',
-            valueKey:'id',
             setValueAsArray: false,
             emptyValue: null,
             showValueAsTags: true,
-            onServerSearch: pointToCollections,
+            disableSelectAll: true
         });
-        const searchCollection = debounce(function(searchValue, virtualSelect) {
-            collectionSearch(searchValue, virtualSelect)
-        }, 1000)
 
-        function pointToCollections(searchValue, virtualSelect) {
-            searchCollection(searchValue, virtualSelect);
-        }
+    </script>
 
-        function collectionSearch(searchValue, virtualSelect) {
-            getCollectionsFromServer(searchValue).then(function(newOptions) {
-                virtualSelect.setServerOptions(newOptions);
+<script>
+    $(document).ready(function() {
+        // Applies to all
+        var max_fields = 10;
 
-            });
-        }
+        // Author Variables
+        var wrapper_authors = $(".authors_container");
+        var add_button_authors = $(".add_author_field");
 
-        function getCollectionsFromServer(searchValue) {
-            var collectionsRoute = '/collections-select/';
-            collectionsRoute = collectionsRoute.concat(searchValue);
+        // Subject Variables
+        var wrapper_subjects = $(".subjects_container");
+        var add_button_subjects = $(".add_subject_field");
+
+        // Add author fields
+        $(add_button_authors).click(function(e) {
+            e.preventDefault();
+            if ($('div.author_wrapper').length < max_fields) {
+                $(wrapper_authors).append('<div class="author_wrapper"><input required class="authors" placeholder="Person" type="text" name="authors_id[]"/><input required placeholder="Contribution" type="text" name="contribution[]"/><a href="#" class="checkData mx-5">Check</a><a href="#" class="delete">Delete</a></div>'); //add input box
+            } else {
+                alert('You reached the limits')
+            }
+        });
+
+        // Delete author fields
+        $(wrapper_authors).on("click", ".delete", function(e) {
+            e.preventDefault();
+            $(this).parent('div').remove();
+        })
+
+        // Ajax request to check if author exists
+        $(wrapper_authors).on("click", ".checkData", function(e) {
+            e.preventDefault();
+            var search = '/author-check/' + $(this).parent('div').find('.authors').val()
             return $.ajax({
-                url: collectionsRoute,
+                url: search,
                 type: 'GET',
                 dataType: 'json',
+                success: function(data) {
+                    $('#checkModal').modal('show')
+                    $('#checkResult').text('Found!')
+                    $('#checkData').text(data.fullname)
+                },
+                error: function(jqXHR, exception) {
+                    var msg = '';
+                    if (jqXHR.status === 0) {
+                        msg = 'Not connect.\n Verify Network.';
+                    } else if (jqXHR.status == 404) {
+                        msg = 'Not Found. [404]';
+                    } else if (jqXHR.status == 500) {
+                        msg = 'Internal Server Error [500].';
+                    } else if (exception === 'parsererror') {
+                        msg = 'Requested JSON parse failed.';
+                    } else if (exception === 'timeout') {
+                        msg = 'Time out error.';
+                    } else if (exception === 'abort') {
+                        msg = 'Ajax request aborted.';
+                    } else {
+                        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                    }
+                    $('#checkModal').modal('show')
+                    $('#checkResult').text('Not Found!')
+                    $('#checkData').text(msg)
+                }
             });
-        }
+        })
 
-        function debounce(cb, delay = 250) {
-            let timeout
-
-            return (...args) => {
-                clearTimeout(timeout)
-                timeout = setTimeout(() => {
-                    cb(...args)
-                }, delay)
+        // Add subject fields
+        $(add_button_subjects).click(function(e) {
+            e.preventDefault();
+            if ($('div.subject_wrapper').length < max_fields) {
+                $(wrapper_subjects).append('<div class="subject_wrapper"><input required class="subjects" placeholder="Subject" type="text" name="subjects_id[]"/><a href="#" class="checkData mx-5">Check</a><a href="#" class="delete">Delete</a></div>'); //add input box
+            } else {
+                alert('You reached the limits')
             }
-        }
-    </script>
-{{--    Subject Multi-select    --}}
-    <script type="text/javascript">
-        VirtualSelect.init({
-            ele: '#subjectsSelect',
-            labelKey:'title',
-            valueKey:'id',
-            setValueAsArray: false,
-            emptyValue: null,
-            showValueAsTags: true,
-            allowNewOption: true,
-            onServerSearch: pointToSubjects,
         });
-        const searchSubject = debounce(function(searchValue, virtualSelect) {
-            subjectSearch(searchValue, virtualSelect)
-        }, 1000)
 
-        function pointToSubjects(searchValue, virtualSelect) {
-            searchSubject(searchValue, virtualSelect);
-        }
 
-        function subjectSearch(searchValue, virtualSelect) {
-            getSubjectsFromServer(searchValue).then(function(newOptions) {
-                virtualSelect.setServerOptions(newOptions);
+        // Delete subject fields
+        $(wrapper_subjects).on("click", ".delete", function(e) {
+            e.preventDefault();
+            $(this).parent('div').remove();
+        })
 
-            });
-        }
 
-        function getSubjectsFromServer(searchValue) {
-            var subjectsRoute = '/subjects-select/';
-            subjectsRoute = subjectsRoute.concat(searchValue);
+        // Ajax request to check subject
+        $(wrapper_subjects).on("click", ".checkData", function(e) {
+            e.preventDefault();
+            var search = '/subject-check/' + $(this).parent('div').find('.subjects').val()
             return $.ajax({
-                url: subjectsRoute,
+                url: search,
                 type: 'GET',
                 dataType: 'json',
+                success: function(data) {
+                    $('#checkModal').modal('show')
+                    $('#checkResult').text('Found!')
+                    $('#checkData').text(data.title)
+                },
+                error: function(jqXHR, exception) {
+                    var msg = '';
+                    if (jqXHR.status === 0) {
+                        msg = 'Not connect.\n Verify Network.';
+                    } else if (jqXHR.status == 404) {
+                        msg = 'Not Found. [404]';
+                    } else if (jqXHR.status == 500) {
+                        msg = 'Internal Server Error [500].';
+                    } else if (exception === 'parsererror') {
+                        msg = 'Requested JSON parse failed.';
+                    } else if (exception === 'timeout') {
+                        msg = 'Time out error.';
+                    } else if (exception === 'abort') {
+                        msg = 'Ajax request aborted.';
+                    } else {
+                        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                    }
+                    $('#checkModal').modal('show')
+                    $('#checkResult').text('Not Found!')
+                    $('#checkData').text(msg)
+                }
             });
-        }
-
-        function debounce(cb, delay = 250) {
-            let timeout
-
-            return (...args) => {
-                clearTimeout(timeout)
-                timeout = setTimeout(() => {
-                    cb(...args)
-                }, delay)
-            }
-        }
-    </script>
+        })
+    });
+</script>
 @endsection

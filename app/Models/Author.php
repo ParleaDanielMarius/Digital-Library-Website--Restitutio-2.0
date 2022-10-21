@@ -33,8 +33,7 @@ class Author extends Model
                         $query->where('title', 'LIKE', '%' . $request->subjects. '%');
                     });
                 });
-            })
-            ;
+            });
         }
     }
 //

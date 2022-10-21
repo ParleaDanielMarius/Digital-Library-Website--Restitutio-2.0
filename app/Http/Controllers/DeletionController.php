@@ -68,6 +68,10 @@ class DeletionController extends Controller
             $collections = explode(', ', $deletion->was_partOf);
         }
 
+        if($deletion->contributions) {
+            $contributions = explode(', ', $deletion->contributions);
+        }
+
         // Check if deletion has a publishing day then append with month and year
         // (since it is not allowed to have a day without a month or a month without a year)
         if($deletion->publisher_day) {
@@ -81,6 +85,7 @@ class DeletionController extends Controller
             'subjects'=> $subjects,
             'authors' => $authors,
             'collections' => $collections,
+            'contributions' => $contributions
         ]);
     }
 
@@ -109,11 +114,14 @@ class DeletionController extends Controller
                 // Same as above but with authors
                 if ($itemToRestore['had_authors'] != null) {
                     $authorsToRestore[] = array();
+                    $contributionsToRestore[] = array();
                     $authors = explode(', ', $itemToRestore['had_authors']);
-                    foreach ($authors as $author) {
+                    $contributions = explode(', ', $itemToRestore['contributions']);
+                    foreach ($authors as $key => $author) {
                         $toAdd = Author::firstWhere('fullname', $author);
                         if ($toAdd != null) {
                             $authorsToRestore[] = $toAdd->id;
+                            $contributionsToRestore[] = $contributions[$key];
                         }
                     }
                 }
@@ -130,6 +138,7 @@ class DeletionController extends Controller
                     }
                 }
 
+
                 // Create Item
                 $item = Item::create($itemToRestore);
                 $item->id = $deletion->original_id;
@@ -140,7 +149,9 @@ class DeletionController extends Controller
                     $item->subjects()->attach($subjectsToRestore);
                 }
                 if (!empty($authorsToRestore)) {
-                    $item->authors()->attach($authorsToRestore);
+                    foreach ($authorsToRestore as $key => $author) {
+                        $item->authors()->attach($author, ['contribution' => $contributionsToRestore[$key]]);
+                    }
                 }
                 if (!empty($collectionsToRestore)) {
                     $item->collections()->attach($collectionsToRestore);

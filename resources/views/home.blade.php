@@ -1,5 +1,5 @@
 @extends('layouts.layout-index')
-@section('title', 'Home')
+@section('title', __('home'))
 
 @section('content')
     <section class="space-bottom-3">
@@ -83,7 +83,7 @@
                         <a class="nav-link px-0 active" id="latestItems-tab" data-toggle="tab" href="#latestItems-Panel" role="tab" aria-controls="latestItems-Panel" aria-selected="true">{{__('items')['items']}}</a>
                     </li>
                     <li class="nav-item mx-5 mb-1 flex-shrink-1 flex-md-shrink-1">
-                        <a class="nav-link px-0" id="latestPeriodics-tab" data-toggle="tab" href="#latestPeriodics-Panel" role="tab" aria-controls="latestPeriodics-Pane" aria-selected="false">{{__('items')['periodics']}}</a>
+                        <a class="nav-link px-0" id="latestPeriodics-tab" data-toggle="tab" href="#latestPeriodics-Panel" role="tab" aria-controls="latestPeriodics-Pane" aria-selected="false">{{__('items')['serials']}}</a>
                     </li>
                     <li class="nav-item mx-5 mb-1 flex-shrink-1 flex-md-shrink-1">
                         <a class="nav-link px-0" id="latestManuscripts-tab" data-toggle="tab" href="#latestManuscripts-Panel" role="tab" aria-controls="latestManuscripts-Panel" aria-selected="false">{{__('items')['manuscripts']}}</a>
@@ -107,7 +107,7 @@
                         <div class="col-lg-12">
                             <div class="row no-gutters products row-cols-6">
                                 @foreach($latestPeriodics as $periodic)
-                                    <x-items.latest-card :item="$periodic"></x-items.latest-card>
+                                    <x-items.latest-card :item="$periodic" types="$types"></x-items.latest-card>
                                 @endforeach
                             </div>
                         </div>
@@ -118,7 +118,7 @@
                         <div class="col-lg-12">
                             <div class="row no-gutters products row-cols-6">
                                 @foreach($latestManuscripts as $manuscript)
-                                    <x-items.latest-card :item="$manuscript"></x-items.latest-card>
+                                    <x-items.latest-card :item="$manuscript" types="$types"></x-items.latest-card>
                                 @endforeach
                             </div>
                         </div>

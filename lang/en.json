@@ -142,7 +142,7 @@
 
     "browse": {
         "browse": "Browse",
-        "browse authors": "Browse Authors",
+        "browse authors": "Browse People",
         "browse collections": "Browse Collections",
         "browse items": "Browse Items"
     },
@@ -169,9 +169,9 @@
 
     "librarian": {
         "librarian": "Librarian",
-        "add author": "Add Author",
-        "edit author": "Edit Author",
-        "delete author": "Delete Author",
+        "add author": "Add Person",
+        "edit author": "Edit Person",
+        "delete author": "Delete Person",
         "add collection": "Add Collection",
         "edit collection": "Edit Collection",
         "delete collection": "Delete Collection",
@@ -182,7 +182,8 @@
         "full delete": "Full Delete",
         "restore": "Restore Item",
         "manage inactive items": "Manage Inactive Item",
-        "change status": "Change Status"
+        "change status": "Change Status",
+        "add subject": "Add Subject"
     },
     "admin": {
         "admin": "Administrator",
@@ -245,8 +246,17 @@
         "manuscripts": "Manuscripts",
         "map": "Map",
         "maps": "Maps",
-        "periodic": "Periodic",
-        "periodics": "Periodics",
+        "serial": "Serial",
+        "serials": "Serials",
+        "ex libris": "Ex Libris",
+        "photograph": "Photograph",
+        "photographs": "Photographs",
+        "document": "Document",
+        "documents": "Documents",
+        "postcard": "Postcard",
+        "postcards": "Postcards",
+        "other": "Other",
+        "others": "Others",
         "created_by": "Created By",
         "updated_by": "Updated By",
         "created_at": "Created At",
@@ -256,6 +266,7 @@
         "restored_at": "Restored At",
         "title": "Title",
         "title_long": "Long Title",
+        "contributors": "Contributors",
         "cover_path": "Cover Path",
         "pdf_path": "PDF Path",
         "publisher": "Publisher",

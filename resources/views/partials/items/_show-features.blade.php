@@ -107,18 +107,6 @@
                                 <th class="px-4 px-xl-5">{{__('items')['updated_at']}}: </th>
                                 <td>{{$item->updated_at ?? 'No Value'}}</td>
                             </tr>
-                            <tr>
-                                <th class="px-4 px-xl-5">{{__('items')['deleted_by']}}: </th>
-                                <td>{{$item->userDelete->username ?? 'No Value'}}</td>
-                            </tr>
-                            <tr>
-                                <th class="px-4 px-xl-5">{{__('items')['deleted_at']}}: </th>
-                                <td>{{$item->deleted_at ?? 'No Value'}}</td>
-                            </tr>
-                            <tr>
-                                <th class="px-4 px-xl-5">{{__('items')['restored_at']}}: </th>
-                                <td>{{$item->restored_at ?? 'No Value'}}</td>
-                            </tr>
                         @endif
                         <tr>
                             <th class="px-4 px-xl-5">{{__('actions')}}: </th>

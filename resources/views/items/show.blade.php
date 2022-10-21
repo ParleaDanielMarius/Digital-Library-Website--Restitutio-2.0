@@ -1,6 +1,4 @@
-@php
-    use App\Models\Item
-@endphp
+
 
 @extends('layouts.layout-index')
 @section('title', $item->title)
@@ -53,23 +51,38 @@
                                                 <label class="form-label font-size-3 font-weight-medium mb-3">{{__('items')['type']}}:</label>
                                                 <span class="font-size-3 font-weight-medium mb-3">
                                                         @switch($item->type)
-                                                            @case(Item::type_Book)
-                                                                {{__('items')['book']}}
-                                                                @break
-                                                            @case(Item::type_OldBook)
-                                                                {{__('items')['old book']}}
-                                                                @break
-                                                            @case(Item::type_Manuscript)
-                                                                {{__('items')['manuscript']}}
-                                                                @break
-                                                            @case(Item::type_Map)
-                                                                {{__('items')['map']}}
-                                                                @break
-                                                            @case(Item::type_Periodic)
-                                                                {{__('items')['periodic']}}
-                                                                @break
-                                                            @default {{__('unknown')}}
-                                                        @endswitch
+                                                        @case('Book')
+                                                        {{__('items')['book']}}
+                                                        @break
+                                                        @case('Old Book')
+                                                        {{__('items')['old book']}}
+                                                        @break
+                                                        @case('Manuscript')
+                                                        {{__('items')['manuscript']}}
+                                                        @break
+                                                        @case('Map')
+                                                        {{__('items')['map']}}
+                                                        @break
+                                                        @case('Serial')
+                                                        {{__('items')['serial']}}
+                                                        @break
+                                                        @case('ex libris')
+                                                        {{__('items')['ex libris']}}
+                                                        @break
+                                                        @case('Photograph')
+                                                        {{__('items')['photograph']}}
+                                                        @break
+                                                        @case('document')
+                                                        {{__('items')['document']}}
+                                                        @break
+                                                        @case('postcard')
+                                                        {{__('items')['postcard']}}
+                                                        @break
+                                                        @case('other')
+                                                        {{__('items')['other']}}
+                                                        @break
+                                                        @default {{__('unknown')}}
+                                                    @endswitch
                                                 </span>
                                             </div>
                                             <div class="mb-4">
@@ -87,11 +100,12 @@
 {{--                    Authors, Subjects Collections Widgets--}}
                     <div id="widgetAccordion">
                         <div class="widget p-4d875 border mb-5">
-                            <label class="form-label font-size-3 font-weight-medium mb-3">Author(s):</label>
+                            <label class="form-label font-size-3 font-weight-medium mb-3">{{__('items')['contributors']}}:</label>
                             <table class="table table-hover table-borderless">
                                 <tbody>
                                 @forelse($item->authors as $author)
                                     <tr>
+                                        <th class="px-4 px-xl-5">{{$author->pivot->contribution ?? __('authors')['author']}}: </th>
                                         <td><a href="{{route('authors.show', $author->slug)}}" class="link-black-100">{{$author->fullname}}</a></td>
                                     </tr>
                                 @empty
@@ -108,17 +122,15 @@
                     <div id="tertiary" class="sidebar widget-area order-1" role="complementary">
                         <div id="widgetAccordion3">
                             <div class="widget p-4d875 border mb-5">
-                                <label class="form-label font-size-3 font-weight-medium mb-3">Subject(s):</label>
+                                <label class="form-label font-size-3 font-weight-medium mb-3">{{__('subjects')['subjects']}}:</label>
                                 <table class="table table-hover table-borderless">
                                     <tbody>
                                     @forelse($item->subjects as $subject)
                                         <tr>
-                                            <th class="px-4 px-xl-5">Subject: </th>
                                             <td>{{$subject->title}}</td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <th class="px-4 px-xl-5">Subject: </th>
                                             <td>No Subjects</td>
                                         </tr>
                                     @endforelse
@@ -129,17 +141,17 @@
                     </div>
 
                     <div class="widget p-4d875 border mb-5">
-                        <label class="form-label font-size-3 font-weight-medium mb-3">Collection(s):</label>
+                        <label class="form-label font-size-3 font-weight-medium mb-3">{{__('collections')['collections']}}:</label>
                         <table class="table table-hover table-borderless">
                             <tbody>
                             @forelse($item->collections as $collection)
                                 <tr>
-                                    <th class="px-4 px-xl-5">Part of: </th>
+                                    <th class="px-4 px-xl-5">{{__('items')['part of']}}: </th>
                                     <td><a href="{{route('collections.show', $collection->slug)}}" class="link-black-100">{{$collection->title}}</a></td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <th class="px-4 px-xl-5">Part of: </th>
+                                    <th class="px-4 px-xl-5">{{__('items')['part of']}}: </th>
                                     <td><a href="#" class="link-black-100">No Collection</a></td>
                                 </tr>
                             @endforelse

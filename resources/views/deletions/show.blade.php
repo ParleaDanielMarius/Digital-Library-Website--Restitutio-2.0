@@ -66,14 +66,13 @@
                             <label class="form-label font-size-3 font-weight-medium mb-3">Author(s):</label>
                             <table class="table table-hover table-borderless">
                                 <tbody>
-                                @forelse($authors as $author)
+                                @forelse($authors as $key=>$author)
                                     <tr>
-                                        <th class="px-4 px-xl-5">Author: </th>
+                                        <th class="px-4 px-xl-5">{{$contributions[$key]}}: </th>
                                         <td><a href="#" class="link-black-100">{{$author}}</a></td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <th class="px-4 px-xl-5">Author: </th>
                                         <td><a href="#" class="link-black-100">No Author</a></td>
                                     </tr>
                                 @endforelse

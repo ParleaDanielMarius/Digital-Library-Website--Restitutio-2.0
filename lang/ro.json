@@ -142,7 +142,7 @@
 
     "browse": {
         "browse": "Caută",
-        "browse authors": "Caută Autori",
+        "browse authors": "Caută Persoane",
         "browse collections": "Caută Colecții",
         "browse items": "Caută Obiecte Digitale"
     },
@@ -169,9 +169,9 @@
 
     "librarian": {
         "librarian": "Bibliotecar",
-        "add author": "Adaugă un Autor",
-        "edit author": "Editează Autorul",
-        "delete author": "Șterge Autor",
+        "add author": "Adaugă o Persoană",
+        "edit author": "Editează Persoana",
+        "delete author": "Șterge Persoana",
         "add collection": "Adaugă o Colecție",
         "edit collection": "Editează Colecția",
         "delete collection": "Șterge Colecția",
@@ -182,7 +182,8 @@
         "full delete": "Șterge Obiectul Complet",
         "restore": "Restaurează Obiectul",
         "manage inactive items": "Administrează Obiectele Inactive",
-        "change status": "Schimbă Statusul"
+        "change status": "Schimbă Statusul",
+        "add subject": "Adaugă un Subiect"
     },
     "admin": {
         "admin": "Administrator",
@@ -245,8 +246,17 @@
         "manuscripts": "Manuscrise",
         "map": "Hartă",
         "maps": "Hărți",
-        "periodic": "Periodic",
-        "periodics": "Periodice",
+        "serial": "Serial",
+        "serials": "Seriale",
+        "ex libris": "Ex Libris",
+        "photograph": "Fotografie",
+        "photographs": "Fotografii",
+        "document": "Document",
+        "documents": "Documente",
+        "postcard": "Carte Poștală",
+        "postcards": "Cărți Poștale",
+        "other": "Alta",
+        "others": "Altele",
         "created_by": "Creat de",
         "updated_by": "Modificat de",
         "created_at": "Creat la",
@@ -256,6 +266,7 @@
         "restored_at": "Restaurat la",
         "title": "Titlu",
         "title_long": "Titlu Lung",
+        "contributors": "Contributori",
         "cover_path": "Cale Copertă",
         "pdf_path": "Cale PDF",
         "publisher": "Editură",

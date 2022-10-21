@@ -10,7 +10,6 @@ use App\Models\Subject;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use Illuminate\Support\Str;
-use function Sodium\randombytes_buf;
 
 class DatabaseSeeder extends Seeder
 {
@@ -52,16 +51,19 @@ class DatabaseSeeder extends Seeder
         //    'pdf_path'=>'item/2022/Aug/Quis nemo aut in rem/HFakIg6GRAhmTDUfaiK9EwTrmX2FLdVcTiC0bVqv.pdf'
        // ]);
 
-        Collection::factory(10)->create(['created_by' => $user->id])->each(function($collection) use($user) {
+        $randomContributions = ['Autor', 'Ilustrator', 'Editor', 'Destinatar'];
+        Collection::factory(10)->create(['created_by' => $user->id])->each(function($collection) use($user, $randomContributions) {
             $collection->update(['slug' => Str::slug($collection->title)]);
             $collection->items()
                 ->saveMany(Item::factory(1000) -> make(['created_by' => $user->id]))
-                ->each(function($item) use($user) {
+                ->each(function($item) use($user, $randomContributions) {
                     $item->update(['slug' => Str::slug($item->title)]);
-                    $item->authors()->saveMany(Author::factory(random_int(1,6))->make([
-                        'created_by' => $user->id,
-                    ]));
-                    $item->subjects()->saveMany(Subject::factory(random_int(1,6))->make());
+                    $authors = Author::factory(random_int(1,6))->create([
+                        'created_by' => $user->id]);
+                    foreach ($authors as $author) {
+                        $item->authors()->attach($author, ['contribution' => $randomContributions[random_int(0,3)]]);
+                    }
+                    $item->subjects()->attach(Subject::factory(random_int(1,6))->create());
                 });
         });
         // \App\Models\User::factory()->create([

@@ -32,6 +32,7 @@
 <x-flash-message />
 <x-flash-warning />
 <body class="left-sidebar">
+<script>0</script>
 {{--HEADER CONTENT--}}
 <header id="site-header" class="site-header__v1">
     <div class="topbar border-bottom d-none d-md-block">
@@ -80,7 +81,7 @@
         <div class="container-fluid px-3 px-md-5 px-xl-8d75 py-2 py-md-0">
             <div class="d-flex align-items-center position-relative flex-wrap">
                 <div class="offcanvas-toggler mr-4 mr-lg-8">
-                    <a id="sidebarNavToggler2" role="button" class="cat-menu"
+                    <a id="sidebarNavToggler2" href="javascript:" role="button" class="cat-menu"
                        aria-controls="sidebarContent2"
                        aria-haspopup="true"
                        aria-expanded="false"

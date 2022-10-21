@@ -247,7 +247,7 @@ class ItemCollectionController extends Controller
 
         // Check if request has files and call fileStorage (found in helpers)
         if($request->hasFile('cover_path')) {
-            $formFields['cover_path'] = fileStorage('collection' ,$formFields['title'], $request, 'cover_path');
+            $formFields['cover_path'] = fileStorage('collection' ,$formFields['slug'], $request, 'cover_path');
             if($formFields['cover_path'] == false) {
                 return back()->withErrors('cover_path', "Something went wrong with the file upload. Please check the file's name and extension");
             }
@@ -300,7 +300,7 @@ class ItemCollectionController extends Controller
 
         // Check if request has files and call fileStorage (found in helpers)
         if ($request->hasFile('cover_path')) {
-            $formFields['cover_path'] = fileStorage('collection', $formFields['title'], $request, 'cover_path');
+            $formFields['cover_path'] = fileStorage('collection', $formFields['slug'], $request, 'cover_path');
             if ($formFields['cover_path'] == false) {
                 return back()->withErrors('cover_path', "Something went wrong with the file upload. Please check the file's name and extension");
             }

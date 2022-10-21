@@ -39,36 +39,57 @@ use App\Models\User
                                                 <label for="first_name" class="form-label">First Name <abbr class="required" title="required">*</abbr></label>
                                                 <input type="text" class="input-text form-control" name="first_name" id="first_name" placeholder="Ex: John" value="{{old('first_name') ?? ''}}" autocomplete="first_name" autofocus="autofocus">
                                             </p>
+                                            @error('first_name')
+                                            <p class="text-danger mt-1 col-12 mb-4d75 form-row form-row-wide">{{$message}}</p>
+                                            @enderror
 {{--                                            Last Name--}}
                                             <p class="col-12 mb-4d75 form-row form-row-wide" id="last_name_field" data-priority="20">
                                                 <label for="last_name" class="form-label">Last Name</label>
                                                 <input type="text" class="input-text form-control" name="last_name" id="last_name" placeholder="Ex: Doe" value="{{old('last_name') ?? ''}}" autocomplete="last_name">
                                             </p>
+                                            @error('last_name')
+                                            <p class="text-danger mt-1 col-12 mb-4d75 form-row form-row-wide">{{$message}}</p>
+                                            @enderror
 {{--                                            Username--}}
                                             <p class="col-12 mb-4d75 form-row form-row-wide" id="username_field" data-priority="30">
                                                 <label for="username" class="form-label">Username</label>
                                                 <input type="text" class="input-text form-control" name="username" id="username" placeholder="Ex: johndoe21" value="{{old('username') ?? ''}}" autocomplete="username">
                                             </p>
+                                            @error('username')
+                                            <p class="text-danger mt-1 col-12 mb-4d75 form-row form-row-wide">{{$message}}</p>
+                                            @enderror
 {{--                                            Email Adress--}}
                                             <p class="col-12 mb-4d75 form-row form-row-last validate-required validate-email" id="email_field" data-priority="40">
                                                 <label for="email" class="form-label">Email address <abbr class="required" title="required">*</abbr></label>
                                                 <input type="email" class="input-text form-control" name="email" id="email" placeholder="john.doe@bcub.ro" value="{{old('email') ?? ''}}" autocomplete="email">
                                             </p>
+                                            @error('email')
+                                            <p class="text-danger mt-1 col-12 mb-4d75 form-row form-row-wide">{{$message}}</p>
+                                            @enderror
 {{--                                            Password--}}
                                             <p class="col-12 mb-4d75 form-row form-row-wide" id="password_field" data-priority="50">
                                                 <label for="password" class="form-label">Password</label>
                                                 <input type="password" class="input-text form-control" name="password" id="password">
                                             </p>
+                                            @error('password')
+                                            <p class="text-danger mt-1 col-12 mb-4d75 form-row form-row-wide">{{$message}}</p>
+                                            @enderror
 {{--                                            Password Confirmation--}}
                                             <p class="col-12 mb-4d75 form-row form-row-wide" id="password_confirmation_field" data-priority="60">
                                                 <label for="password_confirmation" class="form-label">Confirm Password</label>
                                                 <input type="password" class="input-text form-control" name="password_confirmation" id="password_confirmation">
                                             </p>
+                                            @error('password_confirmation')
+                                            <p class="text-danger mt-1 col-12 mb-4d75 form-row form-row-wide">{{$message}}</p>
+                                            @enderror
 {{--                                            Location--}}
                                             <p class="col-12 mb-4d75 form-row form-row-wide" id="location_field" data-priority="70">
                                                 <label for="location" class="form-label">Location</label>
                                                 <input type="text" class="input-text form-control" name="location" id="location" placeholder="Ex: BCU Carol I" value="{{old('location') ?? ''}}" autocomplete="location">
                                             </p>
+                                            @error('location')
+                                            <p class="text-danger mt-1 col-12 mb-4d75 form-row form-row-wide">{{$message}}</p>
+                                            @enderror
 {{--                                            Role--}}
                                             <p class="col-12 mb-4d75 form-row form-row-wide" id="role_field" data-priority="90">
                                                 <label for="role" class="form-label">Role <abbr class="required" title="required">*</abbr></label>
@@ -78,6 +99,9 @@ use App\Models\User
                                                     <option value="{{User::role_Admin}}" @if(old('role') == User::role_Admin) selected @endif>{{User::role_Admin}}</option>
                                                 </select>
                                             </p>
+                                            @error('role')
+                                            <p class="text-danger mt-1 col-12 mb-4d75 form-row form-row-wide">{{$message}}</p>
+                                            @enderror
 {{--                                            Status--}}
                                             <p class="col-12 mb-4d75 form-row form-row-wide" id="status_field" data-priority="100">
                                                 <label for="status" class="form-label">Status <abbr class="required" title="required">*</abbr></label>
@@ -87,6 +111,9 @@ use App\Models\User
                                                     <option value="{{User::STATUS_INACTIVE}}" @if(old('status') == User::STATUS_INACTIVE) selected @endif>{{User::STATUS_INACTIVE}}</option>
                                                 </select>
                                             </p>
+                                            @error('status')
+                                            <p class="text-danger mt-1 col-12 mb-4d75 form-row form-row-wide">{{$message}}</p>
+                                            @enderror
                                         </div>
                                     </div>
                                     <input type="submit" class="button alt btn btn-primary rounded-0 py-4" name="submit" id="submit" value="Submit" data-value="submit">

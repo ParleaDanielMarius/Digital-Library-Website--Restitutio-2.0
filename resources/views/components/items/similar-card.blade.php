@@ -1,7 +1,4 @@
 @props(['item'])
-@php
-    use App\Models\Item
-@endphp
 
 <div class="product">
     <div class="product__inner overflow-hidden p-3 p-md-4d875" style="max-height: 350px ; max-width: 350px ; min-height: 350px ; min-width: 250px">
@@ -13,21 +10,36 @@
                 <div class="text-uppercase font-size-1 mb-1 text-truncate">
                     <a class="text-primary">
                         @switch($item->type)
-                            @case(Item::type_Book)
-                                {{__('items')['book']}}
-                                @break
-                            @case(Item::type_OldBook)
-                                {{__('items')['old book']}}
-                                @break
-                            @case(Item::type_Manuscript)
-                                {{__('items')['manuscript']}}
-                                @break
-                            @case(Item::type_Map)
-                                {{__('items')['map']}}
-                                @break
-                            @case(Item::type_Periodic)
-                                {{__('items')['periodic']}}
-                                @break
+                            @case('Book')
+                            {{__('items')['book']}}
+                            @break
+                            @case('Old Book')
+                            {{__('items')['old book']}}
+                            @break
+                            @case('Manuscript')
+                            {{__('items')['manuscript']}}
+                            @break
+                            @case('Map')
+                            {{__('items')['map']}}
+                            @break
+                            @case('Serial')
+                            {{__('items')['serial']}}
+                            @break
+                            @case('ex libris')
+                            {{__('items')['ex libris']}}
+                            @break
+                            @case('Photograph')
+                            {{__('items')['photograph']}}
+                            @break
+                            @case('document')
+                            {{__('items')['document']}}
+                            @break
+                            @case('postcard')
+                            {{__('items')['postcard']}}
+                            @break
+                            @case('other')
+                            {{__('items')['other']}}
+                            @break
                             @default {{__('unknown')}}
                         @endswitch
                     </a>

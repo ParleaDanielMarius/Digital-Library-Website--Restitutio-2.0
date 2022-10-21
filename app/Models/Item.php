@@ -39,13 +39,19 @@ class Item extends Model {
     // A ton of constants for items used pretty much everywhere (To make life easier? Did they?)
     public const STATUS_INACTIVE = 'Inactive';
     public const STATUS_ACTIVE = 'Active';
+//    public const TYPES = ['Book', 'Old Book', 'Manuscript', 'Map', 'Periodic', 'Ex Libris', 'Photograph', 'Document', 'Postcard','Other'];
     public const type_Book = 'Book';
     public const type_OldBook = 'Old Book';
     public const type_Manuscript = 'Manuscript';
     public const type_Map = 'Map';
-    public const type_Periodic = 'Periodic';
+    public const type_Serial = 'Serial';
+    public const type_ExLibris = 'Ex Libris';
+    public const type_Photograph = 'Photograph';
+    public const type_Document = 'Document';
+    public const type_Postcard = 'Postcard';
+    public const type_Other = 'Other';
     public const null_Unknown = 'Unknown'; // Used if a field is null (Example: When publishing year is not known)
-                                            // Not really used anymore as front-end should take care of this (SHOULD)
+                                             // Not really used anymore as front-end should take care of this (SHOULD)
 
     // Filters
     public function scopeFilter($query, array $filters) {
@@ -65,13 +71,18 @@ class Item extends Model {
             $subjects = explode(', ', $request->subjects);
         }
         // Checks if one-digit month was entered and add 0 in front of it
-        if(strlen($request->month_from) == 1) {
-            $request->month_from = 0 . $request->month_from;
+        if($request->month_from != null) {
+            if(strlen($request->month_from) == 1) {
+                $request->month_from = 0 . $request->month_from;
+            }
         }
         // Same as above
-        if(strlen($request->month_to) == 1) {
-            $request->month_to = 0 . $request->month_to;
+        if($request->month_to != null) {
+            if(strlen($request->month_to) == 1) {
+                $request->month_to = 0 . $request->month_to;
+            }
         }
+
 
         // Check if search filter exists
         if(array_key_exists('search' ,$filters)) {
@@ -164,7 +175,8 @@ class Item extends Model {
 
 // Relationship To Author
     public function authors() {
-        return $this->belongsToMany(Author::class, 'author_item');
+        return $this->belongsToMany(Author::class, 'author_item')
+            ->withPivot('contribution');
     }
 
 // Relationship To Collection

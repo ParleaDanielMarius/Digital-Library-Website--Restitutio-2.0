@@ -120,12 +120,12 @@
                         </div>
 {{--                        Subjects Search--}}
                         <div id="subjectsTab" class="widget widget_search widget_author p-4d875 border">
-                            <div id="widgetHeading20" class="widget-head">
+                            <div id="widgetHeadingTwo" class="widget-head">
                                 <a class="d-flex align-items-center justify-content-between text-dark" href="#"
                                    data-toggle="collapse"
-                                   data-target="#widgetCollapse20"
+                                   data-target="#widgetCollapseTwo"
                                    aria-expanded="true"
-                                   aria-controls="widgetCollapse20">
+                                   aria-controls="widgetCollapseTwo">
                                     <h3 class="widget-title mb-0 font-weight-medium font-size-3">{{__('subjects')['subjects']}}</h3>
                                     <svg class="mins" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="2px">
                                         <path fill-rule="evenodd" fill="rgb(22, 22, 25)" d="M0.000,-0.000 L15.000,-0.000 L15.000,2.000 L0.000,2.000 L0.000,-0.000 Z" />
@@ -135,8 +135,8 @@
                                     </svg>
                                 </a>
                             </div>
-                            <div id="widgetCollapse20" class="mt-4 widget-content collapse show"
-                                 aria-labelledby="widgetHeading20"
+                            <div id="widgetCollapseTwo" class="mt-4 widget-content collapse show"
+                                 aria-labelledby="widgetHeadingTwo"
                             >
                                 <div class="input-group flex-nowrap w-100">
                                     <div class="input-group-prepend">

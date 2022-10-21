@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('author_id');
             $table->string('item_id');
+            $table->string('contribution')->nullable();
             $table->unique(['item_id', 'author_id']);
         });
     }

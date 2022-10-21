@@ -74,6 +74,46 @@
                                                     <p class="text-danger mt-1 col-12 mb-4d75 form-row form-row-wide">{{$message}}</p>
                                                     @enderror
 
+                                                    <div class="col-12 mb-4d75 form-row form-row-wide">
+                                                        <label for="authors_container" class="col-12 mb-4d75 form-label">{{__('authors')['authors']}}</label>
+                                                        <div id="authors_container" class="authors_container">
+                                                            <button class="add_author_field">{{__('librarian')['add author']}} &nbsp;
+                                                                <span style="font-size:16px; font-weight:bold;">+ </span>
+                                                            </button>
+                                                            <div class="author_wrapper"><input class="authors" placeholder="Person" value="{{old('authors_id')[0] ?? ''}}" type="text" name="authors_id[]"><input placeholder="Contribution" type="text" name="contribution[]"/><a href="#" class="checkData mx-5">Check</a></div>
+                                                            @if(old('authors_id'))
+                                                                @foreach(old('authors_id') as $key => $value)
+                                                                    @if($key != 0)
+                                                                        <div class="author_wrapper"><input class="authors" placeholder="Person" type="text" name="authors_id[]" value="{{$value}}"><input placeholder="Contribution" type="text" name="contribution[]"/><a href="#" class="checkData mx-5">Check</a><a href="#" class="delete">Delete</a></div>
+                                                                    @endif
+                                                                @endforeach
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                    @error('authors_id')
+                                                    <p class="text-danger mt-1 col-12 mb-4d75 form-row form-row-wide">{{$message}}</p>
+                                                    @enderror
+
+                                                    <div class="col-12 mb-4d75 form-row form-row-wide">
+                                                        <label for="subjects_container" class="col-12 mb-4d75 form-label">{{__('subjects')['subjects']}}</label>
+                                                        <div id="subjects_container" class="subjects_container">
+                                                            <button class="add_subject_field">{{__('librarian')['add subject']}} &nbsp;
+                                                                <span style="font-size:16px; font-weight:bold;">+ </span>
+                                                            </button>
+                                                            <div class="subject_wrapper"><input class="subjects" placeholder="{{__('subjects')['subject']}}" value="{{old('subjects_id')[0] ?? ''}}" type="text" name="subjects_id[]"><a href="#" class="checkData mx-5">Check</a></div>
+                                                            @if(old('subjects_id'))
+                                                                @foreach(old('subjects_id') as $key => $value)
+                                                                    @if($key != 0)
+                                                                        <div class="subject_wrapper"><input class="subjects" placeholder="{{__('subjects')['subject']}}" type="text" name="subjects_id[]" value="{{$value}}"><a href="#" class="checkData mx-5">Check</a><a href="#" class="delete">Delete</a></div>
+                                                                    @endif
+                                                                @endforeach
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                    @error('subjects_id')
+                                                    <p class="text-danger mt-1 col-12 mb-4d75 form-row form-row-wide">{{$message}}</p>
+                                                    @enderror
+
 
                                                     <p class="col-12 mb-4d75 form-row form-row-wide address-field" id="publisher_field" data-priority="50">
                                                         <label for="publisher" class="form-label">{{__('items')['publisher']}}</label>
@@ -219,87 +259,8 @@
                                             </div>
                                             <input type="submit" class="button alt btn btn-primary rounded-0 py-4" name="submit" id="submit" value="{{__('submit')}}" data-value="submit">
                                         </div>
-
-
                                     </div>
-
-                                    <div id="order_review" class="col-md-6 col-lg-5 col-xl-4 woocommerce-checkout-review-order">
-                                        <div id="checkoutAccordion" class="border border-gray-900 bg-white mb-5">
-
-                                            <div class="p-4d875 border">
-                                                <div id="checkoutHeadingOne" class="checkout-head">
-                                                    <a href="#" class="text-dark d-flex align-items-center justify-content-between"
-                                                       data-toggle="collapse"
-                                                       data-target="#checkoutCollapseOne"
-                                                       aria-expanded="true"
-                                                       aria-controls="checkoutCollapseOne">
-
-                                                        <h3 class="checkout-title mb-0 font-weight-medium font-size-3">{{__('authors')['authors']}}</h3>
-
-                                                        <svg class="mins" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="2px">
-                                                            <path fill-rule="evenodd" fill="rgb(22, 22, 25)" d="M0.000,-0.000 L15.000,-0.000 L15.000,2.000 L0.000,2.000 L0.000,-0.000 Z" />
-                                                        </svg>
-
-                                                        <svg class="plus" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="15px">
-                                                            <path fill-rule="evenodd" fill="rgb(22, 22, 25)" d="M15.000,8.000 L9.000,8.000 L9.000,15.000 L7.000,15.000 L7.000,8.000 L0.000,8.000 L0.000,6.000 L7.000,6.000 L7.000,-0.000 L9.000,-0.000 L9.000,6.000 L15.000,6.000 L15.000,8.000 Z" />
-                                                        </svg>
-                                                    </a>
-                                                </div>
-
-                                                <div id="checkoutCollapseOne" class="mt-4 checkout-content collapse show"
-                                                     aria-labelledby="checkoutHeadingOne"
-                                                    >
-                                                    <div>
-                                                        <input type="text" name="authors_search" class="input-text form-control" id="authors_search" value="" placeholder="{{__('authors')['authors']}}" autocomplete="off">
-                                                    </div>
-
-                                                    <div id="authors_checkboxes" class="woocommerce-checkout-payment mt-4">
-                                                        @include('partials.authors._checkboxAjaxList')
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <input type="hidden" name="authors_id_hidden" id="authors_id_hidden">
-                                            <div class="p-4d875 border">
-                                                <div id="checkoutHeadingTwo" class="checkout-head">
-                                                    <a href="#" class="text-dark d-flex align-items-center justify-content-between"
-                                                       data-toggle="collapse"
-                                                       data-target="#checkoutCollapseTwo"
-                                                       aria-expanded="true"
-                                                       aria-controls="checkoutCollapseTwo">
-
-                                                        <h3 class="checkout-title mb-0 font-weight-medium font-size-3">{{__('authors')['authors']}} Selected</h3>
-
-                                                        <svg class="mins" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="2px">
-                                                            <path fill-rule="evenodd" fill="rgb(22, 22, 25)" d="M0.000,-0.000 L15.000,-0.000 L15.000,2.000 L0.000,2.000 L0.000,-0.000 Z" />
-                                                        </svg>
-
-                                                        <svg class="plus" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="15px">
-                                                            <path fill-rule="evenodd" fill="rgb(22, 22, 25)" d="M15.000,8.000 L9.000,8.000 L9.000,15.000 L7.000,15.000 L7.000,8.000 L0.000,8.000 L0.000,6.000 L7.000,6.000 L7.000,-0.000 L9.000,-0.000 L9.000,6.000 L15.000,6.000 L15.000,8.000 Z" />
-                                                        </svg>
-                                                    </a>
-                                                </div>
-
-                                                <div id="checkoutCollapseTwo" class="mt-4 checkout-content collapse show"
-                                                     aria-labelledby="checkoutHeadingTwo"
-                                                >
-
-                                                    <div id="selected_authors" class="woocommerce-checkout-payment mt-4">
-                                                        <ul id="selected_authors_list" class="wc_payment_methods payment_methods methods">
-
-
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-
                                 </form>
-
-
                         <!-- .entry-content -->
                     </article>
                     <!-- #post-## -->
@@ -319,84 +280,110 @@
 
 @section('separate scripts')
 <script>
-    $(document).ready(function(){
-        var authorIDs = [];
-        const fetch_data = debounce(function(page, search) {
-            fetch_dataAjax(page, search);
-        }, 500)
+    $(document).ready(function() {
+        // Applies to all
+        var max_fields = 10;
 
-        // $('#submit').on('click', function() {
-        //     $(document).getElementById('authors_id').value = [...authorIDs]
-        // })
+        // Author Variables
+        var wrapper_authors = $(".authors_container");
+        var add_button_authors = $(".add_author_field");
 
-        $('#item_create').submit(function(event) {
-            $('#authors_id_hidden').val(authorIDs)
+        // Subject Variables
+        var wrapper_subjects = $(".subjects_container");
+        var add_button_subjects = $(".add_subject_field");
+
+
+        $(add_button_authors).click(function(e) {
+            e.preventDefault();
+            if ($('div.author_wrapper').length < max_fields) {
+                $(wrapper_authors).append('<div class="author_wrapper"><input class="authors" placeholder="Person" type="text" name="authors_id[]"/><input placeholder="Contribution" type="text" name="contribution[]"/><a href="#" class="checkData mx-5">Check</a><a href="#" class="delete">Delete</a></div>'); //add input box
+            } else {
+                alert('You reached the limits')
+            }
+        });
+
+        $(wrapper_authors).on("click", ".delete", function(e) {
+            e.preventDefault();
+            $(this).parent('div').remove();
         })
 
-        $(document).on('click', '.pagination a', function(event){
-            event.preventDefault();
-            console.log(authorIDs)
-            var page = $(this).attr('href').split('page=')[1];
-            var search = $('#authors_search').val();
-            fetch_data(page, search);
-        });
-
-        $(document).on({
-            ajaxStart: function(){
-                $("body").addClass("loading");
-            },
-            ajaxStop: function(){
-                $("body").removeClass("loading");
-            }
-        });
-
-        $('#authors_checkboxes').on('change', '#authors_list :checkbox', function() {
-                if (!authorIDs.includes($(this).val())) {
-                    authorIDs.push($(this).val())
-                    const li = document.createElement('li')
-                    li.innerHTML = $(this).val()
-                    li.onclick = function() {
-                        li.remove()
+        $(wrapper_authors).on("click", ".checkData", function(e) {
+            e.preventDefault();
+            var search = '/author-check/' + $(this).parent('div').find('.authors').val()
+            return $.ajax({
+                url: search,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    alert("Found!\n" + data.fullname)
+                },
+                error: function(jqXHR, exception) {
+                    var msg = '';
+                    if (jqXHR.status === 0) {
+                        msg = 'Not connect.\n Verify Network.';
+                    } else if (jqXHR.status == 404) {
+                        msg = 'Not Found. [404]';
+                    } else if (jqXHR.status == 500) {
+                        msg = 'Internal Server Error [500].';
+                    } else if (exception === 'parsererror') {
+                        msg = 'Requested JSON parse failed.';
+                    } else if (exception === 'timeout') {
+                        msg = 'Time out error.';
+                    } else if (exception === 'abort') {
+                        msg = 'Ajax request aborted.';
+                    } else {
+                        msg = 'Uncaught Error.\n' + jqXHR.responseText;
                     }
-                    document.getElementById('selected_authors_list').appendChild(li)
-                } else {
-                    authorIDs = authorIDs.filter(data => data !== $(this).val())
-                }
-            console.log(authorIDs)
-
-
-
-
-
-        });
-
-        $('#authors_search').on('keyup',function() {
-            var search = $(this).val();
-            fetch_data(1, search);
-        });
-
-        function fetch_dataAjax(page, search = '')
-        {
-            $.ajax({
-                url:"/authors-ajax-list?search="+search+"&page="+page,
-                success:function(data)
-                {
-                    $('#authors_checkboxes').html(data);
+                    alert(msg)
                 }
             });
-        }
+        })
 
-        function debounce(cb, delay = 250) {
-            let timeout
-
-            return (...args) => {
-                clearTimeout(timeout)
-                timeout = setTimeout(() => {
-                    cb(...args)
-                }, delay)
+        $(add_button_subjects).click(function(e) {
+            e.preventDefault();
+            if ($('div.subject_wrapper').length < max_fields) {
+                $(wrapper_subjects).append('<div class="subject_wrapper"><input class="subjects" placeholder="Subject" type="text" name="subjects_id[]"/><a href="#" class="checkData mx-5">Check</a><a href="#" class="delete">Delete</a></div>'); //add input box
+            } else {
+                alert('You reached the limits')
             }
-        }
+        });
 
+        $(wrapper_subjects).on("click", ".delete", function(e) {
+            e.preventDefault();
+            $(this).parent('div').remove();
+        })
+
+        $(wrapper_subjects).on("click", ".checkData", function(e) {
+            e.preventDefault();
+            var search = '/subject-check/' + $(this).parent('div').find('.subjects').val()
+            return $.ajax({
+                url: search,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    alert("Found!\n" + data.title)
+                },
+                error: function(jqXHR, exception) {
+                    var msg = '';
+                    if (jqXHR.status === 0) {
+                        msg = 'Not connect.\n Verify Network.';
+                    } else if (jqXHR.status == 404) {
+                        msg = 'Not Found. [404]';
+                    } else if (jqXHR.status == 500) {
+                        msg = 'Internal Server Error [500].';
+                    } else if (exception === 'parsererror') {
+                        msg = 'Requested JSON parse failed.';
+                    } else if (exception === 'timeout') {
+                        msg = 'Time out error.';
+                    } else if (exception === 'abort') {
+                        msg = 'Ajax request aborted.';
+                    } else {
+                        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                    }
+                    alert(msg)
+                }
+            });
+        })
     });
 </script>
 @endsection

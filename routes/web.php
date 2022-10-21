@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\DeletionController;
 use App\Http\Controllers\ItemCollectionController;
@@ -19,9 +20,10 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/test', [AuthorController::class, 'test'])->name('test');
-Route::get('/authors-ajax-list', [AuthorController::class, 'ajaxGetList']);
-Route::get('/items-index-get', [ItemController::class, 'ajaxIndexGet']);
+Route::get('/test', [LangController::class, 'test'])->name('test');
+Route::get('/author-check/{search}', [AjaxController::class, 'checkAuthor']);
+Route::get('/subject-check/{search}', [AjaxController::class, 'checkSubject']);
+
 
 
 Route::get('/authors-select/{search}', [AuthorController::class, 'authorsSelect'])->name('authorsSelect');

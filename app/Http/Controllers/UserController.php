@@ -109,14 +109,19 @@ class UserController extends Controller
             'first_name'=>'required',
             'last_name'=>'required',
             'email'=>['nullable', 'email', Rule::unique('users', 'email')->ignore($user)],
-            'password'=>['required', 'confirmed', 'min:6'],
+            'password'=>['confirmed', 'min:6', 'nullable'],
             'location'=>'required',
             'role'=>'required',
             'status'=>'required',
         ]);
 
         // Hash Password
-        $formFields['password'] = bcrypt($formFields['password']);
+        if($formFields['password'] != null)
+            $formFields['password'] = bcrypt($formFields['password']);
+        else
+            unset($formFields['password']);
+
+
         $formFields['updated_by'] = auth()->id();
 
         // DB Transaction
@@ -137,7 +142,7 @@ class UserController extends Controller
             return redirect(route('users.show', $user))->with('warning', "User couldn't be updated!");
         }
         // Log success
-        Log::notice('store (User):', [
+        Log::notice('update (User):', [
             'id' => $user->id,
             'user' => auth()->id(),
         ]);

@@ -1,6 +1,4 @@
-@php
-    use App\Models\Item;
-@endphp
+
 @extends('layouts.layout-index')
 @section('title', __('librarian')['manage inactive items'])
 @section('content')
@@ -310,11 +308,16 @@
                                 <label hidden for="type">{{__('items')['type']}}</label>
                                 <select  name="type" id="type" class="border border-gray-200 rounded p-2 w-full">
                                     <option value="" @if(request('type') === null) selected @endif>{{__('none')}}</option>
-                                    <option value="{{Item::type_Book}}" @if(request('type') === Item::type_Book) selected @endif>{{__('items')['book']}}</option>
-                                    <option value="{{Item::type_OldBook}}" @if(request('type') === Item::type_OldBook) selected @endif>{{__('items')['old book']}}</option>
-                                    <option value="{{Item::type_Map}}" @if(request('type') === Item::type_Map) selected @endif>{{__('items')['map']}}</option>
-                                    <option value="{{Item::type_Manuscript}}" @if(request('type') === Item::type_Manuscript) selected @endif>{{__('items')['manuscript']}}</option>
-                                    <option value="{{Item::type_Periodic}}" @if(request('type') === Item::type_Periodic) selected @endif>{{__('items')['periodic']}}</option>
+                                    <option value="Book" @if(request('type') == 'Book') selected @endif>{{__('items')['book']}}</option>
+                                    <option value="Old Book" @if(request('type') == 'Old Book') selected @endif>{{__('items')['old book']}}</option>
+                                    <option value="Manuscript" @if(request('type') == 'Manuscript') selected @endif>{{__('items')['manuscript']}}</option>
+                                    <option value="Map" @if(request('type') == 'Map') selected @endif>{{__('items')['map']}}</option>
+                                    <option value="Serial" @if(request('type') == 'Serial') selected @endif>{{__('items')['serial']}}</option>
+                                    <option value="Ex Libris" @if(request('type') == 'Ex Libris') selected @endif>{{__('items')['ex libris']}}</option>
+                                    <option value="Photograph" @if(request('type') == 'Photograph') selected @endif>{{__('items')['photograph']}}</option>
+                                    <option value="Document" @if(request('type') == 'Document') selected @endif>{{__('items')['document']}}</option>
+                                    <option value="Postcard" @if(request('type') == 'Postcard') selected @endif>{{__('items')['postcard']}}</option>
+                                    <option value="Other" @if(request('type') == 'Other') selected @endif>{{__('items')['other']}}</option>
                                 </select>
                             </div>
                         </div>

@@ -12,7 +12,9 @@ use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
@@ -80,11 +82,12 @@ class ItemController extends Controller
         }
         // Query Active Items, sort, order, paginate and filter using 'search' (found in Item Model)
         // Might need to remove query for collections and subjects since they are not used at the moment and may never be
-        $items = Item::query()
-            ->with(['authors:slug,fullname', 'subjects:id,title', 'collections:slug,title'])
+        $items = Item::with('authors:slug,fullname')
+            ->select('slug','id','title', 'cover_path', 'title_long', 'type')
             ->where('status', Item::STATUS_ACTIVE)
             ->filter(request(['search']))
-            ->orderBy($sortField, $sort)->paginate($pages)->withQueryString();
+            ->orderBy($sortField, $sort)
+            ->paginate($pages)->withQueryString();
         return view('items.index' , [
             'items' => $items,
             /*  Was used for multiselect search
@@ -131,7 +134,14 @@ class ItemController extends Controller
 
     // Item Create
     public function create() {
-        return view('items.create');
+        function convert($size)
+        {
+            $unit=array('b','kb','mb','gb','tb','pb');
+            return @round($size/pow(1024,($i=floor(log($size,1024)))),2).' '.$unit[$i];
+        }
+        return view('items.create', [
+            'collections' => Collection::query()->orderBy('title')->get()->all(),
+        ]);
     }
 
 
@@ -139,9 +149,7 @@ class ItemController extends Controller
     public function edit(Item $item) {
         return view('items.edit', [
             'item' => $item->load(['authors', 'collections', 'subjects']),
-            'authors' => Author::get(['id', 'fullname'])->sortBy('fullname', SORT_NATURAL),
             'collections' => Collection::get(['id', 'title'])->sortBy('title', SORT_NATURAL),
-            'subjects' => Subject::get(['id', 'title'])->sortBy('title', SORT_NATURAL),
         ]);
     }
 
@@ -194,9 +202,9 @@ class ItemController extends Controller
 
     //  --  Creates a backup of the to be deleted Item  --  \\
     // Returns false if backup failed or true if it succeeded (Logs regardless of result)
-    public function deletion(Item $item) {
+    public function deletion(Item $item): bool
+    {
         $itemToDeletion = $item->attributesToArray();
-
         // Check if Item had any collections and add each into an array
         if($item->collections()->exists()) {
             foreach ($item->collections as $collection) {
@@ -210,8 +218,10 @@ class ItemController extends Controller
         if($item->authors()->exists()) {
             foreach ($item->authors as $author) {
                 $had_authors[] = $author->fullname;
+                $had_contributions[] = $author->pivot->contribution;
             }
             $itemToDeletion['had_authors'] = implode(', ', $had_authors);
+            $itemToDeletion['contributions'] = implode(', ', $had_contributions);
         }
 
         // Same as above, but for subjects
@@ -343,11 +353,13 @@ class ItemController extends Controller
     // --   Store item data  -- \\
     public function store(Request $request) {
         // Validate all fields
+        //dd($request);
         $formFields = $request->validate([
             'title' => ['required', 'max:76', Rule::unique('items', 'title')],
             'title_long' => 'nullable',
             'collections_id' => 'required',
-            'authors_id' =>'nullable',
+            'authors_id' =>'required',
+            'contribution' => 'required',
             'cover_path' => 'image',
             'pdf_path' => 'mimes:pdf',
             'publisher' => 'nullable',
@@ -370,29 +382,34 @@ class ItemController extends Controller
         $formFields['slug'] = Str::slug($formFields['title']);
 
         // Checks if one-digit month was entered and add 0 in front of it
-        if(strlen($formFields['publisher_month']) == 1) {
-            $formFields['publisher_month'] = 0 . $formFields['publisher_month'];
+        if($formFields['publisher_month']) {
+            if(strlen($formFields['publisher_month']) == 1) {
+                $formFields['publisher_month'] = 0 . $formFields['publisher_month'];
+            }
         }
         // Same as above
-        if(strlen($formFields['publisher_day']) == 1) {
-            $formFields['publisher_day'] = 0 . $formFields['publisher_day'];
+        if(strlen($formFields['publisher_day'])){
+            if(strlen($formFields['publisher_day']) == 1) {
+                $formFields['publisher_day'] = 0 . $formFields['publisher_day'];
+            }
         }
 
+
         // Front-end returns values as strings, so we turn them into arrays
-        $formFields['authors_id'] = explode(',', $formFields['authors_id']);
-        $formFields['subjects_id'] = explode(',', $formFields['subjects_id']);
+//        $formFields['authors_id'] = explode(',', $formFields['authors_id']);
+//        $formFields['subjects_id'] = explode(',', $formFields['subjects_id']);
         $formFields['collections_id'] = explode(',', $formFields['collections_id']);
 
 
         // If request has files call fileStorage for each
         if($request->hasFile('cover_path')) {
-            $formFields['cover_path'] = fileStorage('item' ,$formFields['title'], $request, 'cover_path');
+            $formFields['cover_path'] = fileStorage('item' ,$formFields['slug'], $request, 'cover_path');
             if($formFields['cover_path'] == false) {
                 return back()->withInput()->with('warning', "Something went wrong with the file upload. Please check the file's name and extension");
             }
         }
         if($request->hasFile('pdf_path')) {
-            $formFields['pdf_path'] = fileStorage('item' ,$formFields['title'], $request, 'pdf_path');
+            $formFields['pdf_path'] = fileStorage('item' ,$formFields['slug'], $request, 'pdf_path');
             if ($formFields['pdf_path'] == false) {
                 return back()->withInput()->with('warning', "Something went wrong with the file upload. Please check the file's name and extension");
             }
@@ -407,23 +424,20 @@ class ItemController extends Controller
         try {
             DB::beginTransaction();
 
-            // Front-end should take care of displaying empty fields now (maybe? might have missed some)
-//            if($formFields['publisher'] == null) {
-//                $formFields['publisher'] = Item::null_Unknown;
-//            }
-//
-//            if($formFields['publisher_when'] == null) {
-//                $formFields['publisher_when'] = Item::null_Unknown;
-//            }
-//
-//            if($formFields['publisher_where'] == null) {
-//                $formFields['publisher_where'] = Item::null_Unknown;
-//            }
-
-            // For User convenience we check if they entered any author and if they didn't we default to
-            // the first author, which should be 'Unknown Author'
+            // In case null authors got past validation we assign Unknown Author
+            $authors = array();
+            $contributions = array();
             if(!array_key_exists('authors_id', $formFields)) {
-                $formFields['authors_id'] = 1;
+                $authors = 1;
+            } else {
+                foreach ($formFields['authors_id'] as $key=>$author) {
+                    $toAdd = Author::query()->where('fullname', $author)->select('id')->first();
+                    if($toAdd != null) {
+                        $authors[] = $toAdd->id;
+                        $contributions[] = $formFields['contribution'][$key];
+                    }
+
+                }
             }
 
             $item = Item::create($formFields);
@@ -431,7 +445,7 @@ class ItemController extends Controller
             // Create subjects if they do not exist already and add them to array
                 foreach ($formFields['subjects_id'] as $subject) {
                     $toAdd = Subject::firstOrCreate([
-                        'id' => $subject,
+                        'title' => $subject,
                     ], ['title'=> $subject]);
                     $subjects[] = $toAdd->id;
                 }
@@ -439,7 +453,15 @@ class ItemController extends Controller
 
             // Relationships
 
-            $item->authors()->attach($formFields['authors_id']);
+            // If no author was found we assign Unknown Author
+            if($authors == null || $contributions == null) {
+                $item->authors()->attach(1);
+            } else {
+                foreach($authors as $key => $author) {
+                    $item->authors()->attach($author, ['contribution' => $contributions[$key]]);
+                }
+            }
+
             $item->collections()->attach($formFields['collections_id']);
             $item->subjects()->attach($subjects);
 
@@ -474,7 +496,8 @@ class ItemController extends Controller
             'title' => ['required', 'max:76', Rule::unique('items', 'title')->ignore($item)],
             'title_long' => 'nullable',
             'collections_id' => 'required',
-            'authors_id' =>'nullable',
+            'authors_id' =>'required',
+            'contribution' => 'required',
             'cover_path' => 'image',
             'pdf_path' => 'mimes:pdf',
             'publisher' => 'nullable',
@@ -497,22 +520,52 @@ class ItemController extends Controller
         // Creates a slug
         $formFields['slug'] = Str::slug($formFields['title']);
 
+        // Checks if one-digit month was entered and add 0 in front of it
+        if($formFields['publisher_month']) {
+            if(strlen($formFields['publisher_month']) == 1) {
+                $formFields['publisher_month'] = 0 . $formFields['publisher_month'];
+            }
+        }
+        // Same as above
+        if(strlen($formFields['publisher_day'])){
+            if(strlen($formFields['publisher_day']) == 1) {
+                $formFields['publisher_day'] = 0 . $formFields['publisher_day'];
+            }
+        }
+
         // Front-end returns values as strings, so we turn them into arrays
-        $formFields['authors_id'] = explode(',', $formFields['authors_id']);
-        $formFields['subjects_id'] = explode(',', $formFields['subjects_id']);
+//        $formFields['authors_id'] = explode(',', $formFields['authors_id']);
+//        $formFields['subjects_id'] = explode(',', $formFields['subjects_id']);
         $formFields['collections_id'] = explode(',', $formFields['collections_id']);
 
         // If request has files call fileStorage for each
         if($request->hasFile('cover_path')) {
-            $formFields['cover_path'] = fileStorage('item' ,$formFields['title'], $request, 'cover_path');
-            if($formFields['cover_path'] == false) {
-                return back()->withInput()->with('warning', "Something went wrong with the file upload. Please check the file's name and extension");
+            if($item->cover_path != null && Storage::disk('public')->exists($item->cover_path)) {
+                $formFields['cover_path'] = fileUpdate($item->cover_path, $request, 'cover_path');
+                if($formFields['cover_path'] == false) {
+                    return back()->withInput()->with('warning', "Something went wrong with the file upload. Please check the file's name and extension");
+                }
+                fileDestroy($item->cover_path);
+            } else {
+                $formFields['cover_path'] = fileStorage('item' ,$formFields['slug'], $request, 'cover_path');
+                if($formFields['cover_path'] == false) {
+                    return back()->withInput()->with('warning', "Something went wrong with the file upload. Please check the file's name and extension");
+                }
             }
         }
+
         if($request->hasFile('pdf_path')) {
-            $formFields['pdf_path'] = fileStorage('item' ,$formFields['title'], $request, 'pdf_path');
-            if ($formFields['pdf_path'] == false) {
-                return back()->withInput()->with('warning', "Something went wrong with the file upload. Please check the file's name and extension");
+            if($item->pdf_path != null && Storage::disk('public')->exists($item->pdf_path)) {
+                $formFields['pdf_path'] = fileUpdate($item->pdf_path, $request, 'pdf_path');
+                if ($formFields['pdf_path'] == false) {
+                    return back()->withInput()->with('warning', "Something went wrong with the file upload. Please check the file's name and extension");
+                }
+                fileDestroy($item->pdf_path);
+            } else {
+                $formFields['pdf_path'] = fileStorage('item' ,$formFields['slug'], $request, 'pdf_path');
+                if ($formFields['pdf_path'] == false) {
+                    return back()->withInput()->with('warning', "Something went wrong with the file upload. Please check the file's name and extension");
+                }
             }
         }
 
@@ -527,23 +580,23 @@ class ItemController extends Controller
             $item->collections()->detach();
             $item->subjects()->detach();
 
-            // Front-end should take care of displaying empty fields now (maybe? might have missed some)
-//            if($formFields['publisher'] == null) {
-//                $formFields['publisher'] = Item::null_Unknown;
-//            }
-//
-//            if($formFields['publisher_when'] == null) {
-//                $formFields['publisher_when'] = Item::null_Unknown;
-//            }
-//
-//            if($formFields['publisher_where'] == null) {
-//                $formFields['publisher_where'] = Item::null_Unknown;
-//            }
 
             // For User convenience we check if they entered any author and if they didn't we default to
             // the first author, which should be 'Unknown Author'
+            // In case null authors got past validation we assign Unknown Author
+            $authors = array();
+            $contributions = array();
             if(!array_key_exists('authors_id', $formFields)) {
-                $formFields['authors_id'] = 1;
+                $authors = 1;
+            } else {
+                foreach ($formFields['authors_id'] as $key=>$author) {
+                    $toAdd = Author::query()->where('fullname', $author)->select('id')->first();
+                    if($toAdd != null) {
+                        $authors[] = $toAdd->id;
+                        $contributions[] = $formFields['contribution'][$key];
+                    }
+
+                }
             }
 
             $item->update($formFields);
@@ -551,13 +604,21 @@ class ItemController extends Controller
             // Create subjects if they do not exist already and add them to array
             foreach ($formFields['subjects_id'] as $subject) {
                 $toAdd = Subject::firstOrCreate([
-                    'id' => $subject,
+                    'title' => $subject,
                 ], ['title'=> $subject]);
                 $subjects[] = $toAdd->id;
             }
 
             // Relationships
-            $item->authors()->attach($formFields['authors_id']);
+            // If no author was found we assign Unknown Author
+            if($authors == null || $contributions == null) {
+                $item->authors()->attach(1);
+            } else {
+                foreach($authors as $key => $author) {
+                    $item->authors()->attach($author, ['contribution' => $contributions[$key]]);
+                }
+            }
+
             $item->collections()->attach($formFields['collections_id']);
             $item->subjects()->attach($subjects);
 

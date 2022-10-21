@@ -14,8 +14,13 @@ class AuthorController extends Controller {
 
     // Gets Author List For Ajax Multiselect
     public function authorsSelect($search) {
-        $authors = Author::query()->select('id', 'fullname')->where('fullname', 'LIKE', '%'. $search . '%')->get();
-        return response($authors->toJson());
+        $authors = Author::query()->select('id', 'fullname')->where('fullname', 'LIKE', '%'. $search . '%')->first();
+            if($authors != null) {
+                return response($authors->toJson());
+            }else {
+                return response("Not Found", 404);
+            }
+
     }
 
     // Authors Index
@@ -43,9 +48,11 @@ class AuthorController extends Controller {
         // Author Query with Item Count
         // ordered and paginated with $sort, $sortField, $pages
         // and filtered by 'search' (found in Author Model)
-        $authors = Author::query()->withCount('items')
+        $authors = Author::query()->select('slug','fullname', 'id')
             ->filter(request(['search']))
-            ->orderBy($sortField, $sort)->paginate($pages)->withQueryString()
+            ->orderBy($sortField, $sort)
+            ->withCount('items')
+            ->paginate($pages)->withQueryString()
         ;
         // Returns the authors index view along with queried authors as $authors
         return view('authors.index', [
