@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('subjects', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
+            $table->id()->index();
+            $table->string('title')->index();
         });
     }
 

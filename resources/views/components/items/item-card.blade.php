@@ -27,19 +27,19 @@
                         @case('Serial')
                         {{__('items')['serial']}}
                         @break
-                        @case('ex libris')
+                        @case('Ex Libris')
                         {{__('items')['ex libris']}}
                         @break
                         @case('Photograph')
                         {{__('items')['photograph']}}
                         @break
-                        @case('document')
+                        @case('Document')
                         {{__('items')['document']}}
                         @break
-                        @case('postcard')
+                        @case('Postcard')
                         {{__('items')['postcard']}}
                         @break
-                        @case('other')
+                        @case('Other')
                         {{__('items')['other']}}
                         @break
                         @default {{__('unknown')}}

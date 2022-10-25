@@ -15,33 +15,29 @@ return new class extends Migration
     {
         Schema::create('items', function (Blueprint $table) {
 
-            $table->id();
-            $table->string('slug')->unique()->nullable();
+            $table->id()->index();
+            $table->string('slug')->unique()->nullable()->index();
             $table->foreignId('created_by')->default('0')->constrained('users');
             $table->foreignId('updated_by')->nullable()->constrained('users');
-            $table->string('status')->default('Inactive');
-            //$table->foreignId('member_of')->default('0')->constrained('collections'); - DEPRECATED
-            $table->string('title');
+            $table->string('status')->default('Inactive')->index();
+            $table->string('title')->index();
             $table->text('title_long')->nullable();
-            //$table->foreignId('author_id')->default('0')->constrained('authors'); - DEPRECATED
             $table->string('cover_path')->nullable();
             $table->string('pdf_path')->nullable();
             $table->string('publisher')->nullable();
             $table->string('publisher_day')->nullable();
             $table->string('publisher_month')->nullable();
             $table->string('publisher_year')->nullable();
-            //$table->string('publisher_when')->nullable(); - DEPRECATED
             $table->string('publisher_where')->nullable();
             $table->longText('description')->nullable();
-            $table->string('type')->nullable();
-            //$table->string('subjects')->nullable(); - DEPRECATED
+            $table->string('type')->nullable()->index();
             $table->string('language')->nullable();
             $table->string('provider')->nullable();
             $table->string('rights')->nullable();
             $table->string('ISBN')->nullable();
             $table->string('ISSN')->nullable();
             $table->timestamps();
-
+            $table->index('created_at');
 
         });
     }

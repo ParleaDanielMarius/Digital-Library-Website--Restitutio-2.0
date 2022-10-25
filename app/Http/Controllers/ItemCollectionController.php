@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Author;
 use App\Models\Collection;
 use App\Models\Item;
-use App\Models\Subject;
 use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -24,14 +22,14 @@ class ItemCollectionController extends Controller
     public function index() {
         // Some arrays for validation of sorting, ordering and pagination
         $validationSort = ['asc', 'desc', 'latest'];
-        $validationPage = ['10', '15', '20', '25', '30'];
+        $validationPage = ['5', '10', '15', '20'];
         // Gets the pagination, sorting and ordering from the request
-        $pages = request('orderBy', 25);
+        $pages = request('orderBy', 5);
         $sort = request('sortBy', 'asc');
         $sortField = 'title';
         // Pagination Validation, $pages gets a default value if validation fails
         if(!in_array($pages, $validationPage, true)) {
-            $pages = 25;
+            $pages = 5;
         }
         // Sorting Validation, $sort gets a default value if validation fails
         if(!in_array($sort, $validationSort, true)) {
@@ -249,7 +247,7 @@ class ItemCollectionController extends Controller
         if($request->hasFile('cover_path')) {
             $formFields['cover_path'] = fileStorage('collection' ,$formFields['slug'], $request, 'cover_path');
             if($formFields['cover_path'] == false) {
-                return back()->withErrors('cover_path', "Something went wrong with the file upload. Please check the file's name and extension");
+                return back()->withErrors('cover_path', "Something went wrong with the file upload. Please check the file's name and extension. If the problem persists contact the system administrator.");
             }
 
         }
@@ -302,7 +300,7 @@ class ItemCollectionController extends Controller
         if ($request->hasFile('cover_path')) {
             $formFields['cover_path'] = fileStorage('collection', $formFields['slug'], $request, 'cover_path');
             if ($formFields['cover_path'] == false) {
-                return back()->withErrors('cover_path', "Something went wrong with the file upload. Please check the file's name and extension");
+                return back()->withErrors('cover_path', "Something went wrong with the file upload. Please check the file's name and extension. If the problem persists contact the system administrator.");
             }
         }
         // Basic Table Log
@@ -322,7 +320,7 @@ class ItemCollectionController extends Controller
                 'user' => auth()->id(),
                 'message' => $e,
             ]);
-            return redirect('/')->with('warning', "Collection Couldn't be created!");
+            return redirect('/')->with('warning', "Collection Couldn't be Created!");
         }
         // Log success
         Log::notice('store (Collection):', [

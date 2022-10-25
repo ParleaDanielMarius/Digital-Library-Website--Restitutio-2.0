@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('collection_item', function (Blueprint $table) {
             $table->id();
-            $table->string('collection_id');
-            $table->string('item_id');
-            $table->unique(['item_id', 'collection_id']);
+            $table->integer('collection_id')->index();
+            $table->integer('item_id')->index();
+            $table->unique(['collection_id', 'item_id']);
         });
     }
 

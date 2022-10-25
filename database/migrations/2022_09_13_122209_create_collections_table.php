@@ -14,15 +14,16 @@ return new class extends Migration
     public function up()
     {
         Schema::create('collections', function (Blueprint $table) {
-            $table->id();
-            $table->string('slug')->unique()->nullable();
+            $table->id()->index();
+            $table->string('slug')->unique()->nullable()->index();
             $table->foreignId('created_by')->default('0')->constrained('users');
             $table->foreignId('updated_by')->nullable()->constrained('users');
-            $table->string('status');
-            $table->string('title');
+            $table->string('status')->index();
+            $table->string('title')->index();
             $table->string('cover_path')->nullable();
             $table->longText('description')->nullable();
             $table->timestamps();
+            $table->index('created_at');
         });
     }
 

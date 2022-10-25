@@ -20,44 +20,6 @@ use Illuminate\Validation\Rule;
 
 class ItemController extends Controller
 {
-//    //  --  Show Home  --  \\
-//    public function home() {
-//        // Takes only 500 to not tank performance
-//        /*
-//        $items = Item::query()
-//            ->with(['authors:id,fullname', 'collections:id,title'])
-//            ->where('status', Item::STATUS_ACTIVE)->latest()->limit(500)
-//            ->get();
-//        $latestItems = $items->take(12);
-//        $latestManuscripts = $items->where('type', Item::type_Manuscript)->take(12);
-//        $latestPeriodics = $items->where('type', Item::type_Periodic)->take(12);
-//        */
-//
-//        $latestItems = Item::query()
-//            ->with(['authors:id,fullname', 'collections:id,title'])
-//            ->where('status', Item::STATUS_ACTIVE)->latest()->limit(12)
-//            ->get();
-//
-//        $latestManuscripts = Item::query()
-//            ->with(['authors:id,fullname', 'collections:id,title'])
-//            ->where('status', Item::STATUS_ACTIVE)
-//            ->where('type', Item::type_Manuscript)
-//            ->latest()->limit(12)
-//            ->get();
-//        $latestPeriodics = Item::query()
-//            ->with(['authors:id,fullname', 'collections:id,title'])
-//            ->where('status', Item::STATUS_ACTIVE)
-//            ->where('type', Item::type_Periodic)
-//            ->latest()->limit(12)
-//            ->get();
-//
-//        return view('home', [
-//            'latestItems' => $latestItems,
-//            'latestPeriodics' => $latestPeriodics,
-//            'latestManuscripts' => $latestManuscripts,
-//        ]);
-//    }
-
     //  --  Show all items  --  \\
     public function index() {
         // Some arrays for validation of sorting, ordering and pagination
@@ -83,17 +45,12 @@ class ItemController extends Controller
         // Query Active Items, sort, order, paginate and filter using 'search' (found in Item Model)
         // Might need to remove query for collections and subjects since they are not used at the moment and may never be
         $items = Item::with('authors:slug,fullname')
-            ->select('slug','id','title', 'cover_path', 'title_long', 'type')
-            ->where('status', Item::STATUS_ACTIVE)
+            ->select('slug','id','title', 'cover_path', 'title_long', 'type', 'status')
             ->filter(request(['search']))
             ->orderBy($sortField, $sort)
             ->paginate($pages)->withQueryString();
         return view('items.index' , [
             'items' => $items,
-            /*  Was used for multiselect search
-            'authors' => $items->pluck('authors')->flatten()->sortBy('fullname', SORT_NATURAL),
-            'collections' => $items->pluck('collections')->flatten()->sortBy('title', SORT_NATURAL),
-            */
         ]);
     }
 
@@ -134,11 +91,6 @@ class ItemController extends Controller
 
     // Item Create
     public function create() {
-        function convert($size)
-        {
-            $unit=array('b','kb','mb','gb','tb','pb');
-            return @round($size/pow(1024,($i=floor(log($size,1024)))),2).' '.$unit[$i];
-        }
         return view('items.create', [
             'collections' => Collection::query()->orderBy('title')->get()->all(),
         ]);
@@ -190,15 +142,6 @@ class ItemController extends Controller
             'subjects' => $items->pluck('subjects')->flatten()->sortBy('title', SORT_NATURAL),
         ]);
     }
-
-//          --  DEPRECATED  -- TO BE REMOVED
-//    //  --  Advanced Search  --  \\
-//    public function advancedSearch() {
-//        return view('items.advanced_search', [
-//            'items' => Item::with(['authors:id,fullname', 'subjects:title'])->where('status', Item::STATUS_ACTIVE)->filter(request(['type', 'subject']))->latest()->paginate(12),
-//        ]);
-//    }
-
 
     //  --  Creates a backup of the to be deleted Item  --  \\
     // Returns false if backup failed or true if it succeeded (Logs regardless of result)
@@ -353,7 +296,6 @@ class ItemController extends Controller
     // --   Store item data  -- \\
     public function store(Request $request) {
         // Validate all fields
-        //dd($request);
         $formFields = $request->validate([
             'title' => ['required', 'max:76', Rule::unique('items', 'title')],
             'title_long' => 'nullable',
@@ -396,8 +338,6 @@ class ItemController extends Controller
 
 
         // Front-end returns values as strings, so we turn them into arrays
-//        $formFields['authors_id'] = explode(',', $formFields['authors_id']);
-//        $formFields['subjects_id'] = explode(',', $formFields['subjects_id']);
         $formFields['collections_id'] = explode(',', $formFields['collections_id']);
 
 
@@ -534,8 +474,6 @@ class ItemController extends Controller
         }
 
         // Front-end returns values as strings, so we turn them into arrays
-//        $formFields['authors_id'] = explode(',', $formFields['authors_id']);
-//        $formFields['subjects_id'] = explode(',', $formFields['subjects_id']);
         $formFields['collections_id'] = explode(',', $formFields['collections_id']);
 
         // If request has files call fileStorage for each

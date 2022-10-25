@@ -341,6 +341,12 @@
                                             <input type="password" class="form-control rounded-0 height-4 px-4" name="password" id="password" placeholder="" aria-label="" aria-describedby="signinPasswordLabel" required>
                                         </div>
                                     </div>
+                                    @error('email')
+                                    <p>{{$message}}</p>
+                                    @enderror
+                                    @error('username')
+                                    <p>{{$message}}</p>
+                                    @enderror
                                     <div class="mb-4d75">
                                         <button type="submit" class="btn btn-block py-3 rounded-0 btn-dark">Sign In</button>
                                     </div>

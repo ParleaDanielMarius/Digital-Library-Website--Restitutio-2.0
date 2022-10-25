@@ -18,6 +18,7 @@ class Author extends Model
         'slug',
     ];
 
+
     // Filter
     public function scopeFilter($query, array $filters) {
         // Get Request

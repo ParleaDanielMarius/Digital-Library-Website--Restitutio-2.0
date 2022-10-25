@@ -1,8 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Foundation\Auth\ThrottlesLogins;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -12,8 +10,7 @@ use Exception;
 
 class UserController extends Controller
 {
-    protected $maxAttempts = 5; // Default is 5
-    protected $decayMinutes = 1; // Default is 1
+
 
 
     // Show Register/Create Form
@@ -60,40 +57,6 @@ class UserController extends Controller
             'user' => auth()->id(),
         ]);
         return redirect(route('users.show', $user))->with('message', 'User Created Successfully');
-    }
-
-    // Logout User
-    public function logout(Request $request) {
-        auth()->logout();
-        // Invalidate session and regenerate token
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return redirect(route('home'))->with('message', 'Logged out successfully');
-    }
-
-    // Show Login Form
-    public function login() {
-        return view('users.login');
-    }
-
-    // Authenticate User
-    public function authenticate(Request $request) {
-        // Validate Fields
-        $formFields = $request->validate([
-            'username'=>'required',
-            'password'=>'required',
-        ]);
-        // Check if user account is active
-        if(auth()->attempt([
-            'username' => $formFields['username'],
-            'password' => $formFields['password'],
-            'status' => USER::STATUS_ACTIVE,
-        ])) {
-            $request->session()->regenerate();
-            return redirect('/')->with('message', 'Logged In!');
-        }
-        return back()->withErrors(['username' => 'Invalid Credentials'])->onlyInput('username');
     }
 
     // Show Edit User Form

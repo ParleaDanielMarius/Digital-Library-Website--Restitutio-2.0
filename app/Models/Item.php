@@ -35,6 +35,7 @@ class Item extends Model {
         'slug',
     ];
 
+    //public $keyType = "string";
 
     // A ton of constants for items used pretty much everywhere (To make life easier? Did they?)
     public const STATUS_INACTIVE = 'Inactive';
@@ -70,6 +71,7 @@ class Item extends Model {
         if($request->subjects != null) {
             $subjects = explode(', ', $request->subjects);
         }
+
         // Checks if one-digit month was entered and add 0 in front of it
         if($request->month_from != null) {
             if(strlen($request->month_from) == 1) {
@@ -125,39 +127,6 @@ class Item extends Model {
 
 
         }
-/* NOT USED ANYMORE, MIGHT DELETE
-     if(array_key_exists('search' ,$filters)) {
-            $query->when($request->search, function($query) use($request) {
-                $query->where('title', 'like', '%' . $request->search . '%')
-                ->orWhere('title_long', 'like', '%' . $request->search . '%');
-                    })
-                ->when($authors, function ($query) use ($authors) {
-                    foreach($authors as $author) {
-                        $query->whereHas('authors', function ($query) use ($author) {
-                            $query->where('fullname', 'like', '%' . $author . '%');
-                        });
-                    }
-                })
-                ->when($request->subjects, function ($query) use ($request) {
-                    foreach($request->subjects as $subject) {
-                        $query->whereHas('subjects', function ($query) use ($subject) {
-                            $query->where('title', $subject);
-                        });
-                    }
-                })
-                ->when($request->publisher_when, function ($query) use ($request) {
-                    $query->where('publisher_when', 'LIKE', '%' . $request->publisher_when . '%');
-                })
-                ->when($request->language, function ($query) use ($request) {
-                    $query->where('language', 'LIKE', '%' . $request->language . '%');
-                })
-                ->when($request->type, function ($query) use ($request) {
-                    $query->where('type', $request->type);
-                });
-
-
-        }
- */
     }
 
 

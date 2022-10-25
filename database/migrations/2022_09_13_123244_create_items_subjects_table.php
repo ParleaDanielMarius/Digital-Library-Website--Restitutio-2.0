@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('item_subject', function (Blueprint $table) {
             $table->id();
-            $table->string('item_id');
-            $table->string('subject_id');
+            $table->integer('item_id')->index();
+            $table->integer('subject_id')->index();
             $table->unique(['item_id', 'subject_id']);
         });
     }

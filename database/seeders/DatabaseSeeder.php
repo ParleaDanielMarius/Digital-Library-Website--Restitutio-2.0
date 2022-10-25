@@ -18,6 +18,9 @@ class DatabaseSeeder extends Seeder
      *
      * @return void
      */
+
+    private int $collectionNr = 0;
+
     public function run()
     {
         $user = User::factory()->create([
@@ -53,17 +56,21 @@ class DatabaseSeeder extends Seeder
 
         $randomContributions = ['Autor', 'Ilustrator', 'Editor', 'Destinatar'];
         Collection::factory(10)->create(['created_by' => $user->id])->each(function($collection) use($user, $randomContributions) {
+            $this->collectionNr++;
+            echo chr(27).chr(91).'H'.chr(27).chr(91).'J';
+            echo($this->collectionNr);
             $collection->update(['slug' => Str::slug($collection->title)]);
             $collection->items()
-                ->saveMany(Item::factory(1000) -> make(['created_by' => $user->id]))
+                ->saveMany(Item::factory(5000) -> make(['created_by' => $user->id]))
                 ->each(function($item) use($user, $randomContributions) {
-                    $item->update(['slug' => Str::slug($item->title)]);
+                    $item->update(['slug' => Str::slug($item->title . $item->created_at, '-')]);
                     $authors = Author::factory(random_int(1,6))->create([
                         'created_by' => $user->id]);
                     foreach ($authors as $author) {
                         $item->authors()->attach($author, ['contribution' => $randomContributions[random_int(0,3)]]);
                     }
                     $item->subjects()->attach(Subject::factory(random_int(1,6))->create());
+                    echo($item);
                 });
         });
         // \App\Models\User::factory()->create([
