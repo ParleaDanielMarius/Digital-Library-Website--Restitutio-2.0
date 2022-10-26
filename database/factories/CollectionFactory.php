@@ -17,7 +17,7 @@ class CollectionFactory extends Factory
     public function definition()
     {
         return [
-            'status'=>'active',
+            'status'=>1,
             'title' =>$this->faker->sentence(),
             'created_by' => '1',
             'updated_by' => '1',

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('slug')->unique()->nullable()->index();
             $table->foreignId('created_by')->default('0')->constrained('users');
             $table->foreignId('updated_by')->nullable()->constrained('users');
-            $table->string('status')->default('Inactive')->index();
+            $table->integer('status')->default(0)->index();
             $table->string('title')->index();
             $table->text('title_long')->nullable();
             $table->string('cover_path')->nullable();
@@ -37,7 +37,7 @@ return new class extends Migration
             $table->string('ISBN')->nullable();
             $table->string('ISSN')->nullable();
             $table->timestamps();
-            $table->index('created_at');
+            $table->index(['created_at', 'status']);
 
         });
     }

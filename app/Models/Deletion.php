@@ -64,9 +64,9 @@ class Deletion extends Model
         if(array_key_exists('search' ,$filters)) {
             // Query deletions
             $query->when($request->search, function($query) use($request) {
-                $query->where('title', 'like', '%' . $request->search . '%')
-                    ->orWhere('title_long', 'like', '%' . $request->search . '%')
-                    ->orWhere('deleted_at', 'like', '%' . $request->search . '%');
+                $query->where('title', 'iLIKE', '%' . $request->search . '%')
+                    ->orWhere('title_long', 'iLIKE', '%' . $request->search . '%')
+                    ->orWhere('deleted_at', 'iLIKE', '%' . $request->search . '%');
             });
 
 

@@ -63,13 +63,13 @@ class DatabaseSeeder extends Seeder
             $collection->items()
                 ->saveMany(Item::factory(5000) -> make(['created_by' => $user->id]))
                 ->each(function($item) use($user, $randomContributions) {
-                    $item->update(['slug' => Str::slug($item->title . $item->created_at, '-')]);
+                    $item->update(['slug' => Str::slug($item->title . $item->created_at)]);
                     $authors = Author::factory(random_int(1,6))->create([
                         'created_by' => $user->id]);
                     foreach ($authors as $author) {
-                        $item->authors()->attach($author, ['contribution' => $randomContributions[random_int(0,3)]]);
+                        $item->authors()->attach($author, ['contribution' => $randomContributions[array_rand($randomContributions)]]);
                     }
-                    $item->subjects()->attach(Subject::factory(random_int(1,6))->create());
+                    $item->subjects()->attach(Subject::factory(random_int(3,6))->create());
                     echo($item);
                 });
         });
@@ -79,8 +79,5 @@ class DatabaseSeeder extends Seeder
         // ]);
     }
 
-    // Used to generate slugs for authors
-    function generateRandomString($itemTitle, $length = 10) {
-        return str_shuffle($itemTitle) . substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length) ;
-    }
+
 }

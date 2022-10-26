@@ -38,9 +38,9 @@ class Item extends Model {
     //public $keyType = "string";
 
     // A ton of constants for items used pretty much everywhere (To make life easier? Did they?)
-    public const STATUS_INACTIVE = 'Inactive';
-    public const STATUS_ACTIVE = 'Active';
-//    public const TYPES = ['Book', 'Old Book', 'Manuscript', 'Map', 'Periodic', 'Ex Libris', 'Photograph', 'Document', 'Postcard','Other'];
+    public const STATUS_INACTIVE = 0;
+    public const STATUS_ACTIVE = 1;
+//    public const TYPES = ['Book', 'Old Book', 'Manuscript', 'Map', 'Serial', 'Ex Libris', 'Photograph', 'Document', 'Postcard','Other'];
     public const type_Book = 'Book';
     public const type_OldBook = 'Old Book';
     public const type_Manuscript = 'Manuscript';
@@ -89,14 +89,14 @@ class Item extends Model {
         // Check if search filter exists
         if(array_key_exists('search' ,$filters)) {
             $query->when($request->search, function($query) use($request) {
-                $query->where('title', 'like', '%' . $request->search . '%')
-                ->orWhere('title_long', 'like', '%' . $request->search . '%');
+                $query->where('title', 'iLIKE', '%' . $request->search . '%')
+                ->orWhere('title_long', 'iLIKE', '%' . $request->search . '%');
                     })
                 ->when($authors, function ($query) use ($authors) {
                     // Queries each author
                     foreach($authors as $author) {
                         $query->whereHas('authors', function ($query) use ($author) {
-                            $query->where('fullname', 'LIKE', '%' . $author . '%');
+                            $query->where('fullname', 'iLIKE', '%' . $author . '%');
                         });
                     }
                 })
@@ -104,12 +104,12 @@ class Item extends Model {
                     // Queries each subject
                     foreach($subjects as $subject) {
                         $query->whereHas('subjects', function ($query) use ($subject) {
-                            $query->where('title', 'LIKE', '%' . $subject . '%');
+                            $query->where('title', 'iLIKE', '%' . $subject . '%');
                         });
                     }
                 })
                 ->when($request->language, function ($query) use ($request) {
-                    $query->where('language', 'LIKE', '%' . $request->language . '%');
+                    $query->where('language', 'iLIKE', '%' . $request->language . '%');
                 })
                 ->when($request->year_from ?? $request->year_to, function ($query) use ($request) {
 

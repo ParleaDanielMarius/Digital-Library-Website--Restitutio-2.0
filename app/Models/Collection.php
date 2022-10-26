@@ -20,8 +20,8 @@ class Collection extends Model
     ];
 
     // Status constants for collections (To make life easier? Did they?)
-    public const STATUS_ACTIVE = 'active';
-    public const STATUS_INACTIVE = 'inactive';
+    public const STATUS_ACTIVE = 1;
+    public const STATUS_INACTIVE = 0;
 
     // Filters
     public function scopeFilter($query, array $filters) {
@@ -30,11 +30,11 @@ class Collection extends Model
         // Check if search filter exists
         if(array_key_exists('search' ,$filters)) {
             // Query collection
-            $query->where('title', 'LIKE', '%'. $request->search . '%')
+            $query->where('title', 'iLIKE', '%'. $request->search . '%')
                 ->when($request->subjects, function($query) use($request) {
                     $query->whereHas('items', function($query) use($request) {
                         $query->whereHas('subjects', function($query) use($request) {
-                            $query->where('title', 'LIKE', '%' . $request->subjects. '%');
+                            $query->where('title', 'iLIKE', '%' . $request->subjects. '%');
                         });
                     });
                 })

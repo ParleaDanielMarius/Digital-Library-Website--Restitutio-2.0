@@ -16,10 +16,10 @@ class ItemFactory extends Factory
      */
     public function definition()
     {
-        $type = ['Book', 'Manuscript', 'Serial', 'Old Book', 'Map'];
+        $type = ['Book', 'Old Book', 'Manuscript', 'Map', 'Serial', 'Ex Libris', 'Photograph', 'Document', 'Postcard','Other'];;
 
         return [
-            'status'=>'Active',
+            'status'=>1,
             'title' =>$this->faker->sentence(),
             'title_long'=>$this->faker->sentence(),
             'updated_by'=>'1',
@@ -28,7 +28,7 @@ class ItemFactory extends Factory
             'publisher_month'=>$this->faker->month(),
             'publisher_year'=>$this->faker->year(),
             'publisher_where'=>$this->faker->city(),
-            'type'=>$type[random_int(0, 4)],
+            'type'=> $type[array_rand($type)],
             'language'=>$this->faker->languageCode(),
             'description'=>$this->faker->paragraph(5),
             'provider'=>$this->faker->company(),

@@ -21,11 +21,13 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/test', [LangController::class, 'test'])->name('test');
+
 Route::group(['middleware' => 'throttle:100,1'], function() {
 
-    Route::get('/test', [LangController::class, 'test'])->name('test');
     Route::get('/author-check/{search}', [AjaxController::class, 'checkAuthor']);
     Route::get('/subject-check/{search}', [AjaxController::class, 'checkSubject']);
+
 
 
     Route::get('/authors-select/{search}', [AuthorController::class, 'authorsSelect'])->name('authorsSelect');

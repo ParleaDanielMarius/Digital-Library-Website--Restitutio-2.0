@@ -26,7 +26,8 @@ class LangController extends Controller
         $latestItems = Item::query()
             ->with(['authors:slug,fullname'])
             ->select('title', 'title_long', 'cover_path', 'slug', 'id', 'type')
-            ->where('status', Item::STATUS_ACTIVE)->latest()->limit(12)
+            ->where('status', Item::STATUS_ACTIVE)
+            ->latest()->limit(12)
             ->get();
 
         // Query for latest active manuscripts

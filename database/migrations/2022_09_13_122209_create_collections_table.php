@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('slug')->unique()->nullable()->index();
             $table->foreignId('created_by')->default('0')->constrained('users');
             $table->foreignId('updated_by')->nullable()->constrained('users');
-            $table->string('status')->index();
+            $table->integer('status')->default(0)->index();
             $table->string('title')->index();
             $table->string('cover_path')->nullable();
             $table->longText('description')->nullable();
