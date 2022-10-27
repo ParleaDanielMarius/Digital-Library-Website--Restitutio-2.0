@@ -72,6 +72,8 @@ class ItemController extends Controller
         // (since a day without a month and a month without a year are not allowed)
         if($item->publisher_day) {
             $item['publisher_when'] = ($item->publisher_day . '-' ?? '') . ($item->publisher_month . '-' ?? '') . ($item->publisher_year ?? '');
+            $item->publisher_when = Carbon::createFromFormat('d-m-Y', $item->publisher_when);
+            $item->publisher_when = $item->publisher_when->format('d-m-Y');
         }else {
             $item['publisher_when'] = $item->publisher_year;
         }
@@ -323,18 +325,18 @@ class ItemController extends Controller
         // Creates a slug
         $formFields['slug'] = Str::slug($formFields['title']);
 
-        // Checks if one-digit month was entered and add 0 in front of it
-        if($formFields['publisher_month']) {
-            if(strlen($formFields['publisher_month']) == 1) {
-                $formFields['publisher_month'] = 0 . $formFields['publisher_month'];
-            }
-        }
-        // Same as above
-        if(strlen($formFields['publisher_day'])){
-            if(strlen($formFields['publisher_day']) == 1) {
-                $formFields['publisher_day'] = 0 . $formFields['publisher_day'];
-            }
-        }
+//        // Checks if one-digit month was entered and add 0 in front of it
+//        if($formFields['publisher_month']) {
+//            if(strlen($formFields['publisher_month']) == 1) {
+//                $formFields['publisher_month'] = 0 . $formFields['publisher_month'];
+//            }
+//        }
+//        // Same as above
+//        if(strlen($formFields['publisher_day'])){
+//            if(strlen($formFields['publisher_day']) == 1) {
+//                $formFields['publisher_day'] = 0 . $formFields['publisher_day'];
+//            }
+//        }
 
 
         // Front-end returns values as strings, so we turn them into arrays
@@ -460,18 +462,18 @@ class ItemController extends Controller
         // Creates a slug
         $formFields['slug'] = Str::slug($formFields['title']);
 
-        // Checks if one-digit month was entered and add 0 in front of it
-        if($formFields['publisher_month']) {
-            if(strlen($formFields['publisher_month']) == 1) {
-                $formFields['publisher_month'] = 0 . $formFields['publisher_month'];
-            }
-        }
-        // Same as above
-        if(strlen($formFields['publisher_day'])){
-            if(strlen($formFields['publisher_day']) == 1) {
-                $formFields['publisher_day'] = 0 . $formFields['publisher_day'];
-            }
-        }
+//        // Checks if one-digit month was entered and add 0 in front of it
+//        if($formFields['publisher_month']) {
+//            if(strlen($formFields['publisher_month']) == 1) {
+//                $formFields['publisher_month'] = 0 . $formFields['publisher_month'];
+//            }
+//        }
+//        // Same as above
+//        if(strlen($formFields['publisher_day'])){
+//            if(strlen($formFields['publisher_day']) == 1) {
+//                $formFields['publisher_day'] = 0 . $formFields['publisher_day'];
+//            }
+//        }
 
         // Front-end returns values as strings, so we turn them into arrays
         $formFields['collections_id'] = explode(',', $formFields['collections_id']);

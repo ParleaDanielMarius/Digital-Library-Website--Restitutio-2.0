@@ -76,6 +76,8 @@ class DeletionController extends Controller
         // (since it is not allowed to have a day without a month or a month without a year)
         if($deletion->publisher_day) {
             $deletion['publisher_when'] = ($deletion->publisher_day . '-' ?? '') . ($deletion->publisher_month . '-' ?? '') . ($deletion->publisher_year ?? '');
+            $deletion['publisher_when'] = Carbon::createFromFormat('d-m-Y', $deletion['publisher_when']);
+            $deletion['publisher_when'] = $deletion['publisher_when']->format('d-m-Y');
         }else {
             $deletion['publisher_when'] = $deletion->publisher_year;
         }

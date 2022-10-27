@@ -58,7 +58,7 @@ class Item extends Model {
     public function scopeFilter($query, array $filters) {
         // Get Request
         $request = request();
-
+        $request->year_from = intval($request->year_from);
         // Initialize arrays
         $authors = array();
         $subjects = array();
@@ -72,31 +72,33 @@ class Item extends Model {
             $subjects = explode(', ', $request->subjects);
         }
 
-        // Checks if one-digit month was entered and add 0 in front of it
-        if($request->month_from != null) {
-            if(strlen($request->month_from) == 1) {
-                $request->month_from = 0 . $request->month_from;
-            }
-        }
-        // Same as above
-        if($request->month_to != null) {
-            if(strlen($request->month_to) == 1) {
-                $request->month_to = 0 . $request->month_to;
-            }
-        }
+//        // Checks if one-digit month was entered and add 0 in front of it
+//        if($request->month_from != null) {
+//            if(strlen($request->month_from) == 1) {
+//                $request->month_from = 0 . $request->month_from;
+//            }
+//        }
+//        // Same as above
+//        if($request->month_to != null) {
+//            if(strlen($request->month_to) == 1) {
+//                $request->month_to = 0 . $request->month_to;
+//            }
+//        }
 
 
         // Check if search filter exists
         if(array_key_exists('search' ,$filters)) {
             $query->when($request->search, function($query) use($request) {
-                $query->where('title', 'iLIKE', '%' . $request->search . '%')
-                ->orWhere('title_long', 'iLIKE', '%' . $request->search . '%');
+                $query->where(function($query) use($request) {
+                        $query->where('title', 'like', '%' . $request->search . '%')
+                            ->orWhere('title_long', 'like', '%' . $request->search . '%');
+                        });
                     })
                 ->when($authors, function ($query) use ($authors) {
                     // Queries each author
                     foreach($authors as $author) {
                         $query->whereHas('authors', function ($query) use ($author) {
-                            $query->where('fullname', 'iLIKE', '%' . $author . '%');
+                            $query->where('fullname', 'like', '%' . $author . '%');
                         });
                     }
                 })
@@ -104,12 +106,12 @@ class Item extends Model {
                     // Queries each subject
                     foreach($subjects as $subject) {
                         $query->whereHas('subjects', function ($query) use ($subject) {
-                            $query->where('title', 'iLIKE', '%' . $subject . '%');
+                            $query->where('title', 'like', '%' . $subject . '%');
                         });
                     }
                 })
                 ->when($request->language, function ($query) use ($request) {
-                    $query->where('language', 'iLIKE', '%' . $request->language . '%');
+                    $query->where('language', 'like', '%' . $request->language . '%');
                 })
                 ->when($request->year_from ?? $request->year_to, function ($query) use ($request) {
 

@@ -61,7 +61,7 @@ class DatabaseSeeder extends Seeder
             echo($this->collectionNr);
             $collection->update(['slug' => Str::slug($collection->title)]);
             $collection->items()
-                ->saveMany(Item::factory(5000) -> make(['created_by' => $user->id]))
+                ->saveMany(Item::factory(500) -> make(['created_by' => $user->id]))
                 ->each(function($item) use($user, $randomContributions) {
                     $item->update(['slug' => Str::slug($item->title . $item->created_at)]);
                     $authors = Author::factory(random_int(1,6))->create([
