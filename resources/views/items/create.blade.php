@@ -311,7 +311,7 @@
         $(add_button_authors).click(function(e) {
             e.preventDefault();
             if ($('div.author_wrapper').length < max_fields) {
-                $(wrapper_authors).append('<div class="author_wrapper"><input required class="authors" placeholder="Person" type="text" name="authors_id[]"/><input required placeholder="Contribution" type="text" name="contribution[]"/><a href="#" class="checkData mx-5">Check</a><a href="#" class="delete">Delete</a></div>'); //add input box
+                $(wrapper_authors).append('<div class="author_wrapper"><input required class="authors" placeholder="Person" type="text" name="authors_id[]"/><input required placeholder="Contribution" type="text" name="contribution[]"/><a href="#" class="checkData mx-5">Check</a><a href="#" class="delete">Delete</a></div>');
             } else {
                 alert('You reached the limits')
             }

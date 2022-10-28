@@ -42,7 +42,6 @@
                     <li class="nav-item"><a href="mailto:{{__('contact email')}}" class="nav-link link-black-100"><i class="glph-icon flaticon-question mr-2"></i>{{__('contact email display')}}</a></li>
                     <li class="nav-item"><a href="tel:{{__('contact phone')}}" class="nav-link link-black-100"><i class="glph-icon flaticon-phone mr-2"></i>{{__('contact phone display')}}</a></li>
                 </ul>
-
                 <ul class="topbar__nav--right nav mr-md-n3">
                     <li class="nav-item"><a href="https://www.instagram.com/bcu_bucuresti/" class="nav-link link-black-100"><i class="fab fa-instagram"></i></a></li>
                     <li class="nav-item"><a href="https://www.facebook.com/BCUCaroII/" class="nav-link link-black-100"><i class="fab fa-facebook-f"></i></a></li>
@@ -130,7 +129,6 @@
                                 <li><a href="{{route('items.index')}}" class="dropdown-item link-black-100">{{__('browse')['browse items']}}</a></li>
                             </ul>
                         </li>
-
 {{--                        Staff Nav--}}
                         @auth
                         <li class="nav-item dropdown">
@@ -275,7 +273,6 @@
                         <span aria-hidden="true">Close <i class="fas fa-times ml-2"></i></span>
                     </button>
                 </div>
-
 {{--                STAFF LOGOUT--}}
                 @auth()
                 <div class="js-scrollbar u-sidebar__body">
@@ -360,7 +357,6 @@
         </div>
     </div>
 </aside>
-
 {{--Categories sidebar navigation--}}
 <aside id="sidebarContent2" class="u-sidebar u-sidebar__md u-sidebar--left" aria-labelledby="sidebarNavToggler2">
 <div class="u-sidebar__scroller js-scrollbar">
@@ -373,7 +369,7 @@
                         <h2 class="font-size-3 mb-0">Restitutio</h2>
 {{--                        Toggle Button--}}
                         <div class="d-flex align-items-center">
-                            <button type="button" class="close ml-auto"
+                            <button type="button" class="close ml-auto categories-close"
                                     aria-controls="sidebarContent2"
                                     aria-haspopup="true"
                                     aria-expanded="false"
@@ -395,19 +391,15 @@
                                 <li>
                                     <a href="{{route('home')}}">{{__('home')}}</a>
                                 </li>
-
                                 <li>
                                     <a href="{{route('authors.index')}}">{{__('browse')['browse authors']}}</a>
                                 </li>
-
                                 <li>
                                     <a href="{{route('collections.index')}}">{{__('browse')['browse collections']}}</a>
                                 </li>
-
                                 <li>
                                     <a href="{{route('items.index')}}">{{__('browse')['browse items']}}</a>
                                 </li>
-
                             </ul>
                         </div>
                     </div>
@@ -442,16 +434,12 @@
     </div>
 </div>
 </aside>
-
 {{--Yield Page Content--}}
 @yield('content')
-
-
 <footer>
     <div class="border-top space-top-3">
         <div class="border-bottom pb-5 space-bottom-lg-3">
             <div class="container">
-
                 <div class="row">
                     <div class="col-lg-2 mb-6 mb-lg-0">
                         <div class="pb-6">
@@ -498,6 +486,8 @@
             </div>
         </div>
     </div>
+{{--    Overlay--}}
+<div id="zeynep-overlay" class="zeynep-overlay" style="position: fixed; display: none; width: 100%; height: 100%; top: 0;  left: 0;  right: 0; bottom: 0; background-color: rgba(0,0,0,0.5); z-index: 2;"></div>
 </footer>
 <!-- ========== END FOOTER ========== -->
 
@@ -531,13 +521,11 @@
         // initialization of slick carousel
         $.HSCore.components.HSSlickCarousel.init('.js-slick-carousel');
 
-
         // initialization of header
         $.HSCore.components.HSHeader.init($('#header'));
 
         // initialization of malihu scrollbar
         $.HSCore.components.HSMalihuScrollBar.init($('.js-scrollbar'));
-
 
         // initialization of show animations
         $.HSCore.components.HSShowAnimation.init('.js-animation-link');
@@ -549,14 +537,12 @@
             onClosed: function () {
                 // enable main wrapper element clicks on any its children element
                 $("body main").attr("style", "");
-
-                console.log('the side menu is closed.');
+                document.getElementById("zeynep-overlay").style.display = "none";
             },
             onOpened: function () {
                 // disable main wrapper element clicks on any its children element
                 $("body main").attr("style", "pointer-events: none;");
-
-                console.log('the side menu is opened.');
+                document.getElementById("zeynep-overlay").style.display = "block";
             }
         });
 
@@ -571,6 +557,12 @@
                 zeynep.close();
             } else {
                 zeynep.open();
+            }
+        });
+
+        $(".categories-close").click(function () {
+            if ($("html").hasClass("zeynep-opened")) {
+                zeynep.close();
             }
         });
     });

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('item_id')->index();
             $table->string('contribution')->nullable();
             $table->unique(['author_id', 'item_id']);
+            $table->index(['author_id', 'item_id']);
         });
     }
 

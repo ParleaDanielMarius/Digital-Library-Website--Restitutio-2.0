@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use function PHPUnit\Framework\isEmpty;
 
 class Item extends Model {
     use HasFactory;
@@ -58,19 +59,20 @@ class Item extends Model {
     public function scopeFilter($query, array $filters) {
         // Get Request
         $request = request();
+
         $request->year_from = intval($request->year_from);
         // Initialize arrays
-        $authors = array();
-        $subjects = array();
+//        $authors = array();
+//        $subjects = array();
 
         // Used to allow search for multiple authors in the same field
-        if($request->authors != null) {
-            $authors = explode(', ', $request->authors);
-        }
-        // Same as above
-        if($request->subjects != null) {
-            $subjects = explode(', ', $request->subjects);
-        }
+//        if($request->authors != null) {
+//            $authors = explode(', ', $request->authors);
+//        }
+//        // Same as above
+//        if($request->subjects != null) {
+//            $subjects = explode(', ', $request->subjects);
+//        }
 
 //        // Checks if one-digit month was entered and add 0 in front of it
 //        if($request->month_from != null) {
@@ -84,8 +86,6 @@ class Item extends Model {
 //                $request->month_to = 0 . $request->month_to;
 //            }
 //        }
-
-
         // Check if search filter exists
         if(array_key_exists('search' ,$filters)) {
             $query->when($request->search, function($query) use($request) {
@@ -94,31 +94,29 @@ class Item extends Model {
                             ->orWhere('title_long', 'like', '%' . $request->search . '%');
                         });
                     })
-                ->when($authors, function ($query) use ($authors) {
+                ->when(!empty($request->authors), function ($query) use ($request) {
                     // Queries each author
-                    foreach($authors as $author) {
-                        $query->whereHas('authors', function ($query) use ($author) {
-                            $query->where('fullname', 'like', '%' . $author . '%');
-                        });
-                    }
+                        foreach($request->authors as $author) {
+                            $query->whereHas('authors', function ($query) use ($author) {
+                                $query->where('fullname', 'like', '%' . $author . '%');
+                            });
+                        }
                 })
-                ->when($subjects, function ($query) use ($subjects) {
+                ->when(!empty($request->subjects[0]), function ($query) use ($request) {
                     // Queries each subject
-                    foreach($subjects as $subject) {
-                        $query->whereHas('subjects', function ($query) use ($subject) {
-                            $query->where('title', 'like', '%' . $subject . '%');
-                        });
-                    }
+                        foreach($request->subjects as $subject) {
+                            $query->whereHas('subjects', function ($query) use ($subject) {
+                                $query->where('title', 'like', '%' . $subject . '%');
+                            });
+                        }
                 })
                 ->when($request->language, function ($query) use ($request) {
                     $query->where('language', 'like', '%' . $request->language . '%');
                 })
                 ->when($request->year_from ?? $request->year_to, function ($query) use ($request) {
-
                     $query->whereBetween('publisher_year', [($request->year_from ?? $request->year_to), ($request->year_to ?? $request->year_from)]);
                 })
                 ->when($request->month_from ?? $request->month_to, function ($query) use ($request) {
-
                     $query->whereBetween('publisher_month', [($request->month_from ?? $request->month_to), ($request->month_to ?? $request->month_from)]);
                 })
 
@@ -149,6 +147,7 @@ class Item extends Model {
         return $this->belongsToMany(Author::class, 'author_item')
             ->withPivot('contribution');
     }
+
 
 // Relationship To Collection
     public function collections() {

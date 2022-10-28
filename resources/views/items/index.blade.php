@@ -15,11 +15,12 @@
         </div>
     </div>
 </div>
+<form action="" class="woocommerce-ordering mb-4 m-md-0" method="GET">
 <div class="site-content space-bottom-3" id="content">
     <div class="container">
         <div class="row">
             <div id="primary" class="content-area order-2">
-                <form action="" class="woocommerce-ordering mb-4 m-md-0" method="GET">
+
                 <div class="shop-control-bar d-lg-flex justify-content-between align-items-center mb-5 text-center text-md-left">
                     <div class="shop-control-bar__left mb-4 m-lg-0">
 {{--                        Pagination details--}}
@@ -161,16 +162,26 @@
                                 </svg>
                             </a>
                         </div>
-                        <div id="widgetCollapse20" class="mt-4 widget-content collapse show"
+                        <div id="widgetCollapse20" class="subjects_container mt-4 widget-content collapse show"
                              aria-labelledby="widgetHeading20"
                         >
-                            <div class="input-group flex-nowrap w-100">
+                            <div class="subject_wrapper input-group flex-nowrap w-100">
                                 <div class="input-group-prepend">
                                     <i class="glph-icon flaticon-loupe py-2d75 bg-white-100 border-white-100 text-dark pl-3 pr-0 rounded-0"></i>
                                 </div>
-                            <input name="subjects" class="form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" type="search" value="{{request('subjects') ?? ''}}" placeholder="Ex: History, Politics" aria-label="Search">
+                                <input name="subjects[]" class="form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" type="search" value="{{request('subjects')[0] ?? ''}}" placeholder="Ex: History, Politics" aria-label="Search">
+                                <button class="add_subject_field rounded">
+                                    <span style="font-size:16px; font-weight:bold;">+</span>
+                                </button>
+                            </div>
+                            @if(request('subjects'))
+                                @foreach(request('subjects') as $key => $value)
+                                    @if($key != 0)
+                                        <div class="subject_wrapper input-group flex-nowrap w-100"> <div class="input-group-prepend"> <i class="glph-icon flaticon-loupe py-2d75 bg-white-100 border-white-100 text-dark pl-3 pr-0 rounded-0"></i> </div> <input value="{{$value ?? ''}}" name="subjects[]" class="form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" type="search" placeholder="Ex: History, Politics" aria-label="Search"/> <button class="delete rounded"> <span style="font-size:16px; font-weight:bold;">-</span> </button> </div>
+                                    @endif
+                                @endforeach
+                            @endif
                         </div>
-                    </div>
                     </div>
 {{--                    Authors Search--}}
                     <div id="authorsTab" class="widget widget_search widget_author p-4d875 border">
@@ -180,7 +191,7 @@
                                data-target="#widgetCollapse21"
                                aria-expanded="true"
                                aria-controls="widgetCollapse21">
-                                <h3 class="widget-title mb-0 font-weight-medium font-size-3">{{__('authors')['authors']}}</h3>
+                                <h3 class="widget-title mb-0 font-weight-medium font-size-3">{{__('items')['contributors']}}</h3>
                                 <svg class="mins" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="2px">
                                     <path fill-rule="evenodd" fill="rgb(22, 22, 25)" d="M0.000,-0.000 L15.000,-0.000 L15.000,2.000 L0.000,2.000 L0.000,-0.000 Z" />
                                 </svg>
@@ -189,16 +200,26 @@
                                 </svg>
                             </a>
                         </div>
-                        <div id="widgetCollapse21" class="mt-4 widget-content collapse show"
+                        <div id="widgetCollapse21" class="authors_container mt-4 widget-content collapse show"
                              aria-labelledby="widgetHeading21"
                              >
-                            <div class="input-group flex-nowrap w-100">
+                            <div class="author_wrapper input-group flex-nowrap w-100">
                                 <div class="input-group-prepend">
                                     <i class="glph-icon flaticon-loupe py-2d75 bg-white-100 border-white-100 text-dark pl-3 pr-0 rounded-0"></i>
                                 </div>
-                            <input name="authors" class="form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" type="search" value="{{request('authors') ?? ''}}" placeholder="Ex: Eminescu, Eliade" aria-label="Search">
+                                <input name="authors[]" class="form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" type="search" value="{{request('authors')[0] ?? ''}}" placeholder="Ex: Eminescu, Eliade"/>
+                                <button class="add_author_field rounded">
+                                    <span style="font-size:16px; font-weight:bold;">+</span>
+                                </button>
+                            </div>
+                            @if(request('authors'))
+                                @foreach(request('authors') as $key => $value)
+                                    @if($key != 0)
+                                        <div class="author_wrapper input-group flex-nowrap w-100"><div class="input-group-prepend"><select name="authors_logic[]" class="py-2d75 bg-white-100 border-white-100 text-dark pl-1 pr-0 rounded-0"> <option value="and">And</option> <option value="or">Or</option> <option value="not">Not</option> </select></div> <input name="authors[]" value="{{$value ?? ''}}" class="form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" type="search" placeholder="Ex: Eminescu, Eliade"/><button class="delete rounded"><span style="font-size:16px; font-weight:bold;">-</span></button></div>
+                                    @endif
+                                @endforeach
+                            @endif
                         </div>
-                    </div>
                     </div>
 {{--                    Language Search--}}
                     <div id="languageTab" class="widget p-4d875 border">
@@ -323,10 +344,57 @@
                         </div>
                     </div>
                 </div>
-            </form>
             </div>
         </div>
     </div>
 </div>
+</form>
 
+@endsection
+
+@section('separate scripts')
+<script>
+    $(document).ready(function() {
+        // Applies to all
+        var max_fields = 5;
+
+        // Author Variables
+        var container_authors = $("div.authors_container")
+        var add_button_authors = $(".add_author_field")
+
+        // Subject Variables
+        var container_subjects = $("div.subjects_container")
+        var add_button_subjects = $(".add_subject_field")
+
+
+        // AUTHORS
+        $(add_button_authors).click(function(e) {
+            e.preventDefault();
+            if($('div.author_wrapper').length < max_fields) {
+                $(container_authors).append('<div class="author_wrapper input-group flex-nowrap w-100"><div class="input-group-prepend"><select name="authors_logic[]" class="py-2d75 bg-white-100 border-white-100 text-dark pl-1 pr-0 rounded-0"> <option value="and">And</option> <option value="or">Or</option> <option value="not">Not</option> </select></div> <input name="authors[]" class="form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" type="search" placeholder="Ex: Eminescu, Eliade"/><button class="delete rounded"><span style="font-size:16px; font-weight:bold;">-</span></button></div>')
+            } else {
+                alert('You reached the limit!')
+            }
+        })
+        $(container_authors).on("click", ".delete", function(e) {
+            e.preventDefault();
+            $(this).parent('div').remove();
+        })
+
+        // SUBJECTS
+        $(add_button_subjects).click(function(e) {
+            e.preventDefault();
+            if($('div.subject_wrapper').length < max_fields) {
+                $(container_subjects).append('<div class="subject_wrapper input-group flex-nowrap w-100"> <div class="input-group-prepend"> <i class="glph-icon flaticon-loupe py-2d75 bg-white-100 border-white-100 text-dark pl-3 pr-0 rounded-0"></i> </div> <input name="subjects[]" class="form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" type="search" placeholder="Ex: History, Politics" aria-label="Search"/> <button class="delete rounded"> <span style="font-size:16px; font-weight:bold;">-</span> </button> </div>')
+            } else {
+                alert('You reached the limit!')
+            }
+        })
+
+        $(container_subjects).on("click", ".delete", function(e) {
+            e.preventDefault();
+            $(this).parent('div').remove();
+        })
+    })
+</script>
 @endsection

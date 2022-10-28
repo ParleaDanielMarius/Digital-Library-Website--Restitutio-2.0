@@ -371,6 +371,7 @@ class ItemController extends Controller
             $contributions = array();
             if(!array_key_exists('authors_id', $formFields)) {
                 $authors = 1;
+                $contributions = 'Autor';
             } else {
                 foreach ($formFields['authors_id'] as $key=>$author) {
                     $toAdd = Author::query()->where('fullname', $author)->select('id')->first();
@@ -397,7 +398,7 @@ class ItemController extends Controller
 
             // If no author was found we assign Unknown Author
             if($authors == null || $contributions == null) {
-                $item->authors()->attach(1);
+                $item->authors()->attach(1, ['contribution' => 'Autor']);
             } else {
                 foreach($authors as $key => $author) {
                     $item->authors()->attach($author, ['contribution' => $contributions[$key]]);
@@ -528,6 +529,7 @@ class ItemController extends Controller
             $contributions = array();
             if(!array_key_exists('authors_id', $formFields)) {
                 $authors = 1;
+                $contributions = 'Autor';
             } else {
                 foreach ($formFields['authors_id'] as $key=>$author) {
                     $toAdd = Author::query()->where('fullname', $author)->select('id')->first();
@@ -552,7 +554,7 @@ class ItemController extends Controller
             // Relationships
             // If no author was found we assign Unknown Author
             if($authors == null || $contributions == null) {
-                $item->authors()->attach(1);
+                $item->authors()->attach(1, ['contribution' => 'Autor']);
             } else {
                 foreach($authors as $key => $author) {
                     $item->authors()->attach($author, ['contribution' => $contributions[$key]]);

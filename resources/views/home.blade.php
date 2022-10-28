@@ -137,7 +137,6 @@
                             <div class="col-lg-7 col-wd-6 mb-4 mb-lg-0">
                                 <img class="img-fluid rounded-md" style='height: 75%; width: 75%; object-fit: contain' src="{{asset('/assets/img/statuie-Carol1-800x800.jpg')}}" alt="image-description">
                             </div>
-
                             <div class="col-lg-5 col-wd-6"
                                  data-scs-animation-in="fadeInRight"
                                  data-scs-animation-delay="500">

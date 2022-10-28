@@ -52,7 +52,6 @@
                 @endforelse
             </div>
             <div class="product__hover d-flex align-items-center">
-
             </div>
         </div>
     </div>
