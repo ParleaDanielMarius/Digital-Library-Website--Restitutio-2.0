@@ -63,7 +63,7 @@
                             <div class="col-lg-5 col-wd-6"
                                  data-scs-animation-in="fadeInRight"
                                  data-scs-animation-delay="500">
-                                <img alt="Featured collection" class="img-fluid rounded" style="height: 450px; width: 350px" src="@if($featuredCollection->cover_path && file_exists('storage' . '/' . $featuredCollection->cover_path)){{asset('storage/' . $featuredCollection->cover_path)}} @else{{asset('assets/img/collections/no-collection-image.png')}}@endif">
+                                <img alt="Featured collection" class="img-fluid mx-auto my-auto rounded" style="max-height: 90% ; max-width:90%" src="@if($featuredCollection->cover_path && file_exists('storage' . '/' . $featuredCollection->cover_path)){{asset('storage/' . $featuredCollection->cover_path)}} @else{{asset('assets/img/collections/no-collection-image.png')}}@endif">
                             </div>
                         </div>
                     </div>
@@ -94,7 +94,7 @@
                 <div class="tab-pane fade show active" id="latestItems-Panel" role="tabpanel" aria-labelledby="featured-tab">
                     <div class="row no-gutters border-top border-left">
                         <div class="col-lg-12">
-                            <div class="row no-gutters products row-cols-6">
+                            <div class="row no-gutters products row-cols-4">
                                 @foreach($latestItems as $item)
                                 <x-items.latest-card :item="$item"></x-items.latest-card>
                                 @endforeach
@@ -105,7 +105,7 @@
                 <div class="tab-pane fade" id="latestPeriodics-Panel" role="tabpanel" aria-labelledby="onsale-tab">
                     <div class="row no-gutters border-top border-left">
                         <div class="col-lg-12">
-                            <div class="row no-gutters products row-cols-6">
+                            <div class="row no-gutters products row-cols-4">
                                 @foreach($latestPeriodics as $periodic)
                                     <x-items.latest-card :item="$periodic" types="$types"></x-items.latest-card>
                                 @endforeach
@@ -116,7 +116,7 @@
                 <div class="tab-pane fade" id="latestManuscripts-Panel" role="tabpanel" aria-labelledby="mostviewed-tab">
                     <div class="row no-gutters border-top border-left">
                         <div class="col-lg-12">
-                            <div class="row no-gutters products row-cols-6">
+                            <div class="row no-gutters products row-cols-4">
                                 @foreach($latestManuscripts as $manuscript)
                                     <x-items.latest-card :item="$manuscript" types="$types"></x-items.latest-card>
                                 @endforeach
@@ -135,7 +135,7 @@
                     <div class="js-slide">
                         <div class="hero row min-height-588 align-items-center">
                             <div class="col-lg-7 col-wd-6 mb-4 mb-lg-0">
-                                <img class="img-fluid rounded-md" style='height: 75%; width: 75%; object-fit: contain' src="{{asset('/assets/img/statuie-Carol1-800x800.jpg')}}" alt="image-description">
+                                <img class="img-fluid mx-auto my-auto rounded-md" style='height: 80%; width: 80%; object-fit: contain' src="{{asset('/assets/img/statuie-Carol1-800x800.jpg')}}" alt="image-description">
                             </div>
                             <div class="col-lg-5 col-wd-6"
                                  data-scs-animation-in="fadeInRight"

@@ -238,9 +238,9 @@
                                             <p class="text-danger mt-1 col-12 mb-4d75 form-row form-row-wide">{{$message}}</p>
                                             @enderror
 {{--                                            Type--}}
-                                            <p class="col-12 mb-4d75 form-row form-row-wide" id="type_field" data-priority="180">
+                                            <p class="col-12 mb-4d75 form-row form-row-wide type-form-p" id="type_field" data-priority="180">
                                                 <label for="type" class="form-label">{{__('items')['type']}} <abbr class="required" title="required">*</abbr></label>
-                                                <select name="type" id="type" class="form-control select2-hidden-accessible"
+                                                <select required name="type" id="type" class="form-control select2-hidden-accessible type-format"
                                                         autocomplete="type" tabindex="-1" aria-hidden="true">
                                                     <option value="Book" @if($item->type == 'Book') selected @endif>{{__('items')['book']}}</option>
                                                     <option value="Old Book" @if($item->type == 'Old Book') selected @endif>{{__('items')['old book']}}</option>
@@ -251,10 +251,16 @@
                                                     <option value="Photograph" @if($item->type == 'Photograph') selected @endif>{{__('items')['photograph']}}</option>
                                                     <option value="Document" @if($item->type == 'Document') selected @endif>{{__('items')['document']}}</option>
                                                     <option value="Postcard" @if($item->type == 'Postcard') selected @endif>{{__('items')['postcard']}}</option>
-                                                    <option value="Other" @if($item->type == 'Other') selected @endif>{{__('items')['other']}}</option>
+                                                    <option value="Other" @if(!in_array($item->type, ['Book', 'Old Book', 'Manuscript', 'Map', 'Serial', 'Ex Libris', 'Photograph', 'Document', 'Postcard'])) selected @endif>{{__('items')['other']}}</option>
                                                 </select>
+                                                @if(!in_array($item->type, ['Book', 'Old Book', 'Manuscript', 'Map', 'Serial', 'Ex Libris', 'Photograph', 'Document', 'Postcard']))
+                                                    <input required class="additionalType my-2 form-control" value="{{$item->type}}" placeholder="Type" type="text" name="additionalType"/>
+                                                @endif
                                             </p>
                                             @error('type')
+                                            <p class="text-danger mt-1 col-12 mb-4d75 form-row form-row-wide">{{$message}}</p>
+                                            @enderror
+                                            @error('additionalType')
                                             <p class="text-danger mt-1 col-12 mb-4d75 form-row form-row-wide">{{$message}}</p>
                                             @enderror
 {{--                                            Status--}}
@@ -318,17 +324,41 @@
         </script>
 
         <script>
+            let addField = false;
+            const typeSelect = $(".type-format");
+            const typeP = $(".type-form-p");
+
+            $(typeSelect).change(function() {
+                if($(this).val() === "Other" && $(".additionalType").length < 1) {
+                    AddField();
+                } else {
+                    RemoveField();
+                }
+            })
+
+            function AddField() {
+                $(typeP).append('<input required class="additionalType my-2 form-control" placeholder="Type" type="text" name="additionalType"/>')
+                addField = true;
+            }
+
+            void function RemoveField() {
+                $(".additionalType").remove();
+                addField = false;
+            }
+        </script>
+
+        <script>
             $(document).ready(function() {
                 // Applies to all
-                var max_fields = 10;
+                const max_fields = 10;
 
                 // Author Variables
-                var wrapper_authors = $(".authors_container");
-                var add_button_authors = $(".add_author_field");
+                const wrapper_authors = $(".authors_container");
+                const add_button_authors = $(".add_author_field");
 
                 // Subject Variables
-                var wrapper_subjects = $(".subjects_container");
-                var add_button_subjects = $(".add_subject_field");
+                const wrapper_subjects = $(".subjects_container");
+                const add_button_subjects = $(".add_subject_field");
 
                 // Add author fields
                 $(add_button_authors).click(function(e) {

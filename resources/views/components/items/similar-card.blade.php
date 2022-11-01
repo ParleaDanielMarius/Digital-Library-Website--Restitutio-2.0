@@ -1,10 +1,10 @@
 @props(['item'])
 
 <div class="product">
-    <div class="product__inner overflow-hidden p-3 p-md-4d875" style="max-height: 350px ; max-width: 350px ; min-height: 350px ; min-width: 250px">
+    <div class="product__inner overflow-hidden p-3 p-md-4d875" style="max-height:300px">
         <div class="woocommerce-LoopProduct-link woocommerce-loop-product__link d-block position-relative">
-            <div class="woocommerce-loop-product__thumbnail">
-                <a href="{{route('items.show', $item->slug)}}" class="d-block"><img style="height: 200px ; max-width: 250px" src="@if($item->cover_path && file_exists('storage' . '/' . $item->cover_path)){{asset('storage/' . $item->cover_path)}} @else{{asset('assets/img/items/no-item-image.png')}}@endif" class="img-fluid d-block mx-auto attachment-shop_catalog size-shop_catalog wp-post-image img-fluid" alt="image-description"></a>
+            <div class="woocommerce-loop-product__thumbnail mx-auto my-auto d-block" style="height: 150px">
+                <a href="{{route('items.show', $item->slug)}}"><img style="height:100%" src="@if($item->cover_path && file_exists('storage' . '/' . $item->cover_path)){{asset('storage/' . $item->cover_path)}} @else{{asset('assets/img/items/no-item-image.png')}}@endif" class="img-fluid d-block mx-auto attachment-shop_catalog size-shop_catalog wp-post-image" alt="image-description"></a>
             </div>
             <div class="woocommerce-loop-product__body product__body pt-3 bg-white">
                 <div class="text-uppercase font-size-1 mb-1 text-truncate">
@@ -40,7 +40,7 @@
                             @case('Other')
                             {{__('items')['other']}}
                             @break
-                            @default {{__('unknown')}}
+                            @default {{$item->type}}
                         @endswitch
                     </a>
                 </div>

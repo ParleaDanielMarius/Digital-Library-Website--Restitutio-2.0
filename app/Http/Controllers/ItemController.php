@@ -46,6 +46,7 @@ class ItemController extends Controller
         // Might need to remove query for collections and subjects since they are not used at the moment and may never be
         $items = Item::with('authors:slug,fullname')
             ->select('slug','id','title', 'cover_path', 'title_long', 'type', 'status')
+            ->where('status', Item::STATUS_ACTIVE)
             ->filter(request(['search']))
             ->orderBy($sortField, $sort)
             ->paginate($pages)->withQueryString();
@@ -312,6 +313,7 @@ class ItemController extends Controller
             'publisher_year'=> ['nullable', 'required_with:publisher_month', 'numeric', 'min:1000', 'max:2500'],
             'publisher_where'=> 'nullable',
             'type' => 'required',
+            'additionalType' => 'nullable|max:30',
             'subjects_id' => 'required',
             'language' => 'required',
             'description' => 'required',
@@ -342,6 +344,10 @@ class ItemController extends Controller
         // Front-end returns values as strings, so we turn them into arrays
         $formFields['collections_id'] = explode(',', $formFields['collections_id']);
 
+
+        if($formFields['additionalType']) {
+            $formFields['type'] = $formFields['additionalType'];
+        }
 
         // If request has files call fileStorage for each
         if($request->hasFile('cover_path')) {
@@ -449,6 +455,7 @@ class ItemController extends Controller
             'publisher_year'=> ['nullable', 'required_with:publisher_month', 'numeric'],
             'publisher_where'=> 'nullable',
             'type' => 'required',
+            'additionalType' =>'nullable|max:30',
             'subjects_id' => 'required',
             'language' => 'required',
             'description' => 'required',
@@ -478,6 +485,11 @@ class ItemController extends Controller
 
         // Front-end returns values as strings, so we turn them into arrays
         $formFields['collections_id'] = explode(',', $formFields['collections_id']);
+
+        if($formFields['additionalType']) {
+            $formFields['type'] = $formFields['additionalType'];
+        }
+
 
         // If request has files call fileStorage for each
         if($request->hasFile('cover_path')) {

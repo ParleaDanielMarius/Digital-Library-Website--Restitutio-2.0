@@ -81,7 +81,7 @@
                                                         @case('Other')
                                                         {{__('items')['other']}}
                                                         @break
-                                                        @default {{__('unknown')}}
+                                                        @default {{$item->type}}
                                                     @endswitch
                                                 </span>
                                             </div>

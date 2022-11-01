@@ -30,11 +30,11 @@ class Collection extends Model
         // Check if search filter exists
         if(array_key_exists('search' ,$filters)) {
             // Query collection
-            $query->where('title', 'iLIKE', '%'. $request->search . '%')
+            $query->where('title', 'LIKE', '%'. $request->search . '%')
                 ->when($request->subjects, function($query) use($request) {
                     $query->whereHas('items', function($query) use($request) {
                         $query->whereHas('subjects', function($query) use($request) {
-                            $query->where('title', 'iLIKE', '%' . $request->subjects. '%');
+                            $query->where('title', 'LIKE', '%' . $request->subjects. '%');
                         });
                     });
                 })
