@@ -12,17 +12,6 @@ use Mockery\Exception;
 
 class AuthorController extends Controller {
 
-    // Gets Author List For Ajax Multiselect
-    public function authorsSelect($search) {
-        $authors = Author::query()->select('id', 'fullname')->where('fullname', 'LIKE', '%'. $search . '%')->first();
-            if($authors != null) {
-                return response($authors->toJson());
-            }else {
-                return response("Not Found", 404);
-            }
-
-    }
-
     // Authors Index
     public function index() {
         // Some arrays for validation of sorting, ordering and pagination

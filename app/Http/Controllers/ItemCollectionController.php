@@ -12,11 +12,6 @@ use Illuminate\Support\Str;
 
 class ItemCollectionController extends Controller
 {
-    public function collectionsSelect($search) {
-        $collections = Collection::query()->select('id', 'title')->where('title', 'LIKE', '%'. $search . '%')->get();
-        return response($collections->toJson());
-    }
-
 
     //  --  Show All Collection  --  \\
     public function index() {

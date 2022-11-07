@@ -7,7 +7,6 @@ use App\Http\Controllers\DeletionController;
 use App\Http\Controllers\ItemCollectionController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\LangController;
-use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,27 +20,22 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/test', [LangController::class, 'test'])->name('test');
 
 Route::group(['middleware' => 'throttle:100,1'], function() {
-
-    Route::get('/author-check/{search}', [AjaxController::class, 'checkAuthor']);
-    Route::get('/subject-check/{search}', [AjaxController::class, 'checkSubject']);
-
-
-
-    Route::get('/authors-select/{search}', [AuthorController::class, 'authorsSelect'])->name('authorsSelect');
-    Route::get('/collections-select/{search}', [ItemCollectionController::class, 'collectionsSelect'])->name('collectionsSelect');
-    Route::get('/subjects-select/{search}', [SubjectController::class, 'subjectsSelect'])->name('subjectsSelect');
-
 
 // Home and Language Change
     Route::get('/', [LangController::class, 'home'])->name('home');
     Route::get('lang/change', [LangController::class, 'change'])->name('changeLang');
 
 
-// Item Routes
+// AJAX Requests
+    Route::middleware('auth')->group(function () {
+        Route::get('/author-check/{search}', [AjaxController::class, 'checkAuthor']);
+        Route::get('/subject-check/{search}', [AjaxController::class, 'checkSubject']);
+    });
 
+
+// Item Routes
     Route::middleware('auth')->group(function () {
         Route::get('/items/manage', [ItemController::class, 'manage'])->name('items.manage');
         Route::get('/items/create', [ItemController::class, 'create'])->name('items.create');
