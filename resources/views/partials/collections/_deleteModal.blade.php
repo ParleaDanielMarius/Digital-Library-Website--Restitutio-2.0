@@ -10,7 +10,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p>You are about to <b class ="text-danger">DELETE</b> this collection. This action is <b class ="text-danger">cannot be undone</b>.</p>
+                <p>You are about to <b class ="text-danger">DELETE</b> this collection. This action <b class ="text-danger">cannot be undone</b>.</p>
             </div>
             <div class="modal-footer">
                 <form method="post" action="{{route('collections.destroy', $collection->slug)}}">

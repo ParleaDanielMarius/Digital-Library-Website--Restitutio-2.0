@@ -38,6 +38,7 @@ class ItemCollectionController extends Controller
         // Query Collection with Items Count, paginate, order, sort and filter
         // using 'search' (found in Collection Model)
         $collections = Collection::query()->withCount('items')
+            ->where('status', Item::STATUS_ACTIVE)
             ->filter(request(['search']))
             ->orderBy($sortField, $sort)->paginate($pages)->withQueryString()
         ;

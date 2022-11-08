@@ -16,7 +16,7 @@ class ItemFactory extends Factory
      */
     public function definition()
     {
-        $type = ['Book', 'Old Book', 'Manuscript', 'Map', 'Serial', 'Ex Libris', 'Photograph', 'Document', 'Postcard','Other'];;
+        $type = ['Carte', 'Carte Veche', 'Manuscris', 'Hartă', 'Serial', 'Ex Libris', 'Fotografie', 'Document', 'Carte Poștală'];;
 
         return [
             'status'=>1,

@@ -322,22 +322,25 @@
                                         </svg>
                                     </a>
                                 </div>
-                                <div id="widgetCollapse22" class="mt-3 widget-content collapse show"
+                                <div id="widgetCollapse22" class="mt-3 widget-content collapse show type-form-div"
                                      aria-labelledby="widgetHeading22"
                                 >
                                     <label hidden for="type">{{__('items')['type']}}</label>
-                                    <select  name="type" id="type" class="border border-gray-200 rounded p-2 w-full">
+                                    <select  name="type" id="type" class="border border-gray-200 rounded p-2 w-full type-format">
                                         <option value="" @if(request('type') === null) selected @endif>{{__('none')}}</option>
-                                        <option value="Book" @if(request('type') == 'Book') selected @endif>{{__('items')['book']}}</option>
-                                        <option value="Old Book" @if(request('type') == 'Old Book') selected @endif>{{__('items')['old book']}}</option>
-                                        <option value="Manuscript" @if(request('type') == 'Manuscript') selected @endif>{{__('items')['manuscript']}}</option>
-                                        <option value="Map" @if(request('type') == 'Map') selected @endif>{{__('items')['map']}}</option>
+                                        <option value="Carte" @if(request('type') == 'Carte') selected @endif>{{__('items')['book']}}</option>
+                                        <option value="Carte Veche" @if(request('type') == 'Carte Veche') selected @endif>{{__('items')['old book']}}</option>
+                                        <option value="Manuscris" @if(request('type') == 'Manuscris') selected @endif>{{__('items')['manuscript']}}</option>
+                                        <option value="Hartă" @if(request('type') == 'Hartă') selected @endif>{{__('items')['map']}}</option>
                                         <option value="Serial" @if(request('type') == 'Serial') selected @endif>{{__('items')['serial']}}</option>
                                         <option value="Ex Libris" @if(request('type') == 'Ex Libris') selected @endif>{{__('items')['ex libris']}}</option>
-                                        <option value="Photograph" @if(request('type') == 'Photograph') selected @endif>{{__('items')['photograph']}}</option>
+                                        <option value="Fotografie" @if(request('type') == 'Fotografie') selected @endif>{{__('items')['photograph']}}</option>
                                         <option value="Document" @if(request('type') == 'Document') selected @endif>{{__('items')['document']}}</option>
-                                        <option value="Postcard" @if(request('type') == 'Postcard') selected @endif>{{__('items')['postcard']}}</option>
+                                        <option value="Carte poștală" @if(request('type') == 'Carte poștală') selected @endif>{{__('items')['postcard']}}</option>
                                         <option value="Other" @if(request('type') == 'Other') selected @endif>{{__('items')['other']}}</option>
+                                        @if(request('additionalType'))
+                                            <input required class="additionalType my-2 form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" value="{{request('additionalType')}}" placeholder="Type" type="text" name="additionalType"/>
+                                        @endif
                                     </select>
                                 </div>
                             </div>
@@ -354,6 +357,30 @@
 @endsection
 
 @section('separate scripts')
+    <script>
+        let addField = false;
+        const typeSelect = $(".type-format");
+        const typeP = $(".type-form-div");
+
+        $(typeSelect).change(function() {
+            if($(this).val() === "Other" && $(".additionalType").length < 1) {
+                AddField();
+            } else {
+                RemoveField();
+            }
+        })
+
+        function AddField() {
+            $(typeP).append('<input required class="additionalType my-2 form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" placeholder="Type" type="text" name="additionalType"/>')
+            addField = true;
+        }
+
+        function RemoveField() {
+            $(".additionalType").remove();
+            addField = false;
+        }
+    </script>
+
     <script>
         $(document).ready(function() {
             // Applies to all

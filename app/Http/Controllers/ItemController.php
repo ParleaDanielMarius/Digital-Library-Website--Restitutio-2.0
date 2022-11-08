@@ -343,7 +343,7 @@ class ItemController extends Controller
         $formFields['collections_id'] = explode(',', $formFields['collections_id']);
 
 
-        if($formFields['additionalType']) {
+        if(array_key_exists('additionalType', $formFields)) {
             $formFields['type'] = $formFields['additionalType'];
         }
 
@@ -484,7 +484,7 @@ class ItemController extends Controller
         // Front-end returns values as strings, so we turn them into arrays
         $formFields['collections_id'] = explode(',', $formFields['collections_id']);
 
-        if($formFields['additionalType']) {
+        if(array_key_exists('additionalType', $formFields)) {
             $formFields['type'] = $formFields['additionalType'];
         }
 

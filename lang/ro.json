@@ -194,6 +194,8 @@
         "manage deleted items": "Administrează Obiectele Șterse"
     },
 
+    "active": "Activ",
+    "inactive": "Inactiv",
     "unknown": "Necunoscut",
     "search": "Caută",
     "from": "De la",

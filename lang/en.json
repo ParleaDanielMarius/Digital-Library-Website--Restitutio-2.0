@@ -144,7 +144,7 @@
         "browse": "Browse",
         "browse authors": "Browse People",
         "browse collections": "Browse Collections",
-        "browse items": "Browse Items"
+        "browse items": "Browse Digital Items"
     },
 
     "sort": {
@@ -194,6 +194,8 @@
         "manage deleted items": "Manage Deleted Items"
     },
 
+    "active": "Active",
+    "inactive": "Inactive",
     "unknown": "Unknown",
     "search": "Search",
     "from": "From",

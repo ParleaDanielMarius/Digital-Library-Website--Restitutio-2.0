@@ -70,9 +70,9 @@
                     <div class="bg-gray-200 space-bottom-2 space-bottom-md-0">
                         <div class="container space-top-2 space-top-wd-3 px-3">
                             <div class="row">
-                                <div class="col-lg-4 col-wd-3 d-flex">
-                                    <img class="img-fluid mb-5 mb-lg-0 mt-auto" src="{{asset('assets/img/authors/edit.png')}}" alt="Image-Description">
-                                </div>
+{{--                                <div class="col-lg-4 col-wd-3 d-flex">--}}
+{{--                                    <img class="img-fluid mb-5 mb-lg-0 mt-auto" src="{{asset('assets/img/authors/edit.png')}}" alt="Image-Description">--}}
+{{--                                </div>--}}
                                 <div class="col-lg-8 col-wd-9">
                                     <div class="mb-8">
 {{--                                        Number of Items--}}
@@ -245,7 +245,7 @@
                                                         <div class="input-group-prepend">
                                                             <i class="glph-icon flaticon-loupe py-2d75 bg-white-100 border-white-100 text-dark pl-3 pr-0 rounded-0"></i>
                                                         </div>
-                                                        <input name="subjects[]" class="form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" type="search" value="{{request('subjects')[0] ?? ''}}" placeholder="Ex: History, Politics" aria-label="Search">
+                                                        <input name="subjects[]" class="form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" type="search" value="{{request('subjects')[0] ?? ''}}" placeholder="Ex: Istorie" aria-label="Search">
                                                         <button class="add_subject_field rounded">
                                                             <span style="font-size:16px; font-weight:bold;">+</span>
                                                         </button>
@@ -253,7 +253,7 @@
                                                     @if(request('subjects'))
                                                         @foreach(request('subjects') as $key => $value)
                                                             @if($key != 0)
-                                                                <div class="subject_wrapper input-group flex-nowrap w-100"> <div class="input-group-prepend"> <i class="glph-icon flaticon-loupe py-2d75 bg-white-100 border-white-100 text-dark pl-3 pr-0 rounded-0"></i> </div> <input value="{{$value ?? ''}}" name="subjects[]" class="form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" type="search" placeholder="Ex: History, Politics" aria-label="Search"/> <button class="delete rounded"> <span style="font-size:16px; font-weight:bold;">-</span> </button> </div>
+                                                                <div class="subject_wrapper input-group flex-nowrap w-100"> <div class="input-group-prepend"> <i class="glph-icon flaticon-loupe py-2d75 bg-white-100 border-white-100 text-dark pl-3 pr-0 rounded-0"></i> </div> <input value="{{$value ?? ''}}" name="subjects[]" class="form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" type="search" placeholder="Ex: Istorie" aria-label="Search"/> <button class="delete rounded"> <span style="font-size:16px; font-weight:bold;">-</span> </button> </div>
                                                             @endif
                                                         @endforeach
                                                     @endif
@@ -267,7 +267,7 @@
                                                        data-target="#widgetCollapse21"
                                                        aria-expanded="true"
                                                        aria-controls="widgetCollapse21">
-                                                        <h3 class="widget-title mb-0 font-weight-medium font-size-3">{{__('authors')['authors']}}</h3>
+                                                        <h3 class="widget-title mb-0 font-weight-medium font-size-3">{{__('items')['contributors']}}</h3>
                                                         <svg class="mins" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="2px">
                                                             <path fill-rule="evenodd" fill="rgb(22, 22, 25)" d="M0.000,-0.000 L15.000,-0.000 L15.000,2.000 L0.000,2.000 L0.000,-0.000 Z" />
                                                         </svg>
@@ -283,7 +283,7 @@
                                                         <div class="input-group-prepend">
                                                             <i class="glph-icon flaticon-loupe py-2d75 bg-white-100 border-white-100 text-dark pl-3 pr-0 rounded-0"></i>
                                                         </div>
-                                                        <input name="authors[]" class="form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" type="search" value="{{request('authors')[0] ?? ''}}" placeholder="Ex: Eminescu, Eliade"/>
+                                                        <input name="authors[]" class="form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" type="search" value="{{request('authors')[0] ?? ''}}" placeholder="Ex: Mihai Eminescu"/>
                                                         <button class="add_author_field rounded">
                                                             <span style="font-size:16px; font-weight:bold;">+</span>
                                                         </button>
@@ -291,7 +291,7 @@
                                                     @if(request('authors'))
                                                         @foreach(request('authors') as $key => $value)
                                                             @if($key != 0)
-                                                                <div class="author_wrapper input-group flex-nowrap w-100"><div class="input-group-prepend"><i class="glph-icon flaticon-loupe py-2d75 bg-white-100 border-white-100 text-dark pl-3 pr-0 rounded-0"></i></div> <input name="authors[]" value="{{$value ?? ''}}" class="form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" type="search" placeholder="Ex: Eminescu, Eliade"/><button class="delete rounded"><span style="font-size:16px; font-weight:bold;">-</span></button></div>
+                                                                <div class="author_wrapper input-group flex-nowrap w-100"><div class="input-group-prepend"><i class="glph-icon flaticon-loupe py-2d75 bg-white-100 border-white-100 text-dark pl-3 pr-0 rounded-0"></i></div> <input name="authors[]" value="{{$value ?? ''}}" class="form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" type="search" placeholder="Ex: Mihai Eminescu Eminescu"/><button class="delete rounded"><span style="font-size:16px; font-weight:bold;">-</span></button></div>
                                                             @endif
                                                         @endforeach
                                                     @endif
@@ -321,7 +321,7 @@
                                                         <div class="input-group-prepend">
                                                             <i class="glph-icon flaticon-loupe py-2d75 bg-white-100 border-white-100 text-dark pl-3 pr-0 rounded-0"></i>
                                                         </div>
-                                                        <input name="language" class="form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" type="search" value="{{request('language') ?? ''}}" placeholder="Ex: Romanian" aria-label="Search">
+                                                        <input name="language" class="form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" type="search" value="{{request('language') ?? ''}}" placeholder="Ex: Română" aria-label="Search">
                                                     </div>
                                                 </div>
                                             </div>
@@ -400,22 +400,25 @@
                                                         </svg>
                                                     </a>
                                                 </div>
-                                                <div id="widgetCollapse22" class="mt-3 widget-content collapse show"
+                                                <div id="widgetCollapse22" class="mt-3 widget-content collapse show type-form-div"
                                                      aria-labelledby="widgetHeading22"
                                                 >
                                                     <label hidden for="type">{{__('items')['type']}}</label>
-                                                    <select  name="type" id="type" class="border border-gray-200 rounded p-2 w-full">
+                                                    <select  name="type" id="type" class="border border-gray-200 rounded p-2 w-full type-format">
                                                         <option value="" @if(request('type') === null) selected @endif>{{__('none')}}</option>
-                                                        <option value="Book" @if(request('type') == 'Book') selected @endif>{{__('items')['book']}}</option>
-                                                        <option value="Old Book" @if(request('type') == 'Old Book') selected @endif>{{__('items')['old book']}}</option>
-                                                        <option value="Manuscript" @if(request('type') == 'Manuscript') selected @endif>{{__('items')['manuscript']}}</option>
-                                                        <option value="Map" @if(request('type') == 'Map') selected @endif>{{__('items')['map']}}</option>
+                                                        <option value="Carte" @if(request('type') == 'Carte') selected @endif>{{__('items')['book']}}</option>
+                                                        <option value="Carte Veche" @if(request('type') == 'Carte Veche') selected @endif>{{__('items')['old book']}}</option>
+                                                        <option value="Manuscris" @if(request('type') == 'Manuscris') selected @endif>{{__('items')['manuscript']}}</option>
+                                                        <option value="Hartă" @if(request('type') == 'Hartă') selected @endif>{{__('items')['map']}}</option>
                                                         <option value="Serial" @if(request('type') == 'Serial') selected @endif>{{__('items')['serial']}}</option>
                                                         <option value="Ex Libris" @if(request('type') == 'Ex Libris') selected @endif>{{__('items')['ex libris']}}</option>
-                                                        <option value="Photograph" @if(request('type') == 'Photograph') selected @endif>{{__('items')['photograph']}}</option>
+                                                        <option value="Fotografie" @if(request('type') == 'Fotografie') selected @endif>{{__('items')['photograph']}}</option>
                                                         <option value="Document" @if(request('type') == 'Document') selected @endif>{{__('items')['document']}}</option>
-                                                        <option value="Postcard" @if(request('type') == 'Postcard') selected @endif>{{__('items')['postcard']}}</option>
+                                                        <option value="Carte poștală" @if(request('type') == 'Carte poștală') selected @endif>{{__('items')['postcard']}}</option>
                                                         <option value="Other" @if(request('type') == 'Other') selected @endif>{{__('items')['other']}}</option>
+                                                        @if(request('additionalType'))
+                                                            <input required class="additionalType my-2 form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" value="{{request('additionalType')}}" placeholder="Type" type="text" name="additionalType"/>
+                                                        @endif
                                                     </select>
                                                 </div>
                                             </div>
@@ -434,6 +437,30 @@
 
 @section('separate scripts')
     <script>
+        let addField = false;
+        const typeSelect = $(".type-format");
+        const typeP = $(".type-form-div");
+
+        $(typeSelect).change(function() {
+            if($(this).val() === "Other" && $(".additionalType").length < 1) {
+                AddField();
+            } else {
+                RemoveField();
+            }
+        })
+
+        function AddField() {
+            $(typeP).append('<input required class="additionalType my-2 form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" placeholder="Type" type="text" name="additionalType"/>')
+            addField = true;
+        }
+
+        function RemoveField() {
+            $(".additionalType").remove();
+            addField = false;
+        }
+    </script>
+
+    <script>
         $(document).ready(function() {
             // Applies to all
             var max_fields = 5;
@@ -451,7 +478,7 @@
             $(add_button_authors).click(function(e) {
                 e.preventDefault();
                 if($('div.author_wrapper').length < max_fields) {
-                    $(container_authors).append('<div class="author_wrapper input-group flex-nowrap w-100"><div class="input-group-prepend"><i class="glph-icon flaticon-loupe py-2d75 bg-white-100 border-white-100 text-dark pl-3 pr-0 rounded-0"></i></div> <input name="authors[]" class="form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" type="search" placeholder="Ex: Eminescu, Eliade"/><button class="delete rounded"><span style="font-size:16px; font-weight:bold;">-</span></button></div>')
+                    $(container_authors).append('<div class="author_wrapper input-group flex-nowrap w-100"><div class="input-group-prepend"><i class="glph-icon flaticon-loupe py-2d75 bg-white-100 border-white-100 text-dark pl-3 pr-0 rounded-0"></i></div> <input name="authors[]" class="form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" type="search" placeholder="Ex: Mihai Eminescu"/><button class="delete rounded"><span style="font-size:16px; font-weight:bold;">-</span></button></div>')
                 } else {
                     alert('You reached the limit!')
                 }
@@ -466,7 +493,7 @@
             $(add_button_subjects).click(function(e) {
                 e.preventDefault();
                 if($('div.subject_wrapper').length < max_fields) {
-                    $(container_subjects).append('<div class="subject_wrapper input-group flex-nowrap w-100"> <div class="input-group-prepend"> <i class="glph-icon flaticon-loupe py-2d75 bg-white-100 border-white-100 text-dark pl-3 pr-0 rounded-0"></i> </div> <input name="subjects[]" class="form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" type="search" placeholder="Ex: History, Politics" aria-label="Search"/> <button class="delete rounded"> <span style="font-size:16px; font-weight:bold;">-</span> </button> </div>')
+                    $(container_subjects).append('<div class="subject_wrapper input-group flex-nowrap w-100"> <div class="input-group-prepend"> <i class="glph-icon flaticon-loupe py-2d75 bg-white-100 border-white-100 text-dark pl-3 pr-0 rounded-0"></i> </div> <input name="subjects[]" class="form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" type="search" placeholder="Ex: Istorie" aria-label="Search"/> <button class="delete rounded"> <span style="font-size:16px; font-weight:bold;">-</span> </button> </div>')
                 } else {
                     alert('You reached the limit!')
                 }

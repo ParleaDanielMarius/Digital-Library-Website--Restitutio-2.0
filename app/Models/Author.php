@@ -27,11 +27,11 @@ class Author extends Model
         // Check if search filter exists
         if(array_key_exists('search' ,$filters)) {
             // Query authors
-            $query->where('fullname', 'iLIKE', '%'. $request->search . '%')
+            $query->where('fullname', 'LIKE', '%'. $request->search . '%')
             ->when($request->subjects, function($query) use($request) {
                 $query->whereHas('items', function($query) use($request) {
                     $query->whereHas('subjects', function($query) use($request) {
-                        $query->where('title', 'iLIKE', '%' . $request->subjects. '%');
+                        $query->where('title', 'LIKE', '%' . $request->subjects. '%');
                     });
                 });
             });

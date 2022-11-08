@@ -75,7 +75,7 @@
                                             @enderror
 {{--                                            Authors--}}
                                             <div class="col-12 mb-4d75 form-row form-row-wide">
-                                                <label for="authors_container" class="col-12 mb-4d75 form-label">{{__('authors')['authors']}} <abbr class="required" title="required">*</abbr></label>
+                                                <label for="authors_container" class="col-12 mb-4d75 form-label">{{__('items')['contributors']}}<abbr class="required" title="required">*</abbr></label>
                                                 <div id="authors_container" class="authors_container">
                                                     <button class="add_author_field rounded">{{__('librarian')['add author']}} &nbsp;
                                                         <span style="font-size:16px; font-weight:bold;">+ </span>
@@ -222,38 +222,31 @@
                                             <p class="text-danger mt-1 col-12 mb-4d75 form-row form-row-wide">{{$message}}</p>
                                             @enderror
 {{--                                            ISSN--}}
-                                            <p class="col-12 mb-4d75 form-row form-row-wide" id="vubis_id_field" data-priority="170" data-o_class="form-row form-row-wide">
-                                                <label for="vubis_id" class="form-label">Vubis ID (optional)</label>
-                                                <input type="text" class="input-text form-control" value="{{$item->vubis_id ?? ''}}" placeholder="Ex: 800100" name="vubis_id" id="vubis_id" autocomplete="vubis_id">
+                                            <p class="col-12 mb-4d75 form-row form-row-wide" id="ISSN_field" data-priority="160" data-o_class="form-row form-row-wide">
+                                                <label for="ISSN" class="form-label">ISSN</label>
+                                                <input type="text" class="input-text form-control" value="{{$item->ISNN ?? ''}}" placeholder="Ex: 2049-3630" name="ISSN" id="ISSN" autocomplete="ISSN">
                                             </p>
                                             @error('ISSN')
                                             <p class="text-danger mt-1 col-12 mb-4d75 form-row form-row-wide">{{$message}}</p>
                                             @enderror
-{{--                                            Vubis ID--}}
-                                            <p class="col-12 mb-4d75 form-row form-row-wide" id="vubis_id_field" data-priority="170" data-o_class="form-row form-row-wide">
-                                                <label for="vubis_id" class="form-label">Vubis ID (optional)</label>
-                                                <input type="text" class="input-text form-control" value="{{$item->vubis_id ?? ''}}" placeholder="Ex: 800100" name="vubis_id" id="vubis_id" autocomplete="vubis_id">
-                                            </p>
-                                            @error('vubis_id')
-                                            <p class="text-danger mt-1 col-12 mb-4d75 form-row form-row-wide">{{$message}}</p>
-                                            @enderror
+
 {{--                                            Type--}}
                                             <p class="col-12 mb-4d75 form-row form-row-wide type-form-p" id="type_field" data-priority="180">
                                                 <label for="type" class="form-label">{{__('items')['type']}} <abbr class="required" title="required">*</abbr></label>
                                                 <select required name="type" id="type" class="form-control select2-hidden-accessible type-format"
                                                         autocomplete="type" tabindex="-1" aria-hidden="true">
-                                                    <option value="Book" @if($item->type == 'Book') selected @endif>{{__('items')['book']}}</option>
-                                                    <option value="Old Book" @if($item->type == 'Old Book') selected @endif>{{__('items')['old book']}}</option>
-                                                    <option value="Manuscript" @if($item->type == 'Manuscript') selected @endif>{{__('items')['manuscript']}}</option>
-                                                    <option value="Map" @if($item->type == 'Map') selected @endif>{{__('items')['map']}}</option>
+                                                    <option value="Carte" @if($item->type == 'Carte') selected @endif>{{__('items')['book']}}</option>
+                                                    <option value="Carte Veche" @if($item->type == 'Carte Veche') selected @endif>{{__('items')['old book']}}</option>
+                                                    <option value="Manuscris" @if($item->type == 'Manuscris') selected @endif>{{__('items')['manuscript']}}</option>
+                                                    <option value="Hartă" @if($item->type == 'Hartă') selected @endif>{{__('items')['map']}}</option>
                                                     <option value="Serial" @if($item->type == 'Serial') selected @endif>{{__('items')['serial']}}</option>
                                                     <option value="Ex Libris" @if($item->type == 'Ex Libris') selected @endif>{{__('items')['ex libris']}}</option>
-                                                    <option value="Photograph" @if($item->type == 'Photograph') selected @endif>{{__('items')['photograph']}}</option>
+                                                    <option value="Fotografie" @if($item->type == 'Fotografie') selected @endif>{{__('items')['photograph']}}</option>
                                                     <option value="Document" @if($item->type == 'Document') selected @endif>{{__('items')['document']}}</option>
-                                                    <option value="Postcard" @if($item->type == 'Postcard') selected @endif>{{__('items')['postcard']}}</option>
-                                                    <option value="Other" @if(!in_array($item->type, ['Book', 'Old Book', 'Manuscript', 'Map', 'Serial', 'Ex Libris', 'Photograph', 'Document', 'Postcard'])) selected @endif>{{__('items')['other']}}</option>
+                                                    <option value="Carte Poștală" @if($item->type == 'Carte Poștală') selected @endif>{{__('items')['postcard']}}</option>
+                                                    <option value="Other" @if(!in_array($item->type, ['Carte', 'Carte Veche', 'Manuscris', 'Hartă', 'Serial', 'Ex Libris', 'Fotografie', 'Document', 'Carte Poștală'])) selected @endif>{{__('items')['other']}}</option>
                                                 </select>
-                                                @if(!in_array($item->type, ['Book', 'Old Book', 'Manuscript', 'Map', 'Serial', 'Ex Libris', 'Photograph', 'Document', 'Postcard']))
+                                                @if(!in_array($item->type, ['Carte', 'Carte Veche', 'Manuscris', 'Hartă', 'Serial', 'Ex Libris', 'Fotografie', 'Document', 'Carte Poștală']))
                                                     <input required class="additionalType my-2 form-control" value="{{$item->type}}" placeholder="Type" type="text" name="additionalType"/>
                                                 @endif
                                             </p>
@@ -341,7 +334,7 @@
                 addField = true;
             }
 
-            void function RemoveField() {
+            function RemoveField() {
                 $(".additionalType").remove();
                 addField = false;
             }

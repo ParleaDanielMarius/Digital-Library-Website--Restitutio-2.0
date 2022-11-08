@@ -35,7 +35,7 @@ class LangController extends Controller
             ->with(['authors:slug,fullname'])
             ->select('title', 'title_long', 'cover_path', 'slug', 'id', 'type')
             ->where('status', Item::STATUS_ACTIVE)
-            ->where('type', 'Manuscript')
+            ->where('type', Item::type_Manuscript)
             ->latest()->limit(12)
             ->get();
         // Query for latest active periodics
@@ -43,7 +43,7 @@ class LangController extends Controller
             ->with(['authors:slug,fullname'])
             ->select('title', 'title_long', 'cover_path', 'slug', 'id', 'type')
             ->where('status', Item::STATUS_ACTIVE)
-            ->where('type', 'Serial')
+            ->where('type', Item::type_Serial)
             ->latest()->limit(12)
             ->get();
 

@@ -42,17 +42,17 @@ class Item extends Model {
     public const STATUS_INACTIVE = 0;
     public const STATUS_ACTIVE = 1;
 //    public const TYPES = ['Book', 'Old Book', 'Manuscript', 'Map', 'Serial', 'Ex Libris', 'Photograph', 'Document', 'Postcard','Other'];
-    public const type_Book = 'Book';
-    public const type_OldBook = 'Old Book';
-    public const type_Manuscript = 'Manuscript';
-    public const type_Map = 'Map';
+    public const type_Book = 'Carte';
+    public const type_OldBook = 'Carte Veche';
+    public const type_Manuscript = 'Manuscris';
+    public const type_Map = 'Hartă';
     public const type_Serial = 'Serial';
     public const type_ExLibris = 'Ex Libris';
-    public const type_Photograph = 'Photograph';
+    public const type_Photograph = 'Fotografie';
     public const type_Document = 'Document';
-    public const type_Postcard = 'Postcard';
+    public const type_Postcard = 'Carte Poștală';
     public const type_Other = 'Other';
-    public const null_Unknown = 'Unknown'; // Used if a field is null (Example: When publishing year is not known)
+    public const null_Unknown = 'Necunoscut'; // Used if a field is null (Example: When publishing year is not known)
                                              // Not really used anymore as front-end should take care of this (SHOULD)
 
     // Filters
@@ -60,7 +60,6 @@ class Item extends Model {
         // Get Request
         $request = request();
 
-        $request->year_from = intval($request->year_from);
         // Initialize arrays
 //        $authors = array();
 //        $subjects = array();
@@ -94,7 +93,7 @@ class Item extends Model {
                             ->orWhere('title_long', 'like', '%' . $request->search . '%');
                         });
                     })
-                ->when(!empty($request->authors), function ($query) use ($request) {
+                ->when(!empty($request->authors[0]), function ($query) use ($request) {
                     // Queries each author
                         foreach($request->authors as $author) {
                             $query->whereHas('authors', function ($query) use ($author) {
@@ -120,8 +119,12 @@ class Item extends Model {
                     $query->whereBetween('publisher_month', [($request->month_from ?? $request->month_to), ($request->month_to ?? $request->month_from)]);
                 })
 
-                ->when($request->type, function ($query) use ($request) {
+                ->when($request->type && $request->type != self::type_Other, function ($query) use ($request) {
                     $query->where('type', $request->type);
+                })
+
+                ->when($request->additionalType, function ($query) use ($request) {
+                    $query->where('type', $request->additionalType);
                 });
 
 

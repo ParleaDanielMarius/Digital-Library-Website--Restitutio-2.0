@@ -51,16 +51,16 @@
                                                 <label class="form-label font-size-3 font-weight-medium mb-3">{{__('items')['type']}}:</label>
                                                 <span class="font-size-3 font-weight-medium mb-3">
                                                         @switch($item->type)
-                                                        @case('Book')
+                                                        @case('Carte')
                                                         {{__('items')['book']}}
                                                         @break
-                                                        @case('Old Book')
+                                                        @case('Carte Veche')
                                                         {{__('items')['old book']}}
                                                         @break
-                                                        @case('Manuscript')
+                                                        @case('Manuscris')
                                                         {{__('items')['manuscript']}}
                                                         @break
-                                                        @case('Map')
+                                                        @case('Hartă')
                                                         {{__('items')['map']}}
                                                         @break
                                                         @case('Serial')
@@ -69,16 +69,16 @@
                                                         @case('Ex Libris')
                                                         {{__('items')['ex libris']}}
                                                         @break
-                                                        @case('Photograph')
+                                                        @case('Fotografie')
                                                         {{__('items')['photograph']}}
                                                         @break
                                                         @case('Document')
                                                         {{__('items')['document']}}
                                                         @break
-                                                        @case('Postcard')
+                                                        @case('Carte Poștală')
                                                         {{__('items')['postcard']}}
                                                         @break
-                                                        @case('Other')
+                                                        @case('Alta')
                                                         {{__('items')['other']}}
                                                         @break
                                                         @default {{$item->type}}

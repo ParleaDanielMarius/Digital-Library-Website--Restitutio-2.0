@@ -142,7 +142,7 @@
                                     <div class="input-group-prepend">
                                         <i class="glph-icon flaticon-loupe py-2d75 bg-white-100 border-white-100 text-dark pl-3 pr-0 rounded-0"></i>
                                     </div>
-                                    <input name="subjects" class="form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" type="search" value="{{request('subjects') ?? ''}}" placeholder="Ex: History, Politics" aria-label="Search">
+                                    <input name="subjects" class="form-control bg-white-100 py-2d75 height-5 border-white-100 rounded-0" type="search" value="{{request('subjects') ?? ''}}" placeholder="Ex: Istorie" aria-label="Search">
                                 </div>
                             </div>
                         </div>
