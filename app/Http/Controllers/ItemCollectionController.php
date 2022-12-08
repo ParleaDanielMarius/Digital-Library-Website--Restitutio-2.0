@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class ItemCollectionController extends Controller
@@ -239,6 +240,15 @@ class ItemCollectionController extends Controller
         // Creates a slug
         $formFields['slug'] = Str::slug($formFields['title']);
 
+        // Validation
+        $validator = Validator::make($formFields, [
+            'fullname' => 'unique:authors',
+            'slug' => 'unique:authors'
+        ]);
+        if($validator->fails()) {
+            return back()->with(['warning' => 'Already exists!']);
+        }
+
         // Check if request has files and call fileStorage (found in helpers)
         if($request->hasFile('cover_path')) {
             $formFields['cover_path'] = fileStorage('collection' ,$formFields['slug'], $request, 'cover_path');
@@ -291,6 +301,14 @@ class ItemCollectionController extends Controller
 
         // Creates a slug
         $formFields['slug'] = Str::slug($formFields['title']);
+
+        // Validation
+        $validator = Validator::make($formFields, [
+            'slug' => 'unique:collections'
+        ]);
+        if($validator->fails()) {
+            return back()->with(['warning' => 'Already exists!']);
+        }
 
         // Check if request has files and call fileStorage (found in helpers)
         if ($request->hasFile('cover_path')) {

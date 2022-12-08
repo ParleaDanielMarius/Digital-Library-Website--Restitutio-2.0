@@ -243,8 +243,8 @@
                                             <p class="col-12 mb-4d75 form-row form-row-wide" id="status_field" data-priority="190">
                                                 <label for="status" class="form-label">{{__('items')['status']}} <abbr class="required" title="required">*</abbr></label>
                                                 <select name="status" id="status" class="form-control select2-hidden-accessible">
-                                                    <option value="{{Item::STATUS_ACTIVE}}" @if(old('status') == Item::STATUS_ACTIVE) selected @endif>{{Item::STATUS_ACTIVE}}</option>
-                                                    <option value="{{Item::STATUS_INACTIVE}}" @if(old('status') == Item::STATUS_INACTIVE) selected @endif>{{Item::STATUS_INACTIVE}}</option>w
+                                                    <option value="{{Item::STATUS_ACTIVE}}" @if(old('status') == Item::STATUS_ACTIVE) selected @endif>{{__('active')}}</option>
+                                                    <option value="{{Item::STATUS_INACTIVE}}" @if(old('status') == Item::STATUS_INACTIVE) selected @endif>{{__('inactive')}}</option>
                                                 </select>
                                             </p>
                                             @error('status')

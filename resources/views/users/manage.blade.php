@@ -286,8 +286,8 @@
                                 <div class="input-group flex-nowrap w-100">
                                     <label hidden for="status">Status</label>
                                     <select name="status" id="status" class="border border-gray-200 rounded p-2 w-full">
-                                        <option value="Active" @if(request('status') == 'Active') selected @endif>Active</option>
-                                        <option value="Inactive" @if(request('status') == 'Inactive') selected @endif>Inactive</option>
+                                        <option value="Active" @if(request('status') == USER::STATUS_ACTIVE) selected @endif>{{__('active')}}</option>
+                                        <option value="Inactive" @if(request('status') == USER::STATUS_INACTIVE) selected @endif>{{__('inactive')}}</option>
                                     </select>
                                 </div>
                             </div>

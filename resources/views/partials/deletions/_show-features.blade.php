@@ -87,12 +87,12 @@
                         <tbody>
                         <tr>
                             <th class="px-4 px-xl-5">{{__('items')['status']}}: </th>
-                            @switch($item->status)
+                            @switch($deletion->status)
                                 @case(0)<td>{{__('inactive')}}</td>
                                 @break
                                 @case(1)<td>{{__('active')}}</td>
                                 @break
-                                @default<td>{{$item->status ?? 'No Value'}}</td>
+                                @default<td>{{$deletion->status ?? 'No Value'}}</td>
                             @endswitch
                         </tr>
                             <tr>

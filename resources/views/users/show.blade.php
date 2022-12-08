@@ -47,7 +47,13 @@
                                 <div class="col-lg-8 col-wd-9">
                                     <div class="mb-8">
                                         <h6 class="font-size-7 ont-weight-medium mt-2 mb-3 pb-1">
-                                            {{$user->username}}  -  {{$user->status}}
+                                            {{$user->username}}  -  @switch($user->status)
+                                                @case(0) {{__('inactive')}}
+                                                @break
+                                                @case(1) {{__('active')}}
+                                                @break
+                                                @default {{$user->status}}
+                                            @endswitch
                                         </h6>
                                         <table class="table table-hover table-borderless">
                                             <tbody>

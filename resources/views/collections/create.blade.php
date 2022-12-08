@@ -57,8 +57,8 @@
                                                 <label for="status" class="form-label">{{__('collections')['status']}}<abbr class="required" title="required">*</abbr></label>
                                                 <select name="status" id="status" class="form-control select2-hidden-accessible"
                                                         autocomplete="status" tabindex="-1" aria-hidden="true">
-                                                    <option value="{{Collection::STATUS_ACTIVE}}" @if(old('status') == Collection::STATUS_ACTIVE) selected @endif>{{Collection::STATUS_ACTIVE}}</option>
-                                                    <option value="{{Collection::STATUS_INACTIVE}}" @if(old('status') == Collection::STATUS_INACTIVE) selected @endif>{{Collection::STATUS_INACTIVE}}</option>w
+                                                    <option value="{{Collection::STATUS_ACTIVE}}" @if(old('status') == Collection::STATUS_ACTIVE) selected @endif>{{__('active')}}</option>
+                                                    <option value="{{Collection::STATUS_INACTIVE}}" @if(old('status') == Collection::STATUS_INACTIVE) selected @endif>{{__('inactive')}}</option>
                                                 </select>
                                             </p>
                                         </div>

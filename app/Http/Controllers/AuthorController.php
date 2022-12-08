@@ -7,6 +7,7 @@ use App\Models\Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Mockery\Exception;
 
@@ -99,10 +100,20 @@ class AuthorController extends Controller {
         // Appends first_name and last_name since Authors Table has a fullname column
         // Used in case first_name or last_name are needed separately
         $formFields['fullname'] = $formFields['first_name'] . ' ' . $formFields['last_name'];
+
         $formFields['created_by'] = auth()->id();
 
         // Creates a slug
         $formFields['slug'] = Str::slug($formFields['fullname']);
+
+        // Validation
+        $validator = Validator::make($formFields, [
+            'fullname' => 'unique:authors',
+            'slug' => 'unique:authors'
+        ]);
+        if($validator->fails()) {
+            return back()->with(['warning' => 'Author with the same name exists!']);
+        }
 
         // DB Transaction
         try {
@@ -118,7 +129,7 @@ class AuthorController extends Controller {
                 'message' => $e,
             ]);
             // Redirects to Home with message
-            return redirect(route('home'))->with('message', "Author couldn't be created!");
+            return redirect(route('home'))->with('warning', "Author couldn't be created!");
         }
         // Logs Success
         Log::notice('Store (Author):', [
@@ -150,6 +161,15 @@ class AuthorController extends Controller {
 
         // Creates a slug
         $formFields['slug'] = Str::slug($formFields['fullname']);
+
+        // Validation
+        $validator = Validator::make($formFields, [
+            'fullname' => 'unique:authors',
+            'slug' => 'unique:authors'
+        ]);
+        if($validator->fails()) {
+            return back()->with(['warning' => 'Author with the same name exists!']);
+        }
 
         // DB Transaction
         try {

@@ -13,6 +13,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
@@ -325,6 +326,14 @@ class ItemController extends Controller
         // Creates a slug
         $formFields['slug'] = Str::slug($formFields['title']);
 
+        // Validation
+        $validator = Validator::make($formFields, [
+            'slug' => 'unique:items'
+        ]);
+        if($validator->fails()) {
+            return back()->with(['warning' => 'Already exists!']);
+        }
+
 //        // Checks if one-digit month was entered and add 0 in front of it
 //        if($formFields['publisher_month']) {
 //            if(strlen($formFields['publisher_month']) == 1) {
@@ -467,6 +476,14 @@ class ItemController extends Controller
 
         // Creates a slug
         $formFields['slug'] = Str::slug($formFields['title']);
+
+        // Validation
+        $validator = Validator::make($formFields, [
+            'slug' => 'unique:items'
+        ]);
+        if($validator->fails()) {
+            return back()->with(['warning' => 'Already exists!']);
+        }
 
 //        // Checks if one-digit month was entered and add 0 in front of it
 //        if($formFields['publisher_month']) {

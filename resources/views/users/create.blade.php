@@ -107,8 +107,8 @@ use App\Models\User
                                                 <label for="status" class="form-label">Status <abbr class="required" title="required">*</abbr></label>
                                                 <select name="status" id="status" class="form-control select2-hidden-accessible"
                                                         autocomplete="status" tabindex="-1" aria-hidden="true">
-                                                    <option value="{{User::STATUS_ACTIVE}}" @if(old('status') == User::STATUS_ACTIVE) selected @endif>{{User::STATUS_ACTIVE}}</option>
-                                                    <option value="{{User::STATUS_INACTIVE}}" @if(old('status') == User::STATUS_INACTIVE) selected @endif>{{User::STATUS_INACTIVE}}</option>
+                                                    <option value="{{User::STATUS_ACTIVE}}" @if(old('status') == User::STATUS_ACTIVE) selected @endif>{{__('active')}}</option>
+                                                    <option value="{{User::STATUS_INACTIVE}}" @if(old('status') == User::STATUS_INACTIVE) selected @endif>{{__('inactive')}}</option>
                                                 </select>
                                             </p>
                                             @error('status')

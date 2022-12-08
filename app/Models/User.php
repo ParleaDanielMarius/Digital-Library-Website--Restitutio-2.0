@@ -73,19 +73,19 @@ class User extends Authenticatable
         // Check if username filter exists
         if(array_key_exists('username' ,$filters)) {
             $query->when($request->first_name, function ($query) use ($request) {
-                $query->where('first_name', 'iLIKE', '%' . $request->first_name . '%');
+                $query->where('first_name', 'LIKE', '%' . $request->first_name . '%');
             })
                 ->when($request->last_name, function ($query) use ($request) {
-                    $query->where('last_name', 'iLIKE', '%' . $request->last_name . '%');
+                    $query->where('last_name', 'LIKE', '%' . $request->last_name . '%');
                 })
                 ->when($request->email, function ($query) use ($request) {
-                    $query->where('email', 'iLIKE', '%' . $request->email . '%');
+                    $query->where('email', 'LIKE', '%' . $request->email . '%');
                 })
                 ->when($request->username, function ($query) use ($request) {
-                    $query->where('username', 'iLIKE', '%' . $request->username . '%');
+                    $query->where('username', 'LIKE', '%' . $request->username . '%');
                 })
                 ->when($request->location, function ($query) use ($request) {
-                    $query->where('location', 'iLIKE', '%' . $request->location . '%');
+                    $query->where('location', 'LIKE', '%' . $request->location . '%');
                 })
                 ->when($request->status, function ($query) use ($request) {
                     $query->where('status', $request->status);
